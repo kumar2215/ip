@@ -18,14 +18,26 @@ public class Rover {
         System.out.println("What can I do for you?");
         System.out.println(divider);
 
+        String[] tasks = new String[100];
+        int taskCount = 0;
+
         while (true) {
             Scanner sc = new Scanner(System.in);
             String input = sc.nextLine();
             if (input.equalsIgnoreCase("bye")) {
                 break;
+            } else if (input.equalsIgnoreCase("list")) {
+                System.out.println(divider);
+                for (int i = 0; i < taskCount; i++) {
+                    System.out.println((i + 1) + ". " + tasks[i]);
+                }
+                System.out.println(divider);
+                continue;
             }
+            tasks[taskCount] = input;
+            taskCount++;
             System.out.println(divider);
-            System.out.println("You entered: " + input);
+            System.out.println("added: " + input);
             System.out.println(divider);
         }
 
