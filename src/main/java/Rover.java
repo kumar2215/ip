@@ -52,10 +52,24 @@ public class Rover {
     }
 
     private static void addTask(String description) {
-        tasks[taskCount] = new Task(description);
+        Task newTask;
+        description = description.trim();
+        if (description.toLowerCase().startsWith("deadline")) {
+            String[] parts = description.split(" /by ");
+            newTask = new Deadline(parts[0].substring(9), parts[1]);
+        } else if (description.toLowerCase().startsWith("event")) {
+            String[] parts = description.split(" /from ");
+            String[] parts2 = parts[1].split(" /to ");
+            newTask = new Event(parts[0].substring(6), parts2[0], parts2[1]);
+        } else {
+            newTask = new Todo(description.substring(5));
+        }
+        tasks[taskCount] = newTask;
         taskCount++;
         System.out.println(divider);
-        System.out.println("added: " + description);
+        System.out.println("Got it. I've added this task:");
+        System.out.println(tasks[taskCount - 1]);
+        System.out.println("Now you have " + taskCount + " task" + (taskCount > 1 ? "s" : "") +  " in the list.");
         System.out.println(divider);
     }
 
