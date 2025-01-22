@@ -7,12 +7,14 @@ public class Rover {
     private static int taskCount = 0;
 
     private static void printWelcome() {
-        String logo = "██████╗  ██████╗ ██╗   ██╗███████╗██████╗ \n" +
-                "██╔══██╗██╔═══██╗██║   ██║██╔════╝██╔══██╗\n" +
-                "██████╔╝██║   ██║██║   ██║█████╗  ██████╔╝\n" +
-                "██╔══██╗██║   ██║╚██╗ ██╔╝██╔══╝  ██╔══██╗\n" +
-                "██║  ██║╚██████╔╝ ╚████╔╝ ███████╗██║  ██║\n" +
-                "╚═╝  ╚═╝ ╚═════╝   ╚═══╝  ╚══════╝╚═╝  ╚═╝\n";
+        String logo = """
+                ___
+                |  _`\\
+                | (_) )   _    _   _    __   _ __
+                | ,  /  /'_`\\ ( ) ( ) /'__`\\( '__)
+                | |\\ \\ ( (_) )| \\_/ |(  ___/| |
+                (_) (_)`\\___/'`\\___/'`\\____)(_)
+                """;
 
         System.out.println(divider);
         System.out.println("Hello! I'm Rover");
@@ -75,8 +77,8 @@ public class Rover {
 
     public static void main(String[] args) {
         printWelcome();
+        Scanner sc = new Scanner(System.in);
         while (true) {
-            Scanner sc = new Scanner(System.in);
             String input = sc.nextLine();
             if (input.equalsIgnoreCase("bye")) {
                 break;
