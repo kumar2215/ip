@@ -1,9 +1,11 @@
 import java.util.Scanner;
+import java.util.HashSet;
 
 public class Rover {
 
     private static final String divider = "--------------------------------------------";
     private static final Task[] tasks = new Task[100];
+    private static final HashSet<String> uniqueTasks = new HashSet<>();
     private static int taskCount = 0;
 
     private static void printWelcome() {
@@ -30,6 +32,11 @@ public class Rover {
 
     private static void listTasks() {
         System.out.println(divider);
+        if (taskCount == 0) {
+            System.out.println("There are no tasks in your list.");
+            System.out.println(divider);
+            return;
+        }
         System.out.println("Here are the tasks in your list:");
         for (int i = 0; i < taskCount; i++) {
             System.out.println((i + 1) + ". " + tasks[i]);
@@ -37,7 +44,34 @@ public class Rover {
         System.out.println(divider);
     }
 
-    private static void markTaskAsDone(int index) {
+    private static int getTaskNumber(String taskNumber, boolean mark) throws RoverException {
+        String toMark = mark ? "done" : "not done";
+        if (taskNumber.isEmpty()) {
+            throw new RoverException("Please specify the task number to be marked as " + toMark + ".");
+        }
+        int index;
+        try {
+            index = Integer.parseInt(taskNumber) - 1;
+        } catch (NumberFormatException e) {
+            throw new RoverException("Please specify a valid task number to be marked as " + toMark + ".");
+        }
+        if (index < 0 || index >= taskCount) {
+            throw new RoverException("Please specify a valid task number to be marked as " + toMark + ".\n" +
+                    "You only have " + taskCount + " tasks in total.");
+        }
+        return index;
+    }
+
+    private static void markTaskAsDone(String taskNumber) {
+        int index;
+        try {
+            index = getTaskNumber(taskNumber, true);
+        } catch (RoverException e) {
+            System.out.println(divider);
+            System.out.println(e.getMessage());
+            System.out.println(divider);
+            return;
+        }
         tasks[index].setDone();
         System.out.println(divider);
         System.out.println("Nice! I've marked this task as done:");
@@ -45,7 +79,16 @@ public class Rover {
         System.out.println(divider);
     }
 
-    private static void markTaskAsUndone(int index) {
+    private static void markTaskAsUndone(String taskNumber) {
+        int index;
+        try {
+            index = getTaskNumber(taskNumber, false);
+        } catch (RoverException e) {
+            System.out.println(divider);
+            System.out.println(e.getMessage());
+            System.out.println(divider);
+            return;
+        }
         tasks[index].setUndone();
         System.out.println(divider);
         System.out.println("OK, I've marked this task as not done yet:");
@@ -53,21 +96,59 @@ public class Rover {
         System.out.println(divider);
     }
 
-    private static void addTask(String description) {
+    private static Task getTaskFromDescription(String description) throws RoverException {
         Task newTask;
         description = description.trim();
         if (description.toLowerCase().startsWith("deadline")) {
-            String[] parts = description.split(" /by ");
-            newTask = new Deadline(parts[0].substring(9), parts[1]);
+            newTask = new Deadline(description.substring(8).trim());
         } else if (description.toLowerCase().startsWith("event")) {
-            String[] parts = description.split(" /from ");
-            String[] parts2 = parts[1].split(" /to ");
-            newTask = new Event(parts[0].substring(6), parts2[0], parts2[1]);
+            newTask = new Event(description.substring(5).trim());
+        } else if (description.toLowerCase().startsWith("todo")) {
+            newTask = new Todo(description.substring(4).trim());
         } else {
-            newTask = new Todo(description.substring(5));
+            throw new RoverException("Not a valid task type.");
+        }
+        return newTask;
+    }
+
+    private static void addTask(String description) {
+        Task newTask;
+        try {
+            newTask = getTaskFromDescription(description);
+        } catch (RoverException e) {
+            if (e.getMessage().equals("Not a valid task type.")) {
+                System.out.println(divider);
+                System.out.println("I'm sorry, but I don't know what that means.");
+                String briefHelp = """
+                        The following commands are supported:
+                            You can add a task by typing:
+                            - todo (description)
+                            - deadline (description) /by (deadline)
+                            - event (description) /from (start) /to (end)
+                            List the existing tasks by typing 'list'.
+                            Mark a task as done by typing 'mark (task number)'.
+                            Mark a task as not done by typing 'unmark (task number)'.
+                            Exit the program by typing 'bye'.
+                        """;
+                System.out.print(briefHelp);
+                System.out.println(divider);
+                return;
+            } else {
+                System.out.println(divider);
+                System.out.println(e.getMessage());
+                System.out.println(divider);
+                return;
+            }
+        }
+        if (uniqueTasks.contains(newTask.getDescription())) {
+            System.out.println(divider);
+            System.out.println("This task already exists in your list.");
+            System.out.println(divider);
+            return;
         }
         tasks[taskCount] = newTask;
         taskCount++;
+        uniqueTasks.add(newTask.getDescription());
         System.out.println(divider);
         System.out.println("Got it. I've added this task:");
         System.out.println(tasks[taskCount - 1]);
@@ -85,13 +166,9 @@ public class Rover {
             } else if (input.equalsIgnoreCase("list")) {
                 listTasks();
             } else if (input.toLowerCase().startsWith("mark")) {
-                String[] parts = input.split(" ");
-                int index = Integer.parseInt(parts[1]) - 1;
-                markTaskAsDone(index);
+                markTaskAsDone(input.substring(4).trim());
             } else if (input.toLowerCase().startsWith("unmark")) {
-                String[] parts = input.split(" ");
-                int index = Integer.parseInt(parts[1]) - 1;
-                markTaskAsUndone(index);
+                markTaskAsUndone(input.substring(6).trim());
             } else {
                 addTask(input);
             }
