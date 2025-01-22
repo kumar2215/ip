@@ -4,10 +4,10 @@ import java.util.ArrayList;
 public class Rover {
 
     private static final String divider = "--------------------------------------------";
-    private static final ArrayList<Task> tasks = new ArrayList<>();
-    private static int taskCount = 0;
+    private final ArrayList<Task> tasks = new ArrayList<>();
+    private int taskCount = 0;
 
-    private static void printWelcome() {
+    private void printWelcome() {
         String logo = """
                 ___
                 |  _`\\
@@ -24,12 +24,12 @@ public class Rover {
         System.out.println(divider);
     }
 
-    private static void printGoodbye() {
+    private void printGoodbye() {
         System.out.println("Bye. Hope to see you again soon!");
         System.out.println(divider);
     }
 
-    private static void listTasks() {
+    private void listTasks() {
         System.out.println(divider);
         if (taskCount == 0) {
             System.out.println("There are no tasks in your list.");
@@ -43,7 +43,7 @@ public class Rover {
         System.out.println(divider);
     }
 
-    private static int getTaskNumber(String taskNumber, TaskAction taskAction) throws RoverException {
+    private int getTaskNumber(String taskNumber, TaskAction taskAction) throws RoverException {
         String action = taskAction == TaskAction.MARK_DONE
                 ? "marked as done"
                 : taskAction == TaskAction.MARK_UNDONE
@@ -65,7 +65,7 @@ public class Rover {
         return index;
     }
 
-    private static void markTaskAsDone(String taskNumber) {
+    private void markTaskAsDone(String taskNumber) {
         int index;
         try {
             index = getTaskNumber(taskNumber, TaskAction.MARK_DONE);
@@ -82,7 +82,7 @@ public class Rover {
         System.out.println(divider);
     }
 
-    private static void markTaskAsUndone(String taskNumber) {
+    private void markTaskAsUndone(String taskNumber) {
         int index;
         try {
             index = getTaskNumber(taskNumber, TaskAction.MARK_UNDONE);
@@ -99,7 +99,7 @@ public class Rover {
         System.out.println(divider);
     }
 
-    private static void deleteTask(String taskNumber) {
+    private void deleteTask(String taskNumber) {
         int index;
         try {
             index = getTaskNumber(taskNumber, TaskAction.DELETE);
@@ -118,7 +118,7 @@ public class Rover {
         System.out.println(divider);
     }
 
-    private static Task getTaskFromDescription(String description) throws RoverException {
+    private Task getTaskFromDescription(String description) throws RoverException {
         Task newTask;
         description = description.trim();
         if (description.toLowerCase().startsWith("deadline")) {
@@ -133,7 +133,7 @@ public class Rover {
         return newTask;
     }
 
-    private static void addTask(String description) {
+    private void addTask(String description) {
         Task newTask;
         try {
             newTask = getTaskFromDescription(description);
@@ -179,24 +179,25 @@ public class Rover {
     }
 
     public static void main(String[] args) {
-        printWelcome();
         Scanner sc = new Scanner(System.in);
+        Rover rover = new Rover();
+        rover.printWelcome();
         while (true) {
             String input = sc.nextLine();
             if (input.equalsIgnoreCase("bye")) {
                 break;
             } else if (input.equalsIgnoreCase("list")) {
-                listTasks();
+                rover.listTasks();
             } else if (input.toLowerCase().startsWith("mark")) {
-                markTaskAsDone(input.substring(4).trim());
+                rover.markTaskAsDone(input.substring(4).trim());
             } else if (input.toLowerCase().startsWith("unmark")) {
-                markTaskAsUndone(input.substring(6).trim());
+                rover.markTaskAsUndone(input.substring(6).trim());
             } else if (input.toLowerCase().startsWith("delete")) {
-                deleteTask(input.substring(6).trim());
+                rover.deleteTask(input.substring(6).trim());
             } else {
-                addTask(input);
+                rover.addTask(input);
             }
         }
-        printGoodbye();
+        rover.printGoodbye();
     }
 }
