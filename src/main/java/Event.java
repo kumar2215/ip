@@ -9,6 +9,7 @@ public class Event extends Task {
         if (parts.length == 1) {
             throw new RoverException("An event task must be a task followed with '/from (start) /to (end)'.");
         }
+        this.description = parts[0];
         String[] parts2 = parts[1].split(" /to ");
         if (parts2.length == 1) {
             throw new RoverException("An event task must be a task followed with '/from (start) /to (end)'.");

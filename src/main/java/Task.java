@@ -22,8 +22,12 @@ public class Task {
         return (isDone ? "X" : " ");
     }
 
-    public String getDescription() {
-        return this.description;
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Task other) {
+            return this.description.equals(other.description);
+        }
+        return false;
     }
 
     @Override

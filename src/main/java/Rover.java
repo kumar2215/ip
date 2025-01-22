@@ -1,11 +1,10 @@
 import java.util.Scanner;
-import java.util.HashSet;
+import java.util.ArrayList;
 
 public class Rover {
 
     private static final String divider = "--------------------------------------------";
-    private static final Task[] tasks = new Task[100];
-    private static final HashSet<String> uniqueTasks = new HashSet<>();
+    private static final ArrayList<Task> tasks = new ArrayList<>();
     private static int taskCount = 0;
 
     private static void printWelcome() {
@@ -39,7 +38,7 @@ public class Rover {
         }
         System.out.println("Here are the tasks in your list:");
         for (int i = 0; i < taskCount; i++) {
-            System.out.println((i + 1) + ". " + tasks[i]);
+            System.out.println((i + 1) + ". " + tasks.get(i));
         }
         System.out.println(divider);
     }
@@ -72,27 +71,27 @@ public class Rover {
             System.out.println(divider);
             return;
         }
-        tasks[index].setDone();
+        tasks.get(index).setDone();
         System.out.println(divider);
         System.out.println("Nice! I've marked this task as done:");
-        System.out.println(tasks[index]);
+        System.out.println(tasks.get(index));
         System.out.println(divider);
     }
 
     private static void markTaskAsUndone(String taskNumber) {
         int index;
         try {
-            index = getTaskNumber(taskNumber, false);
+            index = getTaskNumber(taskNumber, true);
         } catch (RoverException e) {
             System.out.println(divider);
             System.out.println(e.getMessage());
             System.out.println(divider);
             return;
         }
-        tasks[index].setUndone();
+        tasks.get(index).setUndone();
         System.out.println(divider);
         System.out.println("OK, I've marked this task as not done yet:");
-        System.out.println(tasks[index]);
+        System.out.println(tasks.get(index));
         System.out.println(divider);
     }
 
@@ -140,18 +139,17 @@ public class Rover {
                 return;
             }
         }
-        if (uniqueTasks.contains(newTask.getDescription())) {
+        if (tasks.contains(newTask)) {
             System.out.println(divider);
             System.out.println("This task already exists in your list.");
             System.out.println(divider);
             return;
         }
-        tasks[taskCount] = newTask;
+        tasks.add(newTask);
         taskCount++;
-        uniqueTasks.add(newTask.getDescription());
         System.out.println(divider);
         System.out.println("Got it. I've added this task:");
-        System.out.println(tasks[taskCount - 1]);
+        System.out.println(tasks.get(taskCount - 1));
         System.out.println("Now you have " + taskCount + " task" + (taskCount > 1 ? "s" : "") +  " in the list.");
         System.out.println(divider);
     }

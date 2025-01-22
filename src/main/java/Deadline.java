@@ -5,6 +5,7 @@ public class Deadline extends Task {
     public Deadline(String description) throws RoverException {
         super(description);
         String[] parts = description.split(" /by ");
+        this.description = parts[0];
         if (parts.length == 1) {
             throw new RoverException("A deadline task must be a task followed with '/by (deadline)'.");
         }
