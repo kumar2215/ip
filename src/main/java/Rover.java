@@ -43,19 +43,23 @@ public class Rover {
         System.out.println(divider);
     }
 
-    private static int getTaskNumber(String taskNumber, boolean mark) throws RoverException {
-        String toMark = mark ? "done" : "not done";
+    private static int getTaskNumber(String taskNumber, TaskAction taskAction) throws RoverException {
+        String action = taskAction == TaskAction.MARK_DONE
+                ? "marked as done"
+                : taskAction == TaskAction.MARK_UNDONE
+                ? "marked as not done"
+                : "deleted";
         if (taskNumber.isEmpty()) {
-            throw new RoverException("Please specify the task number to be marked as " + toMark + ".");
+            throw new RoverException("Please specify the task number to be " + action  + ".");
         }
         int index;
         try {
             index = Integer.parseInt(taskNumber) - 1;
         } catch (NumberFormatException e) {
-            throw new RoverException("Please specify a valid task number to be marked as " + toMark + ".");
+            throw new RoverException("Please specify a valid task number to be " + action + ".");
         }
         if (index < 0 || index >= taskCount) {
-            throw new RoverException("Please specify a valid task number to be marked as " + toMark + ".\n" +
+            throw new RoverException("Please specify a valid task number to be " + action + ".\n" +
                     "You only have " + taskCount + " tasks in total.");
         }
         return index;
@@ -64,7 +68,7 @@ public class Rover {
     private static void markTaskAsDone(String taskNumber) {
         int index;
         try {
-            index = getTaskNumber(taskNumber, true);
+            index = getTaskNumber(taskNumber, TaskAction.MARK_DONE);
         } catch (RoverException e) {
             System.out.println(divider);
             System.out.println(e.getMessage());
@@ -81,7 +85,7 @@ public class Rover {
     private static void markTaskAsUndone(String taskNumber) {
         int index;
         try {
-            index = getTaskNumber(taskNumber, true);
+            index = getTaskNumber(taskNumber, TaskAction.MARK_UNDONE);
         } catch (RoverException e) {
             System.out.println(divider);
             System.out.println(e.getMessage());
@@ -98,7 +102,7 @@ public class Rover {
     private static void deleteTask(String taskNumber) {
         int index;
         try {
-            index = getTaskNumber(taskNumber, false);
+            index = getTaskNumber(taskNumber, TaskAction.DELETE);
         } catch (RoverException e) {
             System.out.println(divider);
             System.out.println(e.getMessage());
