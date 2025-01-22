@@ -95,6 +95,25 @@ public class Rover {
         System.out.println(divider);
     }
 
+    private static void deleteTask(String taskNumber) {
+        int index;
+        try {
+            index = getTaskNumber(taskNumber, false);
+        } catch (RoverException e) {
+            System.out.println(divider);
+            System.out.println(e.getMessage());
+            System.out.println(divider);
+            return;
+        }
+        Task task = tasks.remove(index);
+        taskCount--;
+        System.out.println(divider);
+        System.out.println("Noted. I've removed this task:");
+        System.out.println(task);
+        System.out.println("Now you have " + taskCount + " task" + (taskCount > 1 ? "s" : "") +  " in the list.");
+        System.out.println(divider);
+    }
+
     private static Task getTaskFromDescription(String description) throws RoverException {
         Task newTask;
         description = description.trim();
@@ -127,6 +146,7 @@ public class Rover {
                             List the existing tasks by typing 'list'.
                             Mark a task as done by typing 'mark (task number)'.
                             Mark a task as not done by typing 'unmark (task number)'.
+                            Delete a task by typing 'delete (task number)'.
                             Exit the program by typing 'bye'.
                         """;
                 System.out.print(briefHelp);
@@ -167,6 +187,8 @@ public class Rover {
                 markTaskAsDone(input.substring(4).trim());
             } else if (input.toLowerCase().startsWith("unmark")) {
                 markTaskAsUndone(input.substring(6).trim());
+            } else if (input.toLowerCase().startsWith("delete")) {
+                deleteTask(input.substring(6).trim());
             } else {
                 addTask(input);
             }
