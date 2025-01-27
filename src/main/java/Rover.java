@@ -1,11 +1,54 @@
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.io.IOException;
+import java.util.stream.Stream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.Files;
 
 public class Rover {
 
     private static final String divider = "--------------------------------------------";
     private final ArrayList<Task> tasks = new ArrayList<>();
     private int taskCount = 0;
+
+    private void loadSavedTasks() throws IOException, SecurityException {
+        String cwd = System.getProperty("user.dir");
+        Path savedTasksPath = Paths.get(cwd, "data", "Rover.txt");
+        boolean fileExists = Files.exists(savedTasksPath);
+        if (!fileExists) {
+            return;
+        } else {
+            Stream<String> lines = Files.lines(savedTasksPath);
+            lines.forEach(line -> {
+                try {
+                    String[] parts = line.split(" \\| ");
+                    Task newTask;
+                    switch (parts[0]) {
+                    case "T":
+                        newTask = new Todo(parts[2]);
+                        break;
+                    case "D":
+                        newTask = new Deadline(parts[2]);
+                        break;
+                    case "E":
+                        newTask = new Event(parts[2]);
+                        break;
+                    default:
+                        return;
+                    }
+                    if (parts[1].equals("1")) {
+                        newTask.setDone();
+                    }
+                    tasks.add(newTask);
+                    taskCount++;
+                } catch (Exception e) {
+                    System.out.println("An error occurred when trying to load saved tasks.");
+                }
+            });
+            lines.close();
+        }
+    }
 
     private void printWelcome() {
         String logo = """
@@ -20,11 +63,47 @@ public class Rover {
         System.out.println(divider);
         System.out.println("Hello! I'm Rover");
         System.out.println(logo);
+        System.out.println("I am your personal task manager.");
+        boolean hasBeenLoaded = false;
+        int attempts = 0;
+        while (!hasBeenLoaded && attempts < 3) {
+            try {
+                loadSavedTasks();
+                hasBeenLoaded = true;
+            } catch (IOException e) {
+                System.out.println("An error occurred when trying to load saved tasks.");
+                attempts++;
+            } catch (SecurityException e) {
+                System.out.println("An error occurred when trying to access the saved tasks file.");
+                break;
+            }
+        }
         System.out.println("What can I do for you?");
         System.out.println(divider);
     }
 
+    private void saveTasks() {
+        String cwd = System.getProperty("user.dir");
+        Path savedTasksPath = Paths.get(cwd, "data", "Rover.txt");
+        try {
+            Files.createDirectories(savedTasksPath.getParent());
+            Files.deleteIfExists(savedTasksPath);
+            Files.createFile(savedTasksPath);
+            for (Task task : tasks) {
+                String taskString = task.getTaskString() + "\n";
+                Files.writeString(savedTasksPath, taskString, java.nio.file.StandardOpenOption.APPEND);
+            }
+            System.out.println("Tasks saved successfully.");
+        } catch (IOException e) {
+            System.out.println("An error occurred when trying to save tasks.");
+        } catch (SecurityException e) {
+            System.out.println("An error occurred when trying to create the saved tasks file.");
+        }
+    }
+
     private void printGoodbye() {
+        System.out.println("Saving your tasks...");
+        saveTasks();
         System.out.println("Bye. Hope to see you again soon!");
         System.out.println(divider);
     }

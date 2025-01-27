@@ -1,4 +1,4 @@
-public class Task {
+public abstract class Task {
     protected String description;
     protected boolean isDone;
 
@@ -29,6 +29,8 @@ public class Task {
         }
         return false;
     }
+
+    public abstract String getTaskString();
 
     @Override
     public String toString() {
