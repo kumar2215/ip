@@ -37,7 +37,7 @@ public class Rover {
                     default:
                         return;
                     }
-                    if (parts[1].equals("X")) {
+                    if (parts[1].equals("1")) {
                         newTask.setDone();
                     }
                     tasks.add(newTask);
@@ -82,23 +82,6 @@ public class Rover {
         System.out.println(divider);
     }
 
-    private String getString(Task task) {
-        String taskType = "";
-        String taskDescription = "";
-        if (task instanceof Todo) {
-            taskType = "T";
-            taskDescription = task.description;
-        } else if (task instanceof Deadline) {
-            taskType = "D";
-            taskDescription = task.description + " /by " + ((Deadline) task).by;
-        } else {
-            taskType = "E";
-            taskDescription = task.description + " /from " + ((Event) task).start + " /to " + ((Event) task).end;
-        }
-        String taskStatus = task.isDone ? "X" : " ";
-        return taskType + " | " + taskStatus + " | " + taskDescription + "\n";
-    }
-
     private void saveTasks() {
         String cwd = System.getProperty("user.dir");
         Path savedTasksPath = Paths.get(cwd, "data", "Rover.txt");
@@ -107,7 +90,7 @@ public class Rover {
             Files.deleteIfExists(savedTasksPath);
             Files.createFile(savedTasksPath);
             for (Task task : tasks) {
-                String taskString = getString(task);
+                String taskString = task.getTaskString() + "\n";
                 Files.writeString(savedTasksPath, taskString, java.nio.file.StandardOpenOption.APPEND);
             }
             System.out.println("Tasks saved successfully.");
