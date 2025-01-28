@@ -7,8 +7,6 @@ import rover.ui.Ui;
 import rover.parser.Parser;
 import rover.task.TaskList;
 
-import java.io.IOException;
-
 public class Rover {
 
     private final Storage storage;
@@ -21,15 +19,9 @@ public class Rover {
         ui = new Ui();
         storage = new Storage(filePath);
         try {
-            taskList = new TaskList(storage.load());
+            taskList = new TaskList(storage.load(ui));
         } catch (RoverException e) {
             ui.displayError("Could not load saved tasks. Saved tasks could be corrupted.");
-            taskList = new TaskList();
-        } catch (IOException e) {
-            ui.displayError("Could not load saved tasks.");
-            taskList = new TaskList();
-        } catch (SecurityException e) {
-            ui.displayError("Could not access the saved tasks file.");
             taskList = new TaskList();
         }
     }

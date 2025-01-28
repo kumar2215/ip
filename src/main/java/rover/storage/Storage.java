@@ -21,15 +21,23 @@ public class Storage {
         this.filePath = Paths.get(cwd, filePathParts);
     }
 
-    public String[] load() throws IOException, SecurityException {
-        boolean fileExists = Files.exists(filePath);
-        if (!fileExists) {
+    public String[] load(Ui ui) {
+        try {
+            boolean fileExists = Files.exists(filePath);
+            if (!fileExists) {
+                return new String[0];
+            } else {
+                Stream<String> lines = Files.lines(filePath).filter(line -> !line.isBlank());
+                String[] tasks = lines.toArray(String[]::new);
+                lines.close();
+                return tasks;
+            }
+        } catch (IOException e) {
+            ui.displayError("Failed to load tasks.");
             return new String[0];
-        } else {
-            Stream<String> lines = Files.lines(filePath).filter(line -> !line.isBlank());
-            String[] tasks = lines.toArray(String[]::new);
-            lines.close();
-            return tasks;
+        } catch (SecurityException e) {
+            ui.displayError("Could not access the saved tasks file.");
+            return new String[0];
         }
     }
 
