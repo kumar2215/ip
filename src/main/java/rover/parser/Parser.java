@@ -1,4 +1,14 @@
+package rover.parser;
+
 import java.time.format.DateTimeParseException;
+
+import rover.command.*;
+import rover.exceptions.RoverException;
+import rover.task.Deadline;
+import rover.task.Event;
+import rover.task.Todo;
+import rover.task.Task;
+import rover.task.TaskAction;
 
 public class Parser {
 
@@ -7,25 +17,25 @@ public class Parser {
     public Command parseCommand(String input) {
         input = input.toLowerCase().trim();
         if (input.isEmpty()) {
-            return Command.EMPTY;
+            return new EmptyCommand(input);
         } else if (input.equals("bye")) {
-            return Command.EXIT;
+            return new ExitCommand(input);
         } else if (input.equals("list")) {
-            return Command.LIST_TASKS;
+            return new ListCommand(input);
         } else if (input.startsWith("mark")) {
-            return Command.MARK_TASK;
+            return new MarkCommand(input);
         } else if (input.startsWith("unmark")) {
-            return Command.UNMARK_TASK;
+            return new UnmarkCommand(input);
         } else if (input.startsWith("delete")) {
-            return Command.DELETE_TASK;
+            return new DeleteCommand(input);
         } else if (input.startsWith("show before")) {
-            return Command.SHOW_TASKS_BEFORE;
+            return new ShowBeforeCommand(input);
         } else if (input.startsWith("show after")) {
-            return Command.SHOW_TASKS_AFTER;
+            return new ShowAfterCommand(input);
         } else if (input.startsWith("todo") || input.startsWith("deadline") || input.startsWith("event")) {
-            return Command.ADD_TASK;
+            return new AddCommand(input);
         } else {
-            return Command.INVALID;
+            return new InvalidCommand(input);
         }
     }
 

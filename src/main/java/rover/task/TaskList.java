@@ -1,4 +1,10 @@
+package rover.task;
+
+import rover.ui.Ui;
+
+import rover.exceptions.RoverException;
 import java.time.format.DateTimeParseException;
+
 import java.util.ArrayList;
 
 public class TaskList {

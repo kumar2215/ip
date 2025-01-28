@@ -1,4 +1,7 @@
+package rover.task;
+
 import java.time.format.DateTimeParseException;
+import rover.exceptions.RoverException;
 
 public abstract class Task {
     protected String description;

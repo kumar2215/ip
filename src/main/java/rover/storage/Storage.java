@@ -1,3 +1,9 @@
+package rover.storage;
+
+import rover.task.Task;
+import rover.task.TaskList;
+import rover.ui.Ui;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
