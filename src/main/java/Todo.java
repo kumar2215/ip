@@ -5,6 +5,16 @@ public class Todo extends Task {
     }
 
     @Override
+    public boolean isBefore(String dateTime) {
+        return false;
+    }
+
+    @Override
+    public boolean isAfter(String dateTime) {
+        return false;
+    }
+
+    @Override
     public String getTaskString() {
         return "T | " + (isDone ? "1" : "0") + " | " + description;
     }

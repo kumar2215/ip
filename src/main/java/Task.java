@@ -1,3 +1,5 @@
+import java.time.format.DateTimeParseException;
+
 public abstract class Task {
     protected String description;
     protected boolean isDone;
@@ -31,6 +33,10 @@ public abstract class Task {
     }
 
     public abstract String getTaskString();
+
+    public abstract boolean isBefore(String dateTime) throws DateTimeParseException;
+
+    public abstract boolean isAfter(String dateTime) throws DateTimeParseException;
 
     @Override
     public String toString() {
