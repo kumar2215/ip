@@ -1,357 +1,124 @@
-import java.time.LocalDate;
-import java.util.Scanner;
-import java.util.ArrayList;
 import java.io.IOException;
 import java.time.format.DateTimeParseException;
-import java.util.stream.Stream;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.Files;
 
 public class Rover {
 
-    private static final String divider = "--------------------------------------------";
-    private final ArrayList<Task> tasks = new ArrayList<>();
-    private int taskCount = 0;
+    private final Storage storage;
+    private TaskList taskList;
+    private final Parser parser;
+    private final Ui ui;
 
-    private void loadSavedTasks() throws IOException, SecurityException {
-        String cwd = System.getProperty("user.dir");
-        Path savedTasksPath = Paths.get(cwd, "data", "Rover.txt");
-        boolean fileExists = Files.exists(savedTasksPath);
-        if (!fileExists) {
-            return;
-        } else {
-            Stream<String> lines = Files.lines(savedTasksPath);
-            lines.forEach(line -> {
-                try {
-                    if (line.isEmpty()) {
-                        return;
-                    }
-                    String[] parts = line.split(" \\| ");
-                    Task newTask;
-                    switch (parts[0]) {
-                    case "T":
-                        newTask = new Todo(parts[2]);
-                        break;
-                    case "D":
-                        newTask = new Deadline(parts[2]);
-                        break;
-                    case "E":
-                        newTask = new Event(parts[2]);
-                        break;
-                    default:
-                        return;
-                    }
-                    if (parts[1].equals("1")) {
-                        newTask.setDone();
-                    }
-                    tasks.add(newTask);
-                    taskCount++;
-                } catch (Exception e) {
-                    System.out.println("An error occurred when trying to load saved tasks.");
-                }
-            });
-            lines.close();
-        }
-    }
-
-    private void printWelcome() {
-        String logo = """
-                ___
-                |  _`\\
-                | (_) )   _    _   _    __   _ __
-                | ,  /  /'_`\\ ( ) ( ) /'__`\\( '__)
-                | |\\ \\ ( (_) )| \\_/ |(  ___/| |
-                (_) (_)`\\___/'`\\___/'`\\____)(_)
-                """;
-
-        System.out.println(divider);
-        System.out.println("Hello! I'm Rover");
-        System.out.println(logo);
-        System.out.println("I am your personal task manager.");
-        boolean hasBeenLoaded = false;
-        int attempts = 0;
-        while (!hasBeenLoaded && attempts < 3) {
-            try {
-                loadSavedTasks();
-                hasBeenLoaded = true;
-            } catch (IOException e) {
-                System.out.println("An error occurred when trying to load saved tasks.");
-                System.out.println("Trying again...");
-                attempts++;
-            } catch (SecurityException e) {
-                System.out.println("An error occurred when trying to access the saved tasks file.");
-                break;
-            }
-        }
-        System.out.println("What can I do for you?");
-        System.out.println(divider);
-    }
-
-    private void saveTasks() {
-        String cwd = System.getProperty("user.dir");
-        Path savedTasksPath = Paths.get(cwd, "data", "Rover.txt");
+    Rover(String filePath) {
+        parser = new Parser();
+        ui = new Ui();
+        storage = new Storage(filePath);
         try {
-            Files.createDirectories(savedTasksPath.getParent());
-            Files.deleteIfExists(savedTasksPath);
-            Files.createFile(savedTasksPath);
-            for (Task task : tasks) {
-                String taskString = task.getTaskString() + "\n";
-                Files.writeString(savedTasksPath, taskString, java.nio.file.StandardOpenOption.APPEND);
-            }
-            System.out.println("Tasks saved successfully.");
+            taskList = new TaskList(storage.load());
+        } catch (RoverException e) {
+            ui.displayError("Could not load saved tasks. Saved tasks could be corrupted.");
+            taskList = new TaskList();
         } catch (IOException e) {
-            System.out.println("An error occurred when trying to save tasks.");
+            ui.displayError("Could not load saved tasks.");
+            taskList = new TaskList();
         } catch (SecurityException e) {
-            System.out.println("An error occurred when trying to create the saved tasks file.");
+            ui.displayError("Could not access the saved tasks file.");
+            taskList = new TaskList();
         }
     }
 
-    private void printGoodbye() {
-        System.out.println("Saving your tasks...");
-        saveTasks();
-        System.out.println("Bye. Hope to see you again soon!");
-        System.out.println(divider);
-    }
-
-    private void listTasks() {
-        System.out.println(divider);
-        if (taskCount == 0) {
-            System.out.println("There are no tasks in your list.");
-            System.out.println(divider);
-            return;
-        }
-        System.out.println("Here are the tasks in your list:");
-        for (int i = 0; i < taskCount; i++) {
-            System.out.println((i + 1) + ". " + tasks.get(i));
-        }
-        System.out.println(divider);
-    }
-
-    private int getTaskNumber(String taskNumber, TaskAction taskAction) throws RoverException {
-        String action = taskAction == TaskAction.MARK_DONE
-                ? "marked as done"
-                : taskAction == TaskAction.MARK_UNDONE
-                ? "marked as not done"
-                : "deleted";
-        if (taskNumber.isEmpty()) {
-            throw new RoverException("Please specify the task number to be " + action  + ".");
-        }
-        int index;
-        try {
-            index = Integer.parseInt(taskNumber) - 1;
-        } catch (NumberFormatException e) {
-            throw new RoverException("Please specify a valid task number to be " + action + ".");
-        }
-        if (index < 0 || index >= taskCount) {
-            throw new RoverException("Please specify a valid task number to be " + action + ".\n" +
-                    "You only have " + taskCount + " tasks in total.");
-        }
-        return index;
-    }
-
-    private void markTaskAsDone(String taskNumber) {
-        int index;
-        try {
-            index = getTaskNumber(taskNumber, TaskAction.MARK_DONE);
-        } catch (RoverException e) {
-            System.out.println(divider);
-            System.out.println(e.getMessage());
-            System.out.println(divider);
-            return;
-        }
-        tasks.get(index).setDone();
-        System.out.println(divider);
-        System.out.println("Nice! I've marked this task as done:");
-        System.out.println(tasks.get(index));
-        System.out.println(divider);
-    }
-
-    private void markTaskAsUndone(String taskNumber) {
-        int index;
-        try {
-            index = getTaskNumber(taskNumber, TaskAction.MARK_UNDONE);
-        } catch (RoverException e) {
-            System.out.println(divider);
-            System.out.println(e.getMessage());
-            System.out.println(divider);
-            return;
-        }
-        tasks.get(index).setUndone();
-        System.out.println(divider);
-        System.out.println("OK, I've marked this task as not done yet:");
-        System.out.println(tasks.get(index));
-        System.out.println(divider);
-    }
-
-    private void deleteTask(String taskNumber) {
-        int index;
-        try {
-            index = getTaskNumber(taskNumber, TaskAction.DELETE);
-        } catch (RoverException e) {
-            System.out.println(divider);
-            System.out.println(e.getMessage());
-            System.out.println(divider);
-            return;
-        }
-        Task task = tasks.remove(index);
-        taskCount--;
-        System.out.println(divider);
-        System.out.println("Noted. I've removed this task:");
-        System.out.println(task);
-        System.out.println("Now you have " + taskCount + " task" + (taskCount > 1 ? "s" : "") +  " in the list.");
-        System.out.println(divider);
-    }
-
-    private void showTasksBefore(String dateTime) {
-        System.out.println(divider);
-        ArrayList<Task> tasksBefore = new ArrayList<>();
-        for (int i = 0; i < taskCount; i++) {
-            Task task = tasks.get(i);
-            try {
-                if (task.isBefore(dateTime)) {
-                    tasksBefore.add(task);
+    private void run() {
+        ui.showWelcome();
+        boolean isRunning = true;
+        while (isRunning) {
+            String input = ui.readCommand();
+            Command command = parser.parseCommand(input);
+            switch (command) {
+            case EMPTY:
+                ui.displayError("Please enter a command.");
+            case EXIT:
+                isRunning = false;
+                break;
+            case LIST_TASKS:
+                taskList.showAllTasks(ui);
+                break;
+            case MARK_TASK:
+                try {
+                    int index = parser.parseTaskNumber(
+                            input.substring(4).trim(),
+                            taskList.getNumberOfTasks(),
+                            TaskAction.MARK_DONE
+                    );
+                    taskList.markTask(index, ui);
+                    break;
+                } catch (RoverException e) {
+                    ui.showLine();
+                    ui.displayError(e.getMessage());
+                    ui.showLine();
                 }
-            } catch (DateTimeParseException e) {
-                System.out.println("Please specify the date in the format 'dd/mm/yy' and time in the format 'hh:mm'.");
-                return;
-            }
-        }
-        if (tasksBefore.isEmpty()) {
-            System.out.println("There are no tasks before " + dateTime + ".");
-        } else {
-            System.out.println("Here are the tasks before " + dateTime + ":");
-            for (int i = 0; i < tasksBefore.size(); i++) {
-                System.out.println((i + 1) + ". " + tasksBefore.get(i));
-            }
-        }
-        System.out.println(divider);
-    }
-
-    private void showTasksAfter(String dateTime) {
-        System.out.println(divider);
-        ArrayList<Task> tasksAfter = new ArrayList<>();
-        for (int i = 0; i < taskCount; i++) {
-            Task task = tasks.get(i);
-            try {
-                if (task.isAfter(dateTime)) {
-                    tasksAfter.add(task);
+                break;
+            case UNMARK_TASK:
+                try {
+                    int index = parser.parseTaskNumber(
+                            input.substring(6).trim(),
+                            taskList.getNumberOfTasks(),
+                            TaskAction.MARK_UNDONE
+                    );
+                    taskList.unmarkTask(index, ui);
+                    break;
+                } catch (RoverException e) {
+                    ui.showLine();
+                    ui.displayError(e.getMessage());
+                    ui.showLine();
                 }
-            } catch (DateTimeParseException e) {
-                System.out.println("Please specify the date in the format 'dd/mm/yy' and time in the format 'hh:mm'.");
-                return;
+                break;
+            case DELETE_TASK:
+                try {
+                    int index = parser.parseTaskNumber(
+                            input.substring(6).trim(),
+                            taskList.getNumberOfTasks(),
+                            TaskAction.DELETE
+                    );
+                    taskList.deleteTask(index, ui);
+                    break;
+                } catch (RoverException e) {
+                    ui.showLine();
+                    ui.displayError(e.getMessage());
+                    ui.showLine();
+                }
+                break;
+            case SHOW_TASKS_BEFORE:
+                taskList.showTasksBefore(input.substring(11).trim(), ui);
+                break;
+            case SHOW_TASKS_AFTER:
+                taskList.showTasksAfter(input.substring(10).trim(), ui);
+                break;
+            case ADD_TASK:
+                try {
+                    Task newTask = parser.parseTaskDescription(input);
+                    taskList.addTask(newTask, ui);
+                } catch (RoverException e) {
+                    ui.showLine();
+                    ui.displayError(e.getMessage());
+                    ui.showLine();
+                } catch (DateTimeParseException e) {
+                    ui.showLine();
+                    if (e.getMessage().contains("date")) {
+                        ui.displayError("The date format should be 'dd/mm/yy'.");
+                    } if (e.getMessage().contains("time")) {
+                        ui.displayError("The time format should be 'hh:mm'.");
+                    }
+                    ui.showLine();
+                }
+                break;
+            case INVALID:
+                ui.showHelpMessage();
             }
         }
-        if (tasksAfter.isEmpty()) {
-            System.out.println("There are no tasks after " + dateTime + ".");
-        } else {
-            System.out.println("Here are the tasks after " + dateTime + ":");
-            for (int i = 0; i < tasksAfter.size(); i++) {
-                System.out.println((i + 1) + ". " + tasksAfter.get(i));
-            }
-        }
-        System.out.println(divider);
-    }
-
-    private Task getTaskFromDescription(String description) throws RoverException, DateTimeParseException {
-        Task newTask;
-        description = description.trim();
-        if (description.toLowerCase().startsWith("deadline")) {
-            newTask = new Deadline(description.substring(8).trim());
-        } else if (description.toLowerCase().startsWith("event")) {
-            newTask = new Event(description.substring(5).trim());
-        } else if (description.toLowerCase().startsWith("todo")) {
-            newTask = new Todo(description.substring(4).trim());
-        } else {
-            throw new RoverException("Not a valid task type.");
-        }
-        return newTask;
-    }
-
-    private void addTask(String description) {
-        Task newTask;
-        try {
-            newTask = getTaskFromDescription(description);
-        } catch (DateTimeParseException e) {
-            System.out.println(divider);
-            if (e.getMessage().contains("date")) {
-                System.out.println("Please specify the date in the format 'dd/mm/yy'.");
-            } if (e.getMessage().contains("time")) {
-                System.out.println("Please specify the time in the format 'hh:mm'.");
-            }
-            System.out.println(divider);
-            return;
-        } catch (RoverException e) {
-            if (e.getMessage().equals("Not a valid task type.")) {
-                System.out.println(divider);
-                System.out.println("I'm sorry, but I don't know what that means.");
-                String briefHelp = """
-                        The following commands are supported:
-                            You can add a task by typing:
-                            - todo (description)
-                            - deadline (description) /by (deadline)
-                            - event (description) /from (start) /to (end)
-                            List the existing tasks by typing 'list'.
-                            Mark a task as done by typing 'mark (task number)'.
-                            Mark a task as not done by typing 'unmark (task number)'.
-                            Delete a task by typing 'delete (task number)'.
-                            Show tasks before a certain date and/or time by typing 'show before (date) (time)'.
-                            Show tasks after a certain date and/or time by typing 'show after (date) (time)'.
-                            Exit the program by typing 'bye'.
-                        """;
-                System.out.print(briefHelp);
-                System.out.println(divider);
-                return;
-            } else {
-                System.out.println(divider);
-                System.out.println(e.getMessage());
-                System.out.println(divider);
-                return;
-            }
-        }
-        if (tasks.contains(newTask)) {
-            System.out.println(divider);
-            System.out.println("This task already exists in your list.");
-            System.out.println(divider);
-            return;
-        }
-        tasks.add(newTask);
-        taskCount++;
-        System.out.println(divider);
-        System.out.println("Got it. I've added this task:");
-        System.out.println(tasks.get(taskCount - 1));
-        System.out.println("Now you have " + taskCount + " task" + (taskCount > 1 ? "s" : "") +  " in the list.");
-        System.out.println(divider);
+        storage.save(taskList, ui);
+        ui.sayBye();
     }
 
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        Rover rover = new Rover();
-        rover.printWelcome();
-        while (true) {
-            String input = sc.nextLine();
-            if (input.equalsIgnoreCase("bye")) {
-                break;
-            } else if (input.equalsIgnoreCase("list")) {
-                rover.listTasks();
-            } else if (input.toLowerCase().startsWith("mark")) {
-                rover.markTaskAsDone(input.substring(4).trim());
-            } else if (input.toLowerCase().startsWith("unmark")) {
-                rover.markTaskAsUndone(input.substring(6).trim());
-            } else if (input.toLowerCase().startsWith("delete")) {
-                rover.deleteTask(input.substring(6).trim());
-            } else if (input.toLowerCase().startsWith("show before")) {
-                rover.showTasksBefore(input.substring(11).trim());
-            } else if (input.toLowerCase().startsWith("show after")) {
-                rover.showTasksAfter(input.substring(10).trim());
-            } else if (input.isEmpty()) {
-                System.out.println(divider);
-                System.out.println("Please enter a valid command.");
-                System.out.println(divider);
-            } else {
-                rover.addTask(input);
-            }
-        }
-        rover.printGoodbye();
+        new Rover("data/Rover.txt").run();
     }
 }
