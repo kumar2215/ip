@@ -1,14 +1,21 @@
 package rover.command;
 
-public enum Command {
-    EXIT,
-    LIST_TASKS,
-    ADD_TASK,
-    MARK_TASK,
-    UNMARK_TASK,
-    DELETE_TASK,
-    SHOW_TASKS_BEFORE,
-    SHOW_TASKS_AFTER,
-    EMPTY,
-    INVALID
+import rover.parser.Parser;
+import rover.ui.Ui;
+import rover.task.TaskList;
+
+public abstract class Command {
+
+    protected final String args;
+
+    public Command(String args) {
+        this.args = args;
+    }
+
+    public abstract void execute(TaskList taskList, Parser parser, Ui ui);
+
+    public boolean isExit() {
+        return false;
+    }
+
 }
