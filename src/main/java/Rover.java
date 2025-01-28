@@ -1,6 +1,8 @@
+import java.time.LocalDate;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.io.IOException;
+import java.time.format.DateTimeParseException;
 import java.util.stream.Stream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -22,6 +24,9 @@ public class Rover {
             Stream<String> lines = Files.lines(savedTasksPath);
             lines.forEach(line -> {
                 try {
+                    if (line.isEmpty()) {
+                        return;
+                    }
                     String[] parts = line.split(" \\| ");
                     Task newTask;
                     switch (parts[0]) {
@@ -72,6 +77,7 @@ public class Rover {
                 hasBeenLoaded = true;
             } catch (IOException e) {
                 System.out.println("An error occurred when trying to load saved tasks.");
+                System.out.println("Trying again...");
                 attempts++;
             } catch (SecurityException e) {
                 System.out.println("An error occurred when trying to access the saved tasks file.");
@@ -197,7 +203,57 @@ public class Rover {
         System.out.println(divider);
     }
 
-    private Task getTaskFromDescription(String description) throws RoverException {
+    private void showTasksBefore(String dateTime) {
+        System.out.println(divider);
+        ArrayList<Task> tasksBefore = new ArrayList<>();
+        for (int i = 0; i < taskCount; i++) {
+            Task task = tasks.get(i);
+            try {
+                if (task.isBefore(dateTime)) {
+                    tasksBefore.add(task);
+                }
+            } catch (DateTimeParseException e) {
+                System.out.println("Please specify the date in the format 'dd/mm/yy' and time in the format 'hh:mm'.");
+                return;
+            }
+        }
+        if (tasksBefore.isEmpty()) {
+            System.out.println("There are no tasks before " + dateTime + ".");
+        } else {
+            System.out.println("Here are the tasks before " + dateTime + ":");
+            for (int i = 0; i < tasksBefore.size(); i++) {
+                System.out.println((i + 1) + ". " + tasksBefore.get(i));
+            }
+        }
+        System.out.println(divider);
+    }
+
+    private void showTasksAfter(String dateTime) {
+        System.out.println(divider);
+        ArrayList<Task> tasksAfter = new ArrayList<>();
+        for (int i = 0; i < taskCount; i++) {
+            Task task = tasks.get(i);
+            try {
+                if (task.isAfter(dateTime)) {
+                    tasksAfter.add(task);
+                }
+            } catch (DateTimeParseException e) {
+                System.out.println("Please specify the date in the format 'dd/mm/yy' and time in the format 'hh:mm'.");
+                return;
+            }
+        }
+        if (tasksAfter.isEmpty()) {
+            System.out.println("There are no tasks after " + dateTime + ".");
+        } else {
+            System.out.println("Here are the tasks after " + dateTime + ":");
+            for (int i = 0; i < tasksAfter.size(); i++) {
+                System.out.println((i + 1) + ". " + tasksAfter.get(i));
+            }
+        }
+        System.out.println(divider);
+    }
+
+    private Task getTaskFromDescription(String description) throws RoverException, DateTimeParseException {
         Task newTask;
         description = description.trim();
         if (description.toLowerCase().startsWith("deadline")) {
@@ -216,6 +272,15 @@ public class Rover {
         Task newTask;
         try {
             newTask = getTaskFromDescription(description);
+        } catch (DateTimeParseException e) {
+            System.out.println(divider);
+            if (e.getMessage().contains("date")) {
+                System.out.println("Please specify the date in the format 'dd/mm/yy'.");
+            } if (e.getMessage().contains("time")) {
+                System.out.println("Please specify the time in the format 'hh:mm'.");
+            }
+            System.out.println(divider);
+            return;
         } catch (RoverException e) {
             if (e.getMessage().equals("Not a valid task type.")) {
                 System.out.println(divider);
@@ -230,6 +295,8 @@ public class Rover {
                             Mark a task as done by typing 'mark (task number)'.
                             Mark a task as not done by typing 'unmark (task number)'.
                             Delete a task by typing 'delete (task number)'.
+                            Show tasks before a certain date and/or time by typing 'show before (date) (time)'.
+                            Show tasks after a certain date and/or time by typing 'show after (date) (time)'.
                             Exit the program by typing 'bye'.
                         """;
                 System.out.print(briefHelp);
@@ -273,6 +340,14 @@ public class Rover {
                 rover.markTaskAsUndone(input.substring(6).trim());
             } else if (input.toLowerCase().startsWith("delete")) {
                 rover.deleteTask(input.substring(6).trim());
+            } else if (input.toLowerCase().startsWith("show before")) {
+                rover.showTasksBefore(input.substring(11).trim());
+            } else if (input.toLowerCase().startsWith("show after")) {
+                rover.showTasksAfter(input.substring(10).trim());
+            } else if (input.isEmpty()) {
+                System.out.println(divider);
+                System.out.println("Please enter a valid command.");
+                System.out.println(divider);
             } else {
                 rover.addTask(input);
             }
