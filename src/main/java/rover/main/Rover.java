@@ -44,6 +44,15 @@ public class Rover {
             isRunning = !command.isExit();
         }
         storage.save(taskList, ui);
+        while (!storage.isSavedSuccessfully()) {
+            ui.displayError("Could not save tasks. Try again? (Y/N)");
+            String input = ui.readCommand();
+            Command command = parser.parseCommand(input);
+            command.execute(taskList, storage, ui);
+            if (command.isExit()) {
+                break;
+            }
+        }
         ui.sayBye();
     }
 

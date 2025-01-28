@@ -1,8 +1,9 @@
 package rover.command;
 
+import rover.task.TaskList;
+import rover.storage.Storage;
 import rover.parser.Parser;
 import rover.ui.Ui;
-import rover.task.TaskList;
 
 public abstract class Command {
 
@@ -13,6 +14,8 @@ public abstract class Command {
     }
 
     public abstract void execute(TaskList taskList, Parser parser, Ui ui);
+
+    public void execute(TaskList taskList, Storage storage, Ui ui) {}
 
     public boolean isExit() {
         return false;

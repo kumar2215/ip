@@ -20,6 +20,8 @@ public class Parser {
             return new EmptyCommand(input);
         } else if (input.equals("bye")) {
             return new ExitCommand(input);
+        } else if (input.equals("y") || input.equals("n") || input.equals("yes") || input.equals("no")) {
+            return new RetrySaveCommand(input);
         } else if (input.equals("list")) {
             return new ListCommand(input);
         } else if (input.startsWith("mark")) {
