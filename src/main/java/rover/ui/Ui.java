@@ -1,3 +1,5 @@
+package rover.ui;
+
 import java.util.Scanner;
 
 public class Ui {

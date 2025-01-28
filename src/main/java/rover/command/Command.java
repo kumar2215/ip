@@ -1,3 +1,5 @@
+package rover.command;
+
 public enum Command {
     EXIT,
     LIST_TASKS,
