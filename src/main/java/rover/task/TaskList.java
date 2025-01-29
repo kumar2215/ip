@@ -21,21 +21,26 @@ public class TaskList {
             if (parts.length != 3) {
                 throw new RoverException("Possible corruption in saved tasks.");
             }
-            Task newTask;
-            switch (parts[0]) {
-                case "T" -> newTask = new Todo(parts[2]);
-                case "D" -> newTask = new Deadline(parts[2]);
-                case "E" -> newTask = new Event(parts[2]);
-                default -> throw new RoverException("Possible corruption in saved tasks.");
-            }
-            if (parts[1].equals("1")) {
-                newTask.setDone();
-            } else if (!parts[1].equals("0")) {
-                throw new RoverException("Possible corruption in saved tasks.");
-            }
+            Task newTask = getTask(parts);
             tasks.add(newTask);
             taskCount++;
         }
+    }
+
+    private Task getTask(String[] parts) throws RoverException {
+        Task newTask;
+        switch (parts[0]) {
+        case "T" -> newTask = new Todo(parts[2]);
+        case "D" -> newTask = new Deadline(parts[2]);
+        case "E" -> newTask = new Event(parts[2]);
+        default -> throw new RoverException("Possible corruption in saved tasks.");
+        }
+        if (parts[1].equals("1")) {
+            newTask.setDone();
+        } else if (!parts[1].equals("0")) {
+            throw new RoverException("Possible corruption in saved tasks.");
+        }
+        return newTask;
     }
 
     public ArrayList<Task> getTasks() {
@@ -70,6 +75,26 @@ public class TaskList {
         ui.showMessage("Got it. I've added this task:");
         ui.showMessage("  " + tasks.get(taskCount - 1).toString());
         ui.showMessage("Now you have " + taskCount + " task" + (taskCount > 1 ? "s" : "") + " in the list.");
+        ui.showLine();
+    }
+
+    public void showTasksByKeyword(String keyword, Ui ui) {
+        ui.showLine();
+        ArrayList<Task> foundTasks = new ArrayList<>();
+        for (int i = 0; i < taskCount; i++) {
+            Task task = tasks.get(i);
+            if (task.toString().contains(keyword)) {
+                foundTasks.add(task);
+            }
+        }
+        if (foundTasks.isEmpty()) {
+            ui.showMessage("There are no tasks with the keyword '" + keyword + "'.");
+        } else {
+            ui.showMessage("Here are the tasks with the keyword '" + keyword + "':");
+            for (int i = 0; i < foundTasks.size(); i++) {
+                ui.showMessage((i + 1) + ". " + foundTasks.get(i));
+            }
+        }
         ui.showLine();
     }
 
