@@ -2,23 +2,42 @@ package rover.ui;
 
 import java.util.Scanner;
 
+/**
+ * Ui class deals with interactions with the user.
+ * It displays messages to the user and reads input from the user.
+ */
 public class Ui {
 
     private static final String divider = "--------------------------------------------";
     private final Scanner sc;
 
+    /**
+     * Constructor for Ui class.
+     * It initializes the scanner to read input from the user.
+     */
     public Ui() {
         this.sc = new Scanner(System.in);
     }
 
+    /**
+     * Reads the next line of input from the user.
+     *
+     * @return The next line of input from the user.
+     */
     public String readCommand() {
         return sc.nextLine();
     }
 
+    /**
+     * Displays a line to separate different messages.
+     */
     public void showLine() {
         System.out.println(divider);
     }
 
+    /**
+     * Displays the welcome message when the program starts.
+     */
     public void showWelcome() {
         String logo = """
                 ___
@@ -37,11 +56,17 @@ public class Ui {
         System.out.println(divider);
     }
 
+    /**
+     * Displays the goodbye message when the program ends.
+     */
     public void sayBye() {
         System.out.println("Bye. Hope to see you again soon!");
         System.out.println(divider);
     }
 
+    /**
+     * Displays the help message when the user types an invalid command.
+     */
     public void showHelpMessage() {
         System.out.println(divider);
         System.out.println("I'm sorry, but I don't know what that means.");
@@ -63,10 +88,20 @@ public class Ui {
         System.out.println(divider);
     }
 
+    /**
+     * Displays the message to the user.
+     *
+     * @param message The message to be displayed.
+     */
     public void showMessage(String message) {
         System.out.println(message);
     }
 
+    /**
+     * Displays the error message to the user.
+     *
+     * @param message The error message to be displayed.
+     */
     public void displayError(String message) {
         System.out.println("Oops! Error: " + message);
     }
