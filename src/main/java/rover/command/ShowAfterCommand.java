@@ -1,4 +1,5 @@
 package rover.command;
+import java.time.format.DateTimeParseException;
 
 import rover.parser.Parser;
 import rover.task.TaskList;
@@ -23,6 +24,17 @@ public class ShowAfterCommand extends ShowCommand {
      */
     @Override
     public void execute(TaskList taskList, Parser parser, Ui ui) {
-        taskList.showTasksAfter(args, ui);
+        taskList.showTasks(ui, (task, wasExceptionThrown) -> {
+            try {
+                if (wasExceptionThrown.get()) {
+                    return false;
+                }
+                return task.isAfter(args);
+            } catch (DateTimeParseException e) {
+                ui.displayError("The date format should be 'dd/mm/yy' and the time format should be 'hh:mm'.");
+                wasExceptionThrown.set(true);
+                return false;
+            }
+        }, "after " + args);
     }
 }

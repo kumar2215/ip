@@ -23,6 +23,7 @@ public class FindCommand extends Command {
      */
     @Override
     public void execute(TaskList taskList, Parser parser, Ui ui) {
-        taskList.showTasksByKeyword(args, ui);
+        taskList.showTasks(ui, (task, ignore) -> task.toString().contains(args),
+            "with the keyword '" + args + "'");
     }
 }

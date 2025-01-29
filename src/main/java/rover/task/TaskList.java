@@ -1,6 +1,9 @@
 package rover.task;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.BiFunction;
 
 import rover.exceptions.RoverException;
 import rover.ui.Ui;
@@ -72,20 +75,27 @@ public class TaskList {
     }
 
     /**
-     * Displays all the tasks in the task list.
+     * Displays all the tasks that match the given predicate.
      *
      * @param ui The user interface to display the tasks.
+     * @param predicate The predicate to filter the tasks.
+     * @param filterDescription The description of the filter.
      */
-    public void showAllTasks(Ui ui) {
+    public void showTasks(Ui ui, BiFunction<Task, AtomicBoolean, Boolean> predicate, String filterDescription) {
         ui.showLine();
-        if (taskCount == 0) {
-            ui.showMessage("There are no tasks in your list.");
+        AtomicBoolean wasExceptionThrown = new AtomicBoolean(false);
+        List<Task> filteredTasks = tasks.stream().filter(task -> predicate.apply(task, wasExceptionThrown)).toList();
+        if (wasExceptionThrown.get()) {
             ui.showLine();
             return;
         }
-        ui.showMessage("Here are the tasks in your list:");
-        for (int i = 0; i < taskCount; i++) {
-            ui.showMessage((i + 1) + ". " + tasks.get(i));
+        if (filteredTasks.isEmpty()) {
+            ui.showMessage("There are no tasks " + filterDescription + ".");
+        } else {
+            ui.showMessage("Here are the tasks " + filterDescription + ":");
+            for (int i = 0; i < filteredTasks.size(); i++) {
+                ui.showMessage((i + 1) + ". " + filteredTasks.get(i));
+            }
         }
         ui.showLine();
     }
@@ -107,32 +117,6 @@ public class TaskList {
         ui.showMessage("Got it. I've added this task:");
         ui.showMessage("  " + tasks.get(taskCount - 1).toString());
         ui.showMessage("Now you have " + taskCount + " task" + (taskCount > 1 ? "s" : "") + " in the list.");
-        ui.showLine();
-    }
-
-    /**
-     * Displays all the tasks that contain the given keyword.
-     *
-     * @param keyword The keyword to search for in the tasks.
-     * @param ui The user interface to display the tasks found.
-     */
-    public void showTasksByKeyword(String keyword, Ui ui) {
-        ui.showLine();
-        ArrayList<Task> foundTasks = new ArrayList<>();
-        for (int i = 0; i < taskCount; i++) {
-            Task task = tasks.get(i);
-            if (task.toString().contains(keyword)) {
-                foundTasks.add(task);
-            }
-        }
-        if (foundTasks.isEmpty()) {
-            ui.showMessage("There are no tasks with the keyword '" + keyword + "'.");
-        } else {
-            ui.showMessage("Here are the tasks with the keyword '" + keyword + "':");
-            for (int i = 0; i < foundTasks.size(); i++) {
-                ui.showMessage((i + 1) + ". " + foundTasks.get(i));
-            }
-        }
         ui.showLine();
     }
 
@@ -180,68 +164,6 @@ public class TaskList {
         ui.showMessage("Noted. I've removed this task:");
         ui.showMessage(task.toString());
         ui.showMessage("Now you have " + taskCount + " task" + (taskCount > 1 ? "s" : "") + " in the list.");
-        ui.showLine();
-    }
-
-    /**
-     * Displays all the tasks that come before the given date and time.
-     *
-     * @param dateTime The date and time to compare with.
-     * @param ui The user interface to display the tasks found.
-     */
-    public void showTasksBefore(String dateTime, Ui ui) {
-        ui.showLine();
-        ArrayList<Task> tasksBefore = new ArrayList<>();
-        for (int i = 0; i < taskCount; i++) {
-            Task task = tasks.get(i);
-            try {
-                if (task.isBefore(dateTime)) {
-                    tasksBefore.add(task);
-                }
-            } catch (DateTimeParseException e) {
-                ui.displayError("The date format should be 'dd/mm/yy' and the time format should be 'hh:mm'.");
-                return;
-            }
-        }
-        if (tasksBefore.isEmpty()) {
-            ui.showMessage("There are no tasks before " + dateTime + ".");
-        } else {
-            ui.showMessage("Here are the tasks before " + dateTime + ":");
-            for (int i = 0; i < tasksBefore.size(); i++) {
-                ui.showMessage((i + 1) + ". " + tasksBefore.get(i));
-            }
-        }
-        ui.showLine();
-    }
-
-    /**
-     * Displays all the tasks that come after the given date and time.
-     *
-     * @param dateTime The date and time to compare with.
-     * @param ui The user interface to display the tasks found.
-     */
-    public void showTasksAfter(String dateTime, Ui ui) {
-        ui.showLine();
-        ArrayList<Task> tasksAfter = new ArrayList<>();
-        for (int i = 0; i < taskCount; i++) {
-            Task task = tasks.get(i);
-            try {
-                if (task.isAfter(dateTime)) {
-                    tasksAfter.add(task);
-                }
-            } catch (DateTimeParseException e) {
-                ui.displayError("The date format should be 'dd/mm/yy' and the time format should be 'hh:mm'.");
-                return;
-            }
-        }
-        if (tasksAfter.isEmpty()) {
-            ui.showMessage("There are no tasks after " + dateTime + ".");
-        } else {
-            ui.showMessage("Here are the tasks after " + dateTime + ":");
-            for (int i = 0; i < tasksAfter.size(); i++) {
-                ui.showMessage((i + 1) + ". " + tasksAfter.get(i));
-            }
-        }
         ui.showLine();
     }
 

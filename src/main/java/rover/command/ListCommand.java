@@ -23,7 +23,7 @@ public class ListCommand extends ShowCommand {
      */
     @Override
     public void execute(TaskList taskList, Parser parser, Ui ui) {
-        taskList.showAllTasks(ui);
+        taskList.showTasks(ui, (task, ignore) -> true, "in your list");
     }
 
 }
