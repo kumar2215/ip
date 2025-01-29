@@ -7,6 +7,7 @@ import rover.command.Command;
 import rover.command.DeleteCommand;
 import rover.command.EmptyCommand;
 import rover.command.ExitCommand;
+import rover.command.FindCommand;
 import rover.command.InvalidCommand;
 import rover.command.ListCommand;
 import rover.command.MarkCommand;
@@ -48,6 +49,8 @@ public class Parser {
             return new RetrySaveCommand(args);
         } else if (input.equals("list")) {
             return new ListCommand(args);
+        } else if (input.startsWith("find")) {
+            return new FindCommand(args);
         } else if (input.startsWith("mark")) {
             return new MarkCommand(args);
         } else if (input.startsWith("unmark")) {

@@ -111,6 +111,32 @@ public class TaskList {
     }
 
     /**
+     * Displays all the tasks that contain the given keyword.
+     *
+     * @param keyword The keyword to search for in the tasks.
+     * @param ui The user interface to display the tasks found.
+     */
+    public void showTasksByKeyword(String keyword, Ui ui) {
+        ui.showLine();
+        ArrayList<Task> foundTasks = new ArrayList<>();
+        for (int i = 0; i < taskCount; i++) {
+            Task task = tasks.get(i);
+            if (task.toString().contains(keyword)) {
+                foundTasks.add(task);
+            }
+        }
+        if (foundTasks.isEmpty()) {
+            ui.showMessage("There are no tasks with the keyword '" + keyword + "'.");
+        } else {
+            ui.showMessage("Here are the tasks with the keyword '" + keyword + "':");
+            for (int i = 0; i < foundTasks.size(); i++) {
+                ui.showMessage((i + 1) + ". " + foundTasks.get(i));
+            }
+        }
+        ui.showLine();
+    }
+
+    /**
      * Marks a task in the task list as done.
      *
      * @param index The index of the task to be marked as done.
