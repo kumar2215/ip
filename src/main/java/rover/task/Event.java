@@ -1,15 +1,13 @@
 package rover.task;
-
-import rover.parser.DateTimeParser;
-
-import rover.exceptions.RoverException;
-
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.format.FormatStyle;
+
+import rover.exceptions.RoverException;
+import rover.parser.DateTimeParser;
 
 public class Event extends Task {
 
@@ -24,12 +22,12 @@ public class Event extends Task {
     public Event(String description) throws RoverException, DateTimeParseException {
         super(description);
         String[] parts = description.split(" /from ");
-        if (parts.length == 1) {
+        if (parts.length != 2) {
             throw new RoverException("An event task must be a task followed with '/from (start) /to (end)'.");
         }
         this.description = parts[0];
         String[] parts2 = parts[1].split(" /to ");
-        if (parts2.length == 1) {
+        if (parts2.length != 2) {
             throw new RoverException("An event task must be a task followed with '/from (start) /to (end)'.");
         }
         this.start = parts2[0];
@@ -37,22 +35,35 @@ public class Event extends Task {
             this.startDate = DateTimeParser.parseDateTime(start).toLocalDate();
             this.startTime = DateTimeParser.parseDateTime(start).toLocalTime();
         } catch (DateTimeParseException e) {
-            this.startDate = LocalDate.now();
-            this.startTime = DateTimeParser.parseTime(start);
+            try {
+                this.startDate = DateTimeParser.parseDate(start);
+                this.startTime = LocalTime.of(0, 0);
+            } catch (DateTimeParseException e2) {
+                this.startDate = LocalDate.now();
+                this.startTime = DateTimeParser.parseTime(start);
+            }
         }
         this.end = parts2[1];
         try {
             this.endDate = DateTimeParser.parseDateTime(end).toLocalDate();
             this.endTime = DateTimeParser.parseDateTime(end).toLocalTime();
         } catch (DateTimeParseException e) {
-            this.endDate = startDate;
-            this.endTime = DateTimeParser.parseTime(end);
+            try {
+                this.endDate = startDate;
+                this.endTime = DateTimeParser.parseTime(end);
+            } catch (DateTimeParseException e2) {
+                this.endDate = DateTimeParser.parseDate(end);
+                this.endTime = LocalTime.of(23, 59);
+            }
+        }
+        if (startDate.isAfter(endDate) || (startDate.isEqual(endDate) && startTime.isAfter(endTime))) {
+            throw new RoverException("The start date and time must be before the end date and time.");
         }
         this.fromToFullFormat = "from "
-                + startDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL)) + " "
-                + startTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))
-                + " to " + endDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL)) + " "
-                + endTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT));
+            + startDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL)) + " "
+            + startTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))
+            + " to " + endDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL)) + " "
+            + endTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT));
     }
 
     @Override

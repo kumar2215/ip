@@ -9,21 +9,21 @@ import java.time.format.DateTimeParseException;
 public class DateTimeParser {
 
     public static final String[] DATE_FORMATS = {
-            "yyyy/MM/dd",
-            "yyyy-MM-dd",
-            "dd-MM-yyyy",
-            "dd/MM/yyyy",
-            "dd/MM/yy",
-            "dd-MM-yy"
+        "yyyy/MM/dd",
+        "yyyy-MM-dd",
+        "dd-MM-yyyy",
+        "dd/MM/yyyy",
+        "dd/MM/yy",
+        "dd-MM-yy"
     };
 
     public static final String[] TIME_FORMATS = {
-            "HH:mm",
-            "HHmm",
-            "h:mma",
-            "h.mma",
-            "hha",
-            "ha"
+        "HH:mm",
+        "HHmm",
+        "h:mma",
+        "h.mma",
+        "hha",
+        "ha"
     };
 
     public static LocalDateTime parseDateTime(String dateTimeString) throws DateTimeParseException {

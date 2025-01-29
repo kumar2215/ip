@@ -1,4 +1,5 @@
 package rover.main;
+import java.time.format.DateTimeParseException;
 
 import rover.command.Command;
 import rover.exceptions.RoverException;
@@ -20,8 +21,8 @@ public class Rover {
         storage = new Storage(filePath);
         try {
             taskList = new TaskList(storage.load(ui));
-        } catch (RoverException e) {
-            ui.displayError("Could not load saved tasks. Saved tasks could be corrupted.");
+        } catch (RoverException | DateTimeParseException e) {
+            ui.displayError("Could not load saved tasks properly. Saved tasks could be corrupted.");
             taskList = new TaskList();
         }
     }

@@ -74,7 +74,7 @@ public class Parser {
                 ? "marked as not done"
                 : "deleted";
         if (taskNumber.isEmpty()) {
-            throw new RoverException("Please specify the task number to be " + action  + ".");
+            throw new RoverException("Please specify the task number to be " + action + ".");
         }
         int index;
         try {
@@ -83,8 +83,8 @@ public class Parser {
             throw new RoverException("Please specify a valid task number to be " + action + ".");
         }
         if (index < 0 || index >= numberOfTasks) {
-            throw new RoverException("Please specify a valid task number to be " + action + ".\n" +
-                    "You only have " + numberOfTasks + " tasks in total.");
+            throw new RoverException("Please specify a valid task number to be " + action + ".\n"
+                + "You only have " + numberOfTasks + " tasks in total.");
         }
         return index;
     }

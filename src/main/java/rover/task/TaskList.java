@@ -1,11 +1,9 @@
 package rover.task;
-
-import rover.ui.Ui;
+import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 
 import rover.exceptions.RoverException;
-import java.time.format.DateTimeParseException;
-
-import java.util.ArrayList;
+import rover.ui.Ui;
 
 public class TaskList {
 
@@ -16,26 +14,24 @@ public class TaskList {
         this.tasks = new ArrayList<>();
     }
 
-    public TaskList(String[] taskStrings) throws RoverException {
+    public TaskList(String[] taskStrings) throws RoverException, DateTimeParseException {
         this.tasks = new ArrayList<>();
         for (String taskString : taskStrings) {
             String[] parts = taskString.split(" \\| ");
+            if (parts.length != 3) {
+                throw new RoverException("Possible corruption in saved tasks.");
+            }
             Task newTask;
             switch (parts[0]) {
-                case "T":
-                    newTask = new Todo(parts[2]);
-                    break;
-                case "D":
-                    newTask = new Deadline(parts[2]);
-                    break;
-                case "E":
-                    newTask = new Event(parts[2]);
-                    break;
-                default:
-                    return;
+                case "T" -> newTask = new Todo(parts[2]);
+                case "D" -> newTask = new Deadline(parts[2]);
+                case "E" -> newTask = new Event(parts[2]);
+                default -> throw new RoverException("Possible corruption in saved tasks.");
             }
             if (parts[1].equals("1")) {
                 newTask.setDone();
+            } else if (!parts[1].equals("0")) {
+                throw new RoverException("Possible corruption in saved tasks.");
             }
             tasks.add(newTask);
             taskCount++;
@@ -64,19 +60,16 @@ public class TaskList {
         ui.showLine();
     }
 
-    public void addTask(Task newTask, Ui ui) {
+    public void addTask(Task newTask, Ui ui) throws RoverException {
         if (tasks.contains(newTask)) {
-            ui.showLine();
-            ui.displayError("This task already exists in your list.");
-            ui.showLine();
-            return;
+            throw new RoverException("This task already exists in the list.");
         }
         tasks.add(newTask);
         taskCount++;
         ui.showLine();
         ui.showMessage("Got it. I've added this task:");
-        ui.showMessage(tasks.get(taskCount - 1).toString());
-        ui.showMessage("Now you have " + taskCount + " task" + (taskCount > 1 ? "s" : "") +  " in the list.");
+        ui.showMessage("  " + tasks.get(taskCount - 1).toString());
+        ui.showMessage("Now you have " + taskCount + " task" + (taskCount > 1 ? "s" : "") + " in the list.");
         ui.showLine();
     }
 
@@ -105,7 +98,7 @@ public class TaskList {
         ui.showLine();
         ui.showMessage("Noted. I've removed this task:");
         ui.showMessage(task.toString());
-        ui.showMessage("Now you have " + taskCount + " task" + (taskCount > 1 ? "s" : "") +  " in the list.");
+        ui.showMessage("Now you have " + taskCount + " task" + (taskCount > 1 ? "s" : "") + " in the list.");
         ui.showLine();
     }
 

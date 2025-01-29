@@ -22,7 +22,7 @@ public class Deadline extends Task {
         super(description);
         String[] parts = description.split(" /by ");
         this.description = parts[0];
-        if (parts.length == 1) {
+        if (parts.length != 2) {
             throw new RoverException("A deadline task must be a task followed with '/by (deadline)'.");
         }
         String[] dateAndTime = parts[1].split(" ");

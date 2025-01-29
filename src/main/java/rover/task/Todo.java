@@ -4,7 +4,7 @@ import rover.exceptions.RoverException;
 
 public class Todo extends Task {
 
-    public Todo (String description) throws RoverException {
+    public Todo(String description) throws RoverException {
         super(description);
     }
 
