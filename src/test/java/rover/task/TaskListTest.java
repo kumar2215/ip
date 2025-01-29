@@ -131,7 +131,7 @@ public class TaskListTest {
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));
 
-        taskList.showAllTasks(ui);
+        taskList.showTasks(ui, (task, ignore) -> true, "in your list");
 
         String expectedOutput = """
             --------------------------------------------
