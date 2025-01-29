@@ -1,12 +1,11 @@
 package rover.command;
+import java.time.format.DateTimeParseException;
 
 import rover.exceptions.RoverException;
+import rover.parser.Parser;
 import rover.task.Task;
 import rover.task.TaskList;
-import rover.parser.Parser;
 import rover.ui.Ui;
-
-import java.time.format.DateTimeParseException;
 
 public class AddCommand extends Command {
 
@@ -27,7 +26,8 @@ public class AddCommand extends Command {
             ui.showLine();
             if (e.getMessage().contains("date")) {
                 ui.displayError("The date format should be 'dd/mm/yy'.");
-            } if (e.getMessage().contains("time")) {
+            }
+            if (e.getMessage().contains("time")) {
                 ui.displayError("The time format should be 'hh:mm'.");
             }
             ui.showLine();

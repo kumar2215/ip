@@ -1,7 +1,7 @@
 package rover.command;
 
-import rover.task.TaskList;
 import rover.parser.Parser;
+import rover.task.TaskList;
 import rover.ui.Ui;
 
 public class ExitCommand extends Command {

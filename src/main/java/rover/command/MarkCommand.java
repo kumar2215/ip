@@ -1,9 +1,9 @@
 package rover.command;
 
 import rover.exceptions.RoverException;
+import rover.parser.Parser;
 import rover.task.TaskAction;
 import rover.task.TaskList;
-import rover.parser.Parser;
 import rover.ui.Ui;
 
 public class MarkCommand extends Command {
