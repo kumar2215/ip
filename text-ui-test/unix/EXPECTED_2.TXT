@@ -7,56 +7,57 @@ ___
 | |\ \ ( (_) )| \_/ |(  ___/| |
 (_) (_)`\___/'`\___/'`\____)(_)
 
+I am your personal task manager.
 What can I do for you?
 --------------------------------------------
 --------------------------------------------
-Got it. I've added this task:
-[T][ ] borrow book
-Now you have 1 task in the list.
---------------------------------------------
---------------------------------------------
-Got it. I've added this task:
-[T][ ] buy bread
-Now you have 2 tasks in the list.
---------------------------------------------
---------------------------------------------
-Got it. I've added this task:
-[E][ ] CS3230 Lecture (from: Thur 2pm to: 4pm)
-Now you have 3 tasks in the list.
---------------------------------------------
---------------------------------------------
-Got it. I've added this task:
-[D][ ] CS3230 Assignment 1 (by: Sunday)
-Now you have 4 tasks in the list.
---------------------------------------------
---------------------------------------------
 Here are the tasks in your list:
-1. [T][ ] borrow book
-2. [T][ ] buy bread
-3. [E][ ] CS3230 Lecture (from: Thur 2pm to: 4pm)
-4. [D][ ] CS3230 Assignment 1 (by: Sunday)
+1. [T][ ] buy milk
+2. [D][ ] CS3230 Assignment 2 (by: Saturday, February 1, 2025 11:59 PM)
+3. [T][ ] read book
+--------------------------------------------
+--------------------------------------------
+Oops! Error: This task already exists in the list.
 --------------------------------------------
 --------------------------------------------
 Nice! I've marked this task as done:
-[T][X] buy bread
+[T][X] buy milk
 --------------------------------------------
 --------------------------------------------
 Here are the tasks in your list:
-1. [T][ ] borrow book
-2. [T][X] buy bread
-3. [E][ ] CS3230 Lecture (from: Thur 2pm to: 4pm)
-4. [D][ ] CS3230 Assignment 1 (by: Sunday)
+1. [T][X] buy milk
+2. [D][ ] CS3230 Assignment 2 (by: Saturday, February 1, 2025 11:59 PM)
+3. [T][ ] read book
 --------------------------------------------
 --------------------------------------------
-OK, I've marked this task as not done yet:
-[T][ ] buy bread
+Oops! Error: Please specify a valid task number to be marked as done.
+You only have 3 tasks in total.
 --------------------------------------------
 --------------------------------------------
 Here are the tasks in your list:
-1. [T][ ] borrow book
-2. [T][ ] buy bread
-3. [E][ ] CS3230 Lecture (from: Thur 2pm to: 4pm)
-4. [D][ ] CS3230 Assignment 1 (by: Sunday)
+1. [T][X] buy milk
+2. [D][ ] CS3230 Assignment 2 (by: Saturday, February 1, 2025 11:59 PM)
+3. [T][ ] read book
 --------------------------------------------
+--------------------------------------------
+Oops! Error: Please specify a valid task number to be deleted.
+You only have 3 tasks in total.
+--------------------------------------------
+--------------------------------------------
+Here are the tasks in your list:
+1. [T][X] buy milk
+2. [D][ ] CS3230 Assignment 2 (by: Saturday, February 1, 2025 11:59 PM)
+3. [T][ ] read book
+--------------------------------------------
+--------------------------------------------
+Here are the tasks before 02/02/25:
+1. [D][ ] CS3230 Assignment 2 (by: Saturday, February 1, 2025 11:59 PM)
+--------------------------------------------
+--------------------------------------------
+Here are the tasks after 30/01/25:
+1. [D][ ] CS3230 Assignment 2 (by: Saturday, February 1, 2025 11:59 PM)
+--------------------------------------------
+Saving your tasks...
+Tasks saved successfully.
 Bye. Hope to see you again soon!
 --------------------------------------------

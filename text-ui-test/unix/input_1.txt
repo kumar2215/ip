@@ -1,0 +1,13 @@
+
+help
+todo
+todo buy milk
+list
+CS3230 Assignment 2 /by 010225 2359
+deadline CS3230 Assignment 2 /by 010225 2359
+deadline CS3230 Assignment 2 /by 01/02/25 2359
+event CS3230 Lecture /from 2pm /to 4pm
+list
+todo read book
+list
+bye

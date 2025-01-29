@@ -25,30 +25,31 @@ public class Parser {
 
     public Parser() {}
 
-    public Command parseCommand(String input) {
-        input = input.toLowerCase().trim();
+    public Command parseCommand(String args) {
+        args = args.trim();
+        String input = args.toLowerCase();
         if (input.isEmpty()) {
-            return new EmptyCommand(input);
+            return new EmptyCommand(args);
         } else if (input.equals("bye")) {
-            return new ExitCommand(input);
+            return new ExitCommand(args);
         } else if (input.equals("y") || input.equals("n") || input.equals("yes") || input.equals("no")) {
-            return new RetrySaveCommand(input);
+            return new RetrySaveCommand(args);
         } else if (input.equals("list")) {
-            return new ListCommand(input);
+            return new ListCommand(args);
         } else if (input.startsWith("mark")) {
-            return new MarkCommand(input);
+            return new MarkCommand(args);
         } else if (input.startsWith("unmark")) {
-            return new UnmarkCommand(input);
+            return new UnmarkCommand(args);
         } else if (input.startsWith("delete")) {
-            return new DeleteCommand(input);
+            return new DeleteCommand(args);
         } else if (input.startsWith("show before")) {
-            return new ShowBeforeCommand(input);
+            return new ShowBeforeCommand(args);
         } else if (input.startsWith("show after")) {
-            return new ShowAfterCommand(input);
+            return new ShowAfterCommand(args);
         } else if (input.startsWith("todo") || input.startsWith("deadline") || input.startsWith("event")) {
-            return new AddCommand(input);
+            return new AddCommand(args);
         } else {
-            return new InvalidCommand(input);
+            return new InvalidCommand(args);
         }
     }
 

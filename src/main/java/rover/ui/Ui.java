@@ -68,7 +68,7 @@ public class Ui {
     }
 
     public void displayError(String message) {
-        System.out.println("Error: " + message);
+        System.out.println("Oops! Error: " + message);
     }
 
 }
