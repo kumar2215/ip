@@ -21,10 +21,22 @@ import rover.task.Task;
 import rover.task.TaskAction;
 import rover.task.Todo;
 
+/**
+ * Parser class to parse user input
+ */
 public class Parser {
 
+    /**
+     * Constructor for Parser class
+     */
     public Parser() {}
 
+    /**
+     * Parses the user input and returns the corresponding command
+     *
+     * @param args User input
+     * @return Command object
+     */
     public Command parseCommand(String args) {
         args = args.trim();
         String input = args.toLowerCase();
@@ -53,6 +65,14 @@ public class Parser {
         }
     }
 
+    /**
+     * Parses the task description and returns the corresponding task object
+     *
+     * @param description Task description
+     * @return Task object
+     * @throws RoverException If the task description is invalid
+     * @throws DateTimeParseException If the date and time format is invalid
+     */
     public Task parseTaskDescription(String description) throws RoverException, DateTimeParseException {
         Task newTask;
         description = description.trim();
@@ -68,6 +88,15 @@ public class Parser {
         return newTask;
     }
 
+    /**
+     * Parses the task number and returns the corresponding task index
+     *
+     * @param taskNumber Task number
+     * @param numberOfTasks Number of tasks
+     * @param taskAction Task action used to determine error message
+     * @return Task index
+     * @throws RoverException If the task number is invalid
+     */
     public int parseTaskNumber(String taskNumber, int numberOfTasks, TaskAction taskAction) throws RoverException {
         String action = taskAction == TaskAction.MARK_DONE
                 ? "marked as done"

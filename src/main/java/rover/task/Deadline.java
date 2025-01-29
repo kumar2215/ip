@@ -1,16 +1,18 @@
 package rover.task;
-
-import rover.parser.DateTimeParser;
-
-import rover.exceptions.RoverException;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeParseException;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.time.format.FormatStyle;
 
+import rover.exceptions.RoverException;
+import rover.parser.DateTimeParser;
+
+/**
+ * Represents a deadline task that can be added to the task list.
+ * A deadline task has a description, a status that indicates whether it is done, and a deadline.
+ */
 public class Deadline extends Task {
 
     protected LocalDate byDate;
@@ -18,6 +20,17 @@ public class Deadline extends Task {
     protected String by;
     protected String byFullFormat;
 
+    /**
+     * Constructs a deadline task with the given description.
+     * The description must be in the format "task /by (deadline)".
+     * The deadline can be a date, time, or date and time.
+     * If the deadline is a date, the time will be set to 00:00.
+     * If the deadline is a time, the date will be set to the current date.
+     * If the deadline is a date and time, the date and time will be set accordingly.
+     *
+     * @param description The description of the deadline task.
+     * @throws RoverException If the description is not in the correct format.
+     */
     public Deadline(String description) throws RoverException, DateTimeParseException {
         super(description);
         String[] parts = description.split(" /by ");
@@ -40,6 +53,9 @@ public class Deadline extends Task {
         }
     }
 
+    /**
+     * {@code @InheritDoc} from Task
+     */
     @Override
     public boolean isBefore(String dateTime) throws DateTimeParseException {
         String[] parts = dateTime.split(" ");
@@ -57,6 +73,9 @@ public class Deadline extends Task {
         }
     }
 
+    /**
+     * {@code @InheritDoc} from Task
+     */
     @Override
     public boolean isAfter(String dateTime) {
         String[] parts = dateTime.split(" ");
@@ -74,11 +93,17 @@ public class Deadline extends Task {
         }
     }
 
+    /**
+     * {@code @InheritDoc} from Task
+     */
     @Override
     public String getTaskString() {
         return "D | " + (isDone ? "1" : "0") + " | " + description + " /by " + by;
     }
 
+    /**
+     * {@code @InheritDoc} from Task
+     */
     @Override
     public String toString() {
         return "[D]" + super.toString() + " (by: " + byFullFormat + ")";

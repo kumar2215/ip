@@ -9,6 +9,10 @@ import java.time.format.FormatStyle;
 import rover.exceptions.RoverException;
 import rover.parser.DateTimeParser;
 
+/**
+ * Represents an event task.
+ * An event task is a task that has a start date and/or time and an end date and/or time.
+ */
 public class Event extends Task {
 
     protected LocalDate startDate;
@@ -19,6 +23,19 @@ public class Event extends Task {
     protected String end;
     protected String fromToFullFormat;
 
+    /**
+     * Constructs an event task with the given description.
+     * The description must be in the format "task /from (start) /to (end)".
+     * The start and end can be a date, time, or date and time.
+     * If the start or end is a date, the time will be set to 00:00.
+     * If the start or end is a time, the date will be set to the current date.
+     * If the start or end is a date and time, the date and time will be set accordingly.
+     * The start date and time must be before the end date and time.
+     *
+     * @param description The description of the event task.
+     * @throws RoverException If the description is not in the correct format or the start date and time is after
+     *      the end date and time.
+     */
     public Event(String description) throws RoverException, DateTimeParseException {
         super(description);
         String[] parts = description.split(" /from ");
@@ -66,6 +83,10 @@ public class Event extends Task {
             + endTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT));
     }
 
+    /**
+     * {@code @InheritDoc} from Task
+     * Event tasks are due before the start date and time.
+     */
     @Override
     public boolean isBefore(String dateTime) {
         String[] parts = dateTime.split(" ");
@@ -83,6 +104,10 @@ public class Event extends Task {
         }
     }
 
+    /**
+     * {@code @InheritDoc} from Task
+     * Event tasks are due before the end date and time.
+     */
     @Override
     public boolean isAfter(String dateTime) {
         String[] parts = dateTime.split(" ");
@@ -100,11 +125,17 @@ public class Event extends Task {
         }
     }
 
+    /**
+     * {@code @InheritDoc} from Task
+     */
     @Override
     public String getTaskString() {
         return "E | " + (isDone ? "1" : "0") + " | " + description + " /from " + start + " /to " + end;
     }
 
+    /**
+     * {@code @InheritDoc} from Task
+     */
     @Override
     public String toString() {
         return "[E]" + super.toString() + " (" + fromToFullFormat + ")";

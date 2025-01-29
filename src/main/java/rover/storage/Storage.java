@@ -9,17 +9,31 @@ import rover.task.Task;
 import rover.task.TaskList;
 import rover.ui.Ui;
 
+/**
+ * Handles the storage of the tasks in the file system.
+ */
 public class Storage {
 
     private final Path filePath;
     private boolean isSaved = false;
 
+    /**
+     * Returns a new Storage object with the specified file path.
+     *
+     * @param filePath The path to the file where the tasks are stored.
+     */
     public Storage(String filePath) {
         String[] filePathParts = filePath.split("/");
         String cwd = System.getProperty("user.dir");
         this.filePath = Paths.get(cwd, filePathParts);
     }
 
+    /**
+     * Loads the tasks from the file system.
+     *
+     * @param ui The Ui object to display messages.
+     * @return An array of strings representing the tasks.
+     */
     public String[] load(Ui ui) {
         try {
             boolean fileExists = Files.exists(filePath);
@@ -40,6 +54,12 @@ public class Storage {
         }
     }
 
+    /**
+     * Saves the tasks to the file system and updates the isSaved field.
+     *
+     * @param taskList The TaskList object containing the tasks to be saved.
+     * @param ui The Ui object to display messages.
+     */
     public void save(TaskList taskList, Ui ui) {
         ui.showMessage("Saving your tasks...");
         try {
@@ -61,6 +81,11 @@ public class Storage {
         }
     }
 
+    /**
+     * Returns whether the tasks were saved successfully.
+     *
+     * @return True if the tasks were saved successfully, false otherwise.
+     */
     public boolean isSavedSuccessfully() {
         return isSaved;
     }

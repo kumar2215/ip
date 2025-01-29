@@ -8,6 +8,9 @@ import rover.storage.Storage;
 import rover.task.TaskList;
 import rover.ui.Ui;
 
+/**
+ * Rover is a personal task manager that helps users keep track of their tasks.
+ **/
 public class Rover {
 
     private final Storage storage;
@@ -15,7 +18,12 @@ public class Rover {
     private final Parser parser;
     private final Ui ui;
 
-    Rover(String filePath) {
+    /**
+     * Creates a new Rover instance by loading tasks from the specified file path.
+     *
+     * @param filePath The file path to save and load tasks from.
+     */
+    private Rover(String filePath) {
         parser = new Parser();
         ui = new Ui();
         storage = new Storage(filePath);
@@ -27,6 +35,9 @@ public class Rover {
         }
     }
 
+    /**
+     * Runs the Rover program.
+     */
     private void run() {
         ui.showWelcome();
         boolean isRunning = true;
@@ -49,6 +60,12 @@ public class Rover {
         ui.sayBye();
     }
 
+    /**
+     * Main entry point of the Rover program.
+     * Creates a new Rover instance and runs the program.
+     *
+     * @param args Command line arguments.
+     */
     public static void main(String[] args) {
         new Rover("data/Rover.txt").run();
     }
