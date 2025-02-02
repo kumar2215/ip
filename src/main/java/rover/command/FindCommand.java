@@ -23,6 +23,12 @@ public class FindCommand extends Command {
      */
     @Override
     public void execute(TaskList taskList, Parser parser, Ui ui) {
+        if (args.isEmpty()) {
+            ui.showLine();
+            ui.displayError("The keyword to find cannot be empty.");
+            ui.showLine();
+            return;
+        }
         taskList.showTasks(ui, (task, ignore) -> task.toString().contains(args),
             "with the keyword '" + args + "'");
     }
