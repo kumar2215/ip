@@ -6,7 +6,7 @@ import rover.exceptions.RoverException;
  * Represents a todo task that can be added to the task list.
  * A todo task has a description and a status that indicates whether it is done.
  */
-public class Todo extends Task {
+public final class Todo extends Task {
 
     /**
      * Constructor for a todo task.

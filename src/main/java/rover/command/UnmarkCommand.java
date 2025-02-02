@@ -9,7 +9,7 @@ import rover.ui.Ui;
 /**
  * Represents a command to unmark a task as done.
  */
-public class UnmarkCommand extends Command {
+public final class UnmarkCommand extends Command {
 
     /**
      * Constructs a new UnmarkCommand object.

@@ -1,13 +1,12 @@
 package rover.command;
 
-import rover.parser.Parser;
 import rover.task.TaskList;
 import rover.ui.Ui;
 
 /**
  * Represents a command to find tasks by keyword.
  */
-public class FindCommand extends Command {
+public class FindCommand extends ShowCommand {
 
     /**
      * Constructor for a FindCommand.
@@ -22,7 +21,7 @@ public class FindCommand extends Command {
      * {@code @InheritDoc} from Task
      */
     @Override
-    public void execute(TaskList taskList, Parser parser, Ui ui) {
+    protected void show(TaskList taskList, Ui ui) {
         if (args.isEmpty()) {
             ui.showLine();
             ui.displayError("The keyword to find cannot be empty.");

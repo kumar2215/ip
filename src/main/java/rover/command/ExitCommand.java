@@ -7,7 +7,7 @@ import rover.ui.Ui;
 /**
  * Represents a command to exit the program.
  */
-public class ExitCommand extends Command {
+public final class ExitCommand extends Command {
 
     /**
      * Constructs an ExitCommand object.

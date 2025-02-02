@@ -8,7 +8,7 @@ import rover.exceptions.RoverException;
  * Represents a task that can be added to the task list.
  * A task has a description and a status that indicates whether it is done.
  */
-public abstract class Task {
+public abstract sealed class Task permits Todo, Deadline, Event {
     protected String description;
     protected boolean isDone;
 

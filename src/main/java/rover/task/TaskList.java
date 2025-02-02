@@ -11,7 +11,7 @@ import rover.ui.Ui;
 /**
  * Represents a list of tasks that can be added to, marked, unmarked, deleted, and displayed.
  */
-public class TaskList {
+public final class TaskList {
 
     private final ArrayList<Task> tasks;
     private int taskCount = 0;

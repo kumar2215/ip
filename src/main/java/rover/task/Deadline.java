@@ -13,12 +13,12 @@ import rover.parser.DateTimeParser;
  * Represents a deadline task that can be added to the task list.
  * A deadline task has a description, a status that indicates whether it is done, and a deadline.
  */
-public class Deadline extends Task {
+public final class Deadline extends Task {
 
-    protected LocalDate byDate;
-    protected LocalTime byTime;
-    protected String by;
-    protected String byFullFormat;
+    private final LocalDate byDate;
+    private final LocalTime byTime;
+    private final String by;
+    private String byFullFormat;
 
     /**
      * Constructs a deadline task with the given description.

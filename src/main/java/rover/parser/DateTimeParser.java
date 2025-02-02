@@ -9,7 +9,7 @@ import java.time.format.DateTimeParseException;
 /**
  * A utility class for parsing date and time strings.
  */
-public class DateTimeParser {
+public final class DateTimeParser {
 
     public static final String[] DATE_FORMATS = {
         "yyyy/MM/dd",

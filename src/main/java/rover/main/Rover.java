@@ -11,7 +11,7 @@ import rover.ui.Ui;
 /**
  * Rover is a personal task manager that helps users keep track of their tasks.
  **/
-public class Rover {
+public final class Rover {
 
     private final Storage storage;
     private TaskList taskList;

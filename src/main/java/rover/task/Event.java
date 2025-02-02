@@ -13,15 +13,13 @@ import rover.parser.DateTimeParser;
  * Represents an event task.
  * An event task is a task that has a start date and/or time and an end date and/or time.
  */
-public class Event extends Task {
+public final class Event extends Task {
 
-    protected LocalDate startDate;
-    protected LocalTime startTime;
-    protected LocalDate endDate;
-    protected LocalTime endTime;
-    protected String start;
-    protected String end;
-    protected String fromToFullFormat;
+    private LocalDate startDate;
+    private LocalTime startTime;
+    private final String start;
+    private final String end;
+    private final String fromToFullFormat;
 
     /**
      * Constructs an event task with the given description.
@@ -61,16 +59,18 @@ public class Event extends Task {
             }
         }
         this.end = parts2[1];
+        LocalTime endTime;
+        LocalDate endDate;
         try {
-            this.endDate = DateTimeParser.parseDateTime(end).toLocalDate();
-            this.endTime = DateTimeParser.parseDateTime(end).toLocalTime();
+            endDate = DateTimeParser.parseDateTime(end).toLocalDate();
+            endTime = DateTimeParser.parseDateTime(end).toLocalTime();
         } catch (DateTimeParseException e) {
             try {
-                this.endDate = startDate;
-                this.endTime = DateTimeParser.parseTime(end);
+                endDate = startDate;
+                endTime = DateTimeParser.parseTime(end);
             } catch (DateTimeParseException e2) {
-                this.endDate = DateTimeParser.parseDate(end);
-                this.endTime = LocalTime.of(23, 59);
+                endDate = DateTimeParser.parseDate(end);
+                endTime = LocalTime.of(23, 59);
             }
         }
         if (startDate.isAfter(endDate) || (startDate.isEqual(endDate) && startTime.isAfter(endTime))) {

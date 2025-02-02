@@ -12,7 +12,7 @@ import rover.ui.Ui;
 /**
  * Handles the storage of the tasks in the file system.
  */
-public class Storage {
+public final class Storage {
 
     private final Path filePath;
     private boolean isSaved = false;

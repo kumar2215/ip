@@ -25,7 +25,7 @@ import rover.task.Todo;
 /**
  * Parser class to parse user input
  */
-public class Parser {
+public final class Parser {
 
     /**
      * Constructor for Parser class

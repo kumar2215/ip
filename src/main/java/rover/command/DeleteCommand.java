@@ -9,7 +9,7 @@ import rover.ui.Ui;
 /**
  * Represents a command to delete a task from the task list.
  */
-public class DeleteCommand extends Command {
+public final class DeleteCommand extends Command {
 
     /**
      * Constructs a DeleteCommand object.

@@ -1,14 +1,13 @@
 package rover.command;
 import java.time.format.DateTimeParseException;
 
-import rover.parser.Parser;
 import rover.task.TaskList;
 import rover.ui.Ui;
 
 /**
  * Represents a command to show tasks after a specified date.
  */
-public class ShowAfterCommand extends ShowCommand {
+public final class ShowAfterCommand extends ShowCommand {
 
     /**
      * Constructs a ShowAfterCommand.
@@ -23,7 +22,7 @@ public class ShowAfterCommand extends ShowCommand {
      * {@code @InheritDoc} from Task
      */
     @Override
-    public void execute(TaskList taskList, Parser parser, Ui ui) {
+    protected void show(TaskList taskList, Ui ui) {
         taskList.showTasks(ui, (task, wasExceptionThrown) -> {
             try {
                 if (wasExceptionThrown.get()) {

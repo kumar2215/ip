@@ -9,7 +9,7 @@ import rover.ui.Ui;
 /**
  * Represents a command to mark a task as done.
  */
-public class MarkCommand extends Command {
+public final class MarkCommand extends Command {
 
     /**
      * Constructs a MarkCommand object.

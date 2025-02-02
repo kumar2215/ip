@@ -7,7 +7,7 @@ import rover.ui.Ui;
 /**
  * Represents an invalid command.
  */
-public class InvalidCommand extends Command {
+public final class InvalidCommand extends Command {
 
     /**
      * Constructs an InvalidCommand object.

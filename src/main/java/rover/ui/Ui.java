@@ -6,7 +6,7 @@ import java.util.Scanner;
  * Ui class deals with interactions with the user.
  * It displays messages to the user and reads input from the user.
  */
-public class Ui {
+public final class Ui {
 
     private static final String divider = "--------------------------------------------";
     private final Scanner sc;

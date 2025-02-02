@@ -7,7 +7,7 @@ import rover.ui.Ui;
 /**
  * Represents a command that does nothing.
  */
-public class EmptyCommand extends Command {
+public final class EmptyCommand extends Command {
 
     /**
      * Constructs an EmptyCommand object.

@@ -1,13 +1,12 @@
 package rover.command;
 
-import rover.parser.Parser;
 import rover.task.TaskList;
 import rover.ui.Ui;
 
 /**
  * Represents a command to list all tasks in the task list.
  */
-public class ListCommand extends ShowCommand {
+public final class ListCommand extends ShowCommand {
 
     /**
      * Constructs a ListCommand object.
@@ -22,7 +21,7 @@ public class ListCommand extends ShowCommand {
      * {@code @InheritDoc} from Task
      */
     @Override
-    public void execute(TaskList taskList, Parser parser, Ui ui) {
+    protected void show(TaskList taskList, Ui ui) {
         taskList.showTasks(ui, (task, ignore) -> true, "in your list");
     }
 

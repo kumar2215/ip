@@ -8,7 +8,7 @@ import rover.ui.Ui;
 /**
  * Represents a command to retry saving the task list.
  */
-public class RetrySaveCommand extends Command {
+public final class RetrySaveCommand extends Command {
 
     /**
      * Constructs a RetrySaveCommand.

@@ -10,7 +10,7 @@ import rover.ui.Ui;
 /**
  * Represents a command that adds a task to the task list.
  */
-public class AddCommand extends Command {
+public final class AddCommand extends Command {
 
     /**
      * Constructs an add command with the given arguments.
