@@ -48,6 +48,13 @@ public class DialogBox extends HBox {
         dialog.getStyleClass().add("reply-label");
     }
 
+    /**
+     * Converts the dialog box to an error dialog box.
+     */
+    private void convertToErrorDialog() {
+        dialog.getStyleClass().add("error-label");
+    }
+
     public static DialogBox getUserDialog(String text, Image img) {
         return new DialogBox(text, img);
     }
@@ -55,6 +62,13 @@ public class DialogBox extends HBox {
     public static DialogBox getRoverDialog(String text, Image img) {
         var db = new DialogBox(text, img);
         db.flip();
+        return db;
+    }
+
+    public static DialogBox getErrorDialog(String text, Image img) {
+        var db = new DialogBox(text, img);
+        db.flip();
+        db.convertToErrorDialog();
         return db;
     }
 }

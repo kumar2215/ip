@@ -160,6 +160,9 @@ public final class Gui extends AnchorPane implements Ui {
      */
     @Override
     public void displayError(String message) {
-        showRoverResponse("Oops! Error: " + message);
+        String response = "Oops! Error: " + message;
+        dialogContainer.getChildren().addAll(
+            DialogBox.getErrorDialog(response, roverImage)
+        );
     }
 }
