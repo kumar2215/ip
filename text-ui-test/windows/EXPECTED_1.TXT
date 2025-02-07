@@ -10,7 +10,9 @@ ___
 I am your personal task manager.
 What can I do for you?
 --------------------------------------------
+--------------------------------------------
 Oops! Error: Please enter a command.
+--------------------------------------------
 --------------------------------------------
 I'm sorry, but I don't know what that means.
 The following commands are supported:
@@ -83,6 +85,7 @@ Here are the tasks in your list:
 2. [D][ ] CS3230 Assignment 2 (by: Saturday, 1 February 2025 11:59 pm)
 3. [E][ ] CS3230 Lecture (from Wednesday, 29 January 2025 2:00 pm to Wednesday, 29 January 2025 4:00 pm)
 4. [T][ ] read book
+--------------------------------------------
 --------------------------------------------
 Saving your tasks...
 Tasks saved successfully.

@@ -20,8 +20,10 @@ fi
 
 # compile the code into the bin folder, terminates if error occurred
 shopt -s globstar
-if ! javac -cp ../../src/main/java -Xlint:none -d ../../bin ../../src/main/java/**/*.java
-then
+# Define excluded files (space-separated list)
+EXCLUDE_LIST="Launcher.java Main.java Gui.java DialogBox.java"
+FILES=$(find ../../src/main/java -type f -name "*.java" | grep -Ev "$(echo $EXCLUDE_LIST | sed 's/ /|/g')")
+if ! javac -cp ../../src/main/java -Xlint:none -d ../../bin $FILES; then
     echo "********** BUILD FAILURE **********"
     exit 1
 fi

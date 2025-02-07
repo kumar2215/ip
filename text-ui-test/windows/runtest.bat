@@ -5,12 +5,15 @@ if exist ACTUAL_1.TXT del ACTUAL_1.TXT
 
 if exist data rmdir /s /q data
 
+set exclude_list="Launcher.java Main.java Gui.java DialogBox.java"
 REM compile the code into the bin folder
 for /R ..\..\src\main\java %%f in (*.java) do (
-    javac -cp ..\..\src\main\java -Xlint:none -d ..\..\bin "%%f"
-    IF ERRORLEVEL 1 (
-        echo ********** BUILD FAILURE **********
-        exit /b 1
+    echo %exclude_list% | findstr /i /c:"%%~nxf" >nul || (
+        javac -cp ..\..\src\main\java -Xlint:none -d ..\..\bin "%%f"
+        IF ERRORLEVEL 1 (
+            echo ********** BUILD FAILURE **********
+            exit /b 1
+        )
     )
 )
 REM no error here, errorlevel == 0
