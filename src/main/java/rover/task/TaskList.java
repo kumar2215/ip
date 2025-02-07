@@ -30,7 +30,7 @@ public final class TaskList {
      * @throws RoverException If there is a possible corruption in the saved tasks.
      * @throws DateTimeParseException If the date and time format is incorrect.
      */
-    public TaskList(String[] taskStrings) throws RoverException, DateTimeParseException {
+    public TaskList(String ...taskStrings) throws RoverException, DateTimeParseException {
         this.tasks = new ArrayList<>();
         for (String taskString : taskStrings) {
             String[] parts = taskString.split(" \\| ");
@@ -50,7 +50,7 @@ public final class TaskList {
      * @return The task based on the parts.
      * @throws RoverException If there is a possible corruption in the saved tasks.
      */
-    private Task getTask(String[] parts) throws RoverException {
+    private Task getTask(String ...parts) throws RoverException {
         Task newTask;
         switch (parts[0]) {
         case "T" -> newTask = new Todo(parts[2]);
