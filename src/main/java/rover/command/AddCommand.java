@@ -30,18 +30,18 @@ public final class AddCommand extends Command {
             Task newTask = parser.parseTaskDescription(args);
             taskList.addTask(newTask, ui);
         } catch (RoverException e) {
-            ui.showLine();
+
             ui.displayError(e.getMessage());
-            ui.showLine();
+
         } catch (DateTimeParseException e) {
-            ui.showLine();
+
             if (e.getMessage().contains("date")) {
                 ui.displayError("The date format should be 'dd/mm/yy'.");
             }
             if (e.getMessage().contains("time")) {
                 ui.displayError("The time format should be 'hh:mm'.");
             }
-            ui.showLine();
+
         }
     }
 }

@@ -29,9 +29,9 @@ public final class DeleteCommand extends Command {
             int index = parser.parseTaskNumber(args, taskList.getNumberOfTasks(), TaskAction.DELETE);
             taskList.deleteTask(index, ui);
         } catch (RoverException e) {
-            ui.showLine();
+
             ui.displayError(e.getMessage());
-            ui.showLine();
+
         }
     }
 }

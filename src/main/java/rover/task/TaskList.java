@@ -82,22 +82,24 @@ public final class TaskList {
      * @param filterDescription The description of the filter.
      */
     public void showTasks(Ui ui, BiFunction<Task, AtomicBoolean, Boolean> predicate, String filterDescription) {
-        ui.showLine();
+        StringBuilder response = new StringBuilder();
         AtomicBoolean wasExceptionThrown = new AtomicBoolean(false);
         List<Task> filteredTasks = tasks.stream().filter(task -> predicate.apply(task, wasExceptionThrown)).toList();
         if (wasExceptionThrown.get()) {
-            ui.showLine();
             return;
         }
         if (filteredTasks.isEmpty()) {
-            ui.showMessage("There are no tasks " + filterDescription + ".");
+            response.append("There are no tasks ").append(filterDescription).append(".");
         } else {
-            ui.showMessage("Here are the tasks " + filterDescription + ":");
+            response.append("Here are the tasks ").append(filterDescription).append(":").append(System.lineSeparator());
             for (int i = 0; i < filteredTasks.size(); i++) {
-                ui.showMessage((i + 1) + ". " + filteredTasks.get(i));
+                response.append((i + 1)).append(". ").append(filteredTasks.get(i));
+                if (i != filteredTasks.size() - 1) {
+                    response.append(System.lineSeparator());
+                }
             }
         }
-        ui.showLine();
+        ui.showMessage(response.toString());
     }
 
     /**
@@ -113,11 +115,11 @@ public final class TaskList {
         }
         tasks.add(newTask);
         taskCount++;
-        ui.showLine();
-        ui.showMessage("Got it. I've added this task:");
-        ui.showMessage("  " + tasks.get(taskCount - 1).toString());
-        ui.showMessage("Now you have " + taskCount + " task" + (taskCount > 1 ? "s" : "") + " in the list.");
-        ui.showLine();
+        String response = "Got it. I've added this task:" + System.lineSeparator()
+            + "  " + newTask + System.lineSeparator()
+            + "Now you have " + taskCount + " task"
+            + (taskCount > 1 ? "s" : "") + " in the list.";
+        ui.showMessage(response);
     }
 
     /**
@@ -129,10 +131,8 @@ public final class TaskList {
     public void markTask(int index, Ui ui) {
         Task task = tasks.get(index);
         task.setDone();
-        ui.showLine();
-        ui.showMessage("Nice! I've marked this task as done:");
-        ui.showMessage(task.toString());
-        ui.showLine();
+        String response = "Nice! I've marked this task as done:" + System.lineSeparator() + task;
+        ui.showMessage(response);
     }
 
     /**
@@ -144,10 +144,8 @@ public final class TaskList {
     public void unmarkTask(int index, Ui ui) {
         Task task = tasks.get(index);
         task.setUndone();
-        ui.showLine();
-        ui.showMessage("OK, I've marked this task as not done yet:");
-        ui.showMessage(task.toString());
-        ui.showLine();
+        String response = "OK, I've marked this task as not done yet:" + System.lineSeparator() + task;
+        ui.showMessage(response);
     }
 
     /**
@@ -160,11 +158,9 @@ public final class TaskList {
         Task task = tasks.get(index);
         tasks.remove(index);
         taskCount--;
-        ui.showLine();
-        ui.showMessage("Noted. I've removed this task:");
-        ui.showMessage(task.toString());
-        ui.showMessage("Now you have " + taskCount + " task" + (taskCount > 1 ? "s" : "") + " in the list.");
-        ui.showLine();
+        String response = "Noted. I've removed this task:" + System.lineSeparator() + task
+            + System.lineSeparator() + "Now you have " + taskCount + " task"
+            + (taskCount > 1 ? "s" : "") + " in the list.";
+        ui.showMessage(response);
     }
-
 }

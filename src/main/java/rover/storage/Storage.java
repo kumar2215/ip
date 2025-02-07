@@ -61,7 +61,7 @@ public final class Storage {
      * @param ui The Ui object to display messages.
      */
     public void save(TaskList taskList, Ui ui) {
-        ui.showMessage("Saving your tasks...");
+        String response = "Saving your tasks...";
         try {
             Files.createDirectories(filePath.getParent());
             Files.deleteIfExists(filePath);
@@ -70,7 +70,7 @@ public final class Storage {
                 String taskString = task.getTaskString() + "\n";
                 Files.writeString(filePath, taskString, java.nio.file.StandardOpenOption.APPEND);
             }
-            ui.showMessage("Tasks saved successfully.");
+            response += System.lineSeparator() + "Tasks saved successfully.";
             isSaved = true;
         } catch (IOException e) {
             ui.displayError("Failed to save tasks.");
@@ -78,6 +78,8 @@ public final class Storage {
         } catch (SecurityException e) {
             ui.displayError("Could not create the saved tasks file.");
             isSaved = false;
+        } finally {
+            ui.showMessageWithoutLineSeparator(response);
         }
     }
 

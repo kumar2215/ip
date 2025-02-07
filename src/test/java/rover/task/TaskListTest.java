@@ -9,6 +9,7 @@ import java.time.format.DateTimeParseException;
 import org.junit.jupiter.api.Test;
 
 import rover.exceptions.RoverException;
+import rover.ui.TextUi;
 import rover.ui.Ui;
 
 public class TaskListTest {
@@ -118,7 +119,7 @@ public class TaskListTest {
     @Test
     public void checkListingOfTasks() {
         TaskList taskList = new TaskList();
-        Ui ui = new Ui();
+        Ui ui = new TextUi();
         try {
             taskList.addTask(new Todo("read book"), ui);
             taskList.addTask(new Deadline("return book /by 2021-08-24 1800"), ui);
@@ -148,7 +149,7 @@ public class TaskListTest {
     @Test
     public void checkAddingOfTasks() {
         TaskList taskList = new TaskList();
-        Ui ui = new Ui();
+        Ui ui = new TextUi();
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));
 

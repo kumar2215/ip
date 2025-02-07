@@ -6,6 +6,7 @@ import rover.exceptions.RoverException;
 import rover.parser.Parser;
 import rover.storage.Storage;
 import rover.task.TaskList;
+import rover.ui.TextUi;
 import rover.ui.Ui;
 
 /**
@@ -16,7 +17,14 @@ public final class Rover {
     private final Storage storage;
     private TaskList taskList;
     private final Parser parser;
-    private final Ui ui;
+    private Ui ui;
+
+    /**
+     * Creates a new Rover instance with the default file path.
+     */
+    public Rover() {
+        this("data/Rover.txt");
+    }
 
     /**
      * Creates a new Rover instance by loading tasks from the specified file path.
@@ -25,7 +33,7 @@ public final class Rover {
      */
     private Rover(String filePath) {
         parser = new Parser();
-        ui = new Ui();
+        ui = new TextUi();
         storage = new Storage(filePath);
         try {
             taskList = new TaskList(storage.load(ui));
@@ -36,17 +44,32 @@ public final class Rover {
     }
 
     /**
-     * Runs the Rover program.
+     * Sets the Ui instance for Rover.
      */
-    private void run() {
+    public void setUi(Ui ui) {
+        this.ui = ui;
+    }
+
+    /**
+     * Starts the Rover session by displaying the welcome message.
+     */
+    public void startSession() {
         ui.showWelcome();
-        boolean isRunning = true;
-        while (isRunning) {
-            String input = ui.readCommand();
-            Command command = parser.parseCommand(input);
-            command.execute(taskList, parser, ui);
-            isRunning = !command.isExit();
-        }
+    }
+
+    /**
+     * Handles the response from Rover based on the user input.
+     */
+    public boolean handleResponse(String input) {
+        Command command = parser.parseCommand(input);
+        command.execute(taskList, parser, ui);
+        return command.isExit();
+    }
+
+    /**
+     * Ends the Rover session by saving the tasks and displaying the goodbye message.
+     */
+    public void endSession() {
         storage.save(taskList, ui);
         while (!storage.isSavedSuccessfully()) {
             ui.displayError("Could not save tasks. Try again? (Y/N)");
@@ -58,6 +81,18 @@ public final class Rover {
             }
         }
         ui.sayBye();
+    }
+
+    /**
+     * Runs the Rover program.
+     */
+    private void run() {
+        startSession();
+        boolean isExit = false;
+        while (!isExit) {
+            isExit = handleResponse(ui.readCommand());
+        }
+        endSession();
     }
 
     /**
