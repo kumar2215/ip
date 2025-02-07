@@ -27,10 +27,7 @@ import rover.task.Todo;
  */
 public final class Parser {
 
-    /**
-     * Constructor for Parser class
-     */
-    public Parser() {}
+    private boolean isPreviousCommandBye = false;
 
     /**
      * Parses the user input and returns the corresponding command
@@ -44,8 +41,10 @@ public final class Parser {
         if (input.isEmpty()) {
             return new EmptyCommand(args);
         } else if (input.equals("bye")) {
+            isPreviousCommandBye = true;
             return new ExitCommand(args);
-        } else if (input.equals("y") || input.equals("n") || input.equals("yes") || input.equals("no")) {
+        } else if (isPreviousCommandBye && (input.equals("y") || input.equals("n")
+            || input.equals("yes") || input.equals("no"))) {
             return new RetrySaveCommand(args);
         } else if (input.equals("list")) {
             return new ListCommand(args);
