@@ -1,4 +1,8 @@
 package rover.ui;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
@@ -99,6 +103,11 @@ public final class Gui extends AnchorPane implements Ui {
     public void sayBye() {
         String response = "Bye. Hope to see you again soon!";
         showRoverResponse(response);
+        new Timer().schedule(new TimerTask() {
+            public void run() {
+                Platform.exit();
+            }
+        }, 2000);
     }
 
     /**
