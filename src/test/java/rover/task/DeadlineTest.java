@@ -62,7 +62,7 @@ public class DeadlineTest {
         try {
             Deadline deadline = new Deadline("do homework /by 2021-08-24");
             assertEquals("D | 0 | do homework /by 2021-08-24", deadline.getTaskString());
-            assertEquals("[D][ ] do homework (by: Tuesday, 24 August 2021)", deadline.toString());
+            assertEquals("[D][ ] do homework (by: Tuesday, 24 August 2021 11:59 pm)", deadline.toString());
         } catch (RoverException e) {
             System.out.println(e.getMessage());
         }
@@ -74,7 +74,7 @@ public class DeadlineTest {
             Deadline deadline = new Deadline("do homework /by 2021-08-24");
             deadline.setDone();
             assertEquals("D | 1 | do homework /by 2021-08-24", deadline.getTaskString());
-            assertEquals("[D][X] do homework (by: Tuesday, 24 August 2021)", deadline.toString());
+            assertEquals("[D][X] do homework (by: Tuesday, 24 August 2021 11:59 pm)", deadline.toString());
         } catch (RoverException e) {
             System.out.println(e.getMessage());
         }

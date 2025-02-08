@@ -67,7 +67,6 @@ public final class TaskList {
         } else if (!parts[1].equals("0")) {
             throw new RoverException("Possible corruption in saved tasks.");
         }
-        assert newTask != null : "Task should not be null.";
         return newTask;
     }
 
