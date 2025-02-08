@@ -37,6 +37,7 @@ public final class DateTimeParser {
      * @throws DateTimeParseException if the string cannot be parsed
      */
     public static LocalDateTime parseDateTime(String dateTimeString) throws DateTimeParseException {
+        assert dateTimeString != null : "Date and time string should not be null";
         for (String dateFormat : DATE_FORMATS) {
             for (String timeFormat : TIME_FORMATS) {
                 String format = dateFormat + " " + timeFormat;
@@ -58,6 +59,7 @@ public final class DateTimeParser {
      * @throws DateTimeParseException if the string cannot be parsed
      */
     public static LocalDate parseDate(String dateString) throws DateTimeParseException {
+        assert dateString != null : "Date string should not be null";
         for (String format : DATE_FORMATS) {
             try {
                 return LocalDate.parse(dateString, DateTimeFormatter.ofPattern(format));
@@ -76,6 +78,7 @@ public final class DateTimeParser {
      * @throws DateTimeParseException if the string cannot be parsed
      */
     public static LocalTime parseTime(String timeString) throws DateTimeParseException {
+        assert timeString != null : "Time string should not be null";
         for (String format : TIME_FORMATS) {
             try {
                 return LocalTime.parse(timeString, DateTimeFormatter.ofPattern(format));

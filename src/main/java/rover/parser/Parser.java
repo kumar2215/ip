@@ -87,6 +87,7 @@ public final class Parser {
         } else {
             throw new RoverException("Not a valid task type.");
         }
+        assert newTask != null : "Task should not be null.";
         return newTask;
     }
 
