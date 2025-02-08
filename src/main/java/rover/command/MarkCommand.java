@@ -29,9 +29,7 @@ public final class MarkCommand extends Command {
             int index = parser.parseTaskNumber(args, taskList.getNumberOfTasks(), TaskAction.MARK_DONE);
             taskList.markTask(index, ui);
         } catch (RoverException e) {
-
             ui.displayError(e.getMessage());
-
         }
     }
 }

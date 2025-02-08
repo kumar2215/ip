@@ -29,9 +29,7 @@ public final class UnmarkCommand extends Command {
             int index = parser.parseTaskNumber(args, taskList.getNumberOfTasks(), TaskAction.MARK_UNDONE);
             taskList.unmarkTask(index, ui);
         } catch (RoverException e) {
-
             ui.displayError(e.getMessage());
-
         }
     }
 }

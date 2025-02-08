@@ -17,9 +17,11 @@ public final class Event extends Task {
 
     private LocalDate startDate;
     private LocalTime startTime;
-    private final String start;
-    private final String end;
-    private final String fromToFullFormat;
+    private LocalDate endDate;
+    private LocalTime endTime;
+    private String start;
+    private String end;
+    private String fromToFullFormat;
 
     /**
      * Constructs an event task with the given description.
@@ -36,6 +38,28 @@ public final class Event extends Task {
      */
     public Event(String description) throws RoverException, DateTimeParseException {
         super(description);
+        setStartAndEnd();
+        setStartDateAndTime();
+        setEndDateAndTime();
+        checkIfEndIsAfterStart();
+        setFromToFullFormat();
+    }
+
+    private void setFromToFullFormat() {
+        fromToFullFormat = "from "
+            + startDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL)) + " "
+            + startTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))
+            + " to " + endDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL)) + " "
+            + endTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT));
+    }
+
+    private void checkIfEndIsAfterStart() throws RoverException {
+        if (startDate.isAfter(endDate) || (startDate.isEqual(endDate) && startTime.isAfter(endTime))) {
+            throw new RoverException("The start date and time must be before the end date and time.");
+        }
+    }
+
+    private void setStartAndEnd() throws RoverException {
         String[] parts = description.split(" /from ");
         if (parts.length != 2) {
             throw new RoverException("An event task must be a task followed with '/from (start) /to (end)'.");
@@ -46,41 +70,39 @@ public final class Event extends Task {
             throw new RoverException("An event task must be a task followed with '/from (start) /to (end)'.");
         }
         this.start = parts2[0];
-        try {
-            this.startDate = DateTimeParser.parseDateTime(start).toLocalDate();
-            this.startTime = DateTimeParser.parseDateTime(start).toLocalTime();
+        this.end = parts2[1];
+    }
+
+    private void setStartDateAndTime() throws DateTimeParseException {
+        try { // Try to parse the start as a date and time
+            startDate = DateTimeParser.parseDateTime(start).toLocalDate();
+            startTime = DateTimeParser.parseDateTime(start).toLocalTime();
         } catch (DateTimeParseException e) {
-            try {
+            try { // Try to parse the start as a date only
                 this.startDate = DateTimeParser.parseDate(start);
                 this.startTime = LocalTime.of(0, 0);
             } catch (DateTimeParseException e2) {
+                // Try to parse the start as a time only
                 this.startDate = LocalDate.now();
                 this.startTime = DateTimeParser.parseTime(start);
             }
         }
-        this.end = parts2[1];
-        LocalTime endTime;
-        LocalDate endDate;
-        try {
+    }
+
+    private void setEndDateAndTime() throws DateTimeParseException {
+        try { // Try to parse the end as a date and time
             endDate = DateTimeParser.parseDateTime(end).toLocalDate();
             endTime = DateTimeParser.parseDateTime(end).toLocalTime();
         } catch (DateTimeParseException e) {
-            try {
+            try { // Try to parse the end as a time only
                 endDate = startDate;
                 endTime = DateTimeParser.parseTime(end);
             } catch (DateTimeParseException e2) {
+                // Try to parse the end as a date only
                 endDate = DateTimeParser.parseDate(end);
                 endTime = LocalTime.of(23, 59);
             }
         }
-        if (startDate.isAfter(endDate) || (startDate.isEqual(endDate) && startTime.isAfter(endTime))) {
-            throw new RoverException("The start date and time must be before the end date and time.");
-        }
-        this.fromToFullFormat = "from "
-            + startDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL)) + " "
-            + startTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))
-            + " to " + endDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL)) + " "
-            + endTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT));
     }
 
     /**
@@ -91,14 +113,15 @@ public final class Event extends Task {
     public boolean isBefore(String dateTime) {
         String[] parts = dateTime.split(" ");
         if (parts.length == 1) {
-            try {
+            try { // Interpret as a date only
                 LocalDate otherDate = DateTimeParser.parseDate(dateTime);
                 return startDate.isBefore(otherDate);
             } catch (DateTimeParseException e) {
+                // Interpret as a time only
                 LocalDateTime otherDateTime = DateTimeParser.parseDateTime(LocalDate.now() + " " + dateTime);
                 return startDate.atTime(startTime).isBefore(otherDateTime);
             }
-        } else {
+        } else { // Interpret as a date and time
             LocalDateTime otherDateTime = DateTimeParser.parseDateTime(dateTime);
             return startDate.atTime(startTime).isBefore(otherDateTime);
         }
@@ -112,14 +135,15 @@ public final class Event extends Task {
     public boolean isAfter(String dateTime) {
         String[] parts = dateTime.split(" ");
         if (parts.length == 1) {
-            try {
+            try { // Interpret as a date only
                 LocalDate otherDate = DateTimeParser.parseDate(dateTime);
                 return startDate.isAfter(otherDate);
             } catch (DateTimeParseException e) {
+                // Interpret as a time only
                 LocalDateTime otherDateTime = DateTimeParser.parseDateTime(LocalDate.now() + " " + dateTime);
                 return startDate.atTime(startTime).isAfter(otherDateTime);
             }
-        } else {
+        } else { // Interpret as a date and time
             LocalDateTime otherDateTime = DateTimeParser.parseDateTime(dateTime);
             return startDate.atTime(startTime).isAfter(otherDateTime);
         }

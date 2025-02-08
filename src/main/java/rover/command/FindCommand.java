@@ -23,9 +23,7 @@ public class FindCommand extends ShowCommand {
     @Override
     protected void show(TaskList taskList, Ui ui) {
         if (args.isEmpty()) {
-
             ui.displayError("The keyword to find cannot be empty.");
-
             return;
         }
         taskList.showTasks(ui, (task, ignore) -> task.toString().contains(args),

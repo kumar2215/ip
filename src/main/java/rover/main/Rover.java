@@ -35,12 +35,6 @@ public final class Rover {
         parser = new Parser();
         ui = new TextUi();
         storage = new Storage(filePath);
-        try {
-            taskList = new TaskList(storage.load(ui));
-        } catch (RoverException | DateTimeParseException e) {
-            ui.displayError("Could not load saved tasks properly. Saved tasks could be corrupted.");
-            taskList = new TaskList();
-        }
     }
 
     /**
@@ -55,6 +49,12 @@ public final class Rover {
      */
     public void startSession() {
         ui.showWelcome();
+        try {
+            taskList = new TaskList(storage.load(ui));
+        } catch (RoverException | DateTimeParseException e) {
+            ui.displayError("Could not load saved tasks properly. Saved tasks could be corrupted.");
+            taskList = new TaskList();
+        }
     }
 
     /**
