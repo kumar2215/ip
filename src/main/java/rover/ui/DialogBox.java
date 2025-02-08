@@ -24,6 +24,8 @@ public class DialogBox extends HBox {
     private ImageView displayPicture;
 
     private DialogBox(String text, Image img) {
+        assert text != null : "Text should not be null.";
+        assert img != null : "Image should not be null.";
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(Gui.class.getResource("/view/DialogBox.fxml"));
             fxmlLoader.setController(this);
