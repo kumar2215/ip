@@ -3,6 +3,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import rover.task.Task;
@@ -64,10 +66,10 @@ public final class Storage {
             Files.createDirectories(filePath.getParent());
             Files.deleteIfExists(filePath);
             Files.createFile(filePath);
-            for (Task task : taskList.getTasks()) {
-                String taskString = task.getTaskString() + "\n";
-                Files.writeString(filePath, taskString, java.nio.file.StandardOpenOption.APPEND);
-            }
+            String tasksString = taskList.getTasks().stream()
+                .map(Task::getTaskString)
+                .collect(Collectors.joining("\n"));
+            Files.writeString(filePath, tasksString, StandardOpenOption.WRITE);
             isSaved = true;
         } catch (IOException e) {
             errorMessage = "Failed to save tasks.";
