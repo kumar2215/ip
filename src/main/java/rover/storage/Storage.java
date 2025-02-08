@@ -16,6 +16,7 @@ import rover.ui.Ui;
  */
 public final class Storage {
 
+    private static final String NEW_LINE = System.lineSeparator();
     private final Path filePath;
     private boolean isSaved = false;
 
@@ -60,6 +61,8 @@ public final class Storage {
      * @param ui The Ui object to display messages.
      */
     public void save(TaskList taskList, Ui ui) {
+        assert taskList != null : "TaskList should not be null.";
+        assert ui != null : "Ui should not be null.";
         String response = "Saving your tasks...";
         String errorMessage = "";
         try {
@@ -76,10 +79,10 @@ public final class Storage {
             isSaved = false;
         } finally {
             if (isSaved) {
-                response += System.lineSeparator() + "Tasks saved successfully!";
+                response += NEW_LINE + "Tasks saved successfully!";
                 ui.showMessageWithoutLineSeparator(response);
             } else {
-                response += System.lineSeparator() + errorMessage;
+                response += NEW_LINE + errorMessage;
                 ui.displayError(response);
             }
         }

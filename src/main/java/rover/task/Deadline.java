@@ -15,9 +15,9 @@ import rover.parser.DateTimeParser;
  */
 public final class Deadline extends Task {
 
-    private final LocalDate byDate;
-    private final LocalTime byTime;
-    private final String by;
+    private LocalDate byDate;
+    private LocalTime byTime;
+    private String by;
     private String byFullFormat;
 
     /**
@@ -33,24 +33,38 @@ public final class Deadline extends Task {
      */
     public Deadline(String description) throws RoverException, DateTimeParseException {
         super(description);
+        setByAndDescription(description);
+        setByDateAndTime();
+        setByFullFormat();
+    }
+
+    private void setByAndDescription(String description) throws RoverException {
         String[] parts = description.split(" /by ");
         this.description = parts[0];
         if (parts.length != 2) {
             throw new RoverException("A deadline task must be a task followed with '/by (deadline)'.");
         }
-        String[] dateAndTime = parts[1].split(" ");
+        this.by = parts[1];
+    }
+
+    private void setByDateAndTime() {
+        String[] dateAndTime = by.split(" ");
         if (dateAndTime.length == 1) {
+            // Deadline is a date only
+            // The case where only time is given is omitted as it doesn't make sense
+            // to create a deadline task on the same day with only a time
             this.byDate = DateTimeParser.parseDate(dateAndTime[0]);
-            this.byTime = null;
+            this.byTime = LocalTime.MAX; // Set to the end of the day
         } else {
+            // Deadline is a date and time
             this.byDate = DateTimeParser.parseDate(dateAndTime[0]);
             this.byTime = DateTimeParser.parseTime(dateAndTime[1]);
         }
-        this.by = parts[1];
+    }
+
+    private void setByFullFormat() {
         this.byFullFormat = byDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL));
-        if (byTime != null) {
-            this.byFullFormat += " " + byTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT));
-        }
+        this.byFullFormat += " " + byTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT));
     }
 
     /**
@@ -60,16 +74,17 @@ public final class Deadline extends Task {
     public boolean isBefore(String dateTime) throws DateTimeParseException {
         String[] parts = dateTime.split(" ");
         if (parts.length == 1) {
-            try {
+            try { // Interpret as a date only
                 LocalDate otherDate = DateTimeParser.parseDate(dateTime);
                 return byDate.isBefore(otherDate);
             } catch (DateTimeParseException e) {
+                // Interpret as a time only
                 LocalDateTime otherTime = DateTimeParser.parseDateTime(LocalDate.now() + " " + dateTime);
-                return byDate.atTime(byTime == null ? LocalTime.MAX : byTime).isBefore(otherTime);
+                return byDate.atTime(byTime).isBefore(otherTime);
             }
-        } else {
+        } else { // Interpret as a date and time
             LocalDateTime otherDateTime = DateTimeParser.parseDateTime(dateTime);
-            return byDate.atTime(byTime == null ? LocalTime.MAX : byTime).isBefore(otherDateTime);
+            return byDate.atTime(byTime).isBefore(otherDateTime);
         }
     }
 
@@ -80,16 +95,17 @@ public final class Deadline extends Task {
     public boolean isAfter(String dateTime) {
         String[] parts = dateTime.split(" ");
         if (parts.length == 1) {
-            try {
+            try { // Interpret as a date only
                 LocalDate otherDate = DateTimeParser.parseDate(dateTime);
                 return byDate.isAfter(otherDate);
             } catch (DateTimeParseException e) {
+                // Interpret as a time only
                 LocalDateTime otherTime = DateTimeParser.parseDateTime(LocalDate.now() + " " + dateTime);
-                return byDate.atTime(byTime == null ? LocalTime.MAX : byTime).isAfter(otherTime);
+                return byDate.atTime(byTime).isAfter(otherTime);
             }
-        } else {
+        } else { // Interpret as a date and time
             LocalDateTime otherDateTime = DateTimeParser.parseDateTime(dateTime);
-            return byDate.atTime(byTime == null ? LocalTime.MAX : byTime).isAfter(otherDateTime);
+            return byDate.atTime(byTime).isAfter(otherDateTime);
         }
     }
 

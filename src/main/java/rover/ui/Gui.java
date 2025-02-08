@@ -25,8 +25,8 @@ public final class Gui extends AnchorPane implements Ui {
 
     private Rover rover;
 
-    private Image userImage = new Image(this.getClass().getResourceAsStream("/images/User.png"));
-    private Image roverImage = new Image(this.getClass().getResourceAsStream("/images/Rover.png"));
+    private final Image userImage = new Image(this.getClass().getResourceAsStream("/images/User.png"));
+    private final Image roverImage = new Image(this.getClass().getResourceAsStream("/images/Rover.png"));
 
     @FXML
     public void initialize() {
@@ -43,6 +43,7 @@ public final class Gui extends AnchorPane implements Ui {
      * Shows the response from the user in the dialog container.
      */
     private void showUserResponse() {
+        assert dialogContainer != null : "Dialog container should not be null.";
         dialogContainer.getChildren().addAll(
             DialogBox.getUserDialog(userInput.getText(), userImage)
         );
@@ -54,6 +55,7 @@ public final class Gui extends AnchorPane implements Ui {
      * @param response The response from Rover.
      */
     private void showRoverResponse(String response) {
+        assert dialogContainer != null : "Dialog container should not be null.";
         dialogContainer.getChildren().addAll(
             DialogBox.getRoverDialog(response, roverImage)
         );
@@ -66,6 +68,7 @@ public final class Gui extends AnchorPane implements Ui {
      */
     @Override
     public String readCommand() {
+        assert userInput != null : "User input should not be null.";
         return userInput.getText();
     }
 
@@ -77,6 +80,7 @@ public final class Gui extends AnchorPane implements Ui {
     private void handleUserInput() {
         String input = readCommand();
         showUserResponse();
+        assert rover != null : "Rover should not be null.";
         boolean isExit = rover.handleResponse(input);
         if (isExit) {
             rover.endSession();

@@ -26,7 +26,10 @@ public final class TextUi implements Ui {
      */
     @Override
     public String readCommand() {
-        return sc.nextLine();
+        assert sc != null : "Scanner should not be null.";
+        String input = sc.nextLine();
+        assert input != null && !input.isEmpty() : "Input should not be null or empty.";
+        return input;
     }
 
     /**
@@ -65,6 +68,7 @@ public final class TextUi implements Ui {
     public void sayBye() {
         System.out.println("Bye. Hope to see you again soon!");
         showLine();
+        sc.close();
     }
 
     /**

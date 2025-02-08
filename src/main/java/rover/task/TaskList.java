@@ -13,6 +13,8 @@ import rover.ui.Ui;
  */
 public final class TaskList {
 
+    private static final String NEW_LINE = System.lineSeparator();
+    private static final String DELIMITER = " \\| ";
     private final ArrayList<Task> tasks;
     private int taskCount = 0;
 
@@ -31,9 +33,10 @@ public final class TaskList {
      * @throws DateTimeParseException If the date and time format is incorrect.
      */
     public TaskList(String ...taskStrings) throws RoverException, DateTimeParseException {
+        assert taskStrings != null : "Task strings should not be null.";
         this.tasks = new ArrayList<>();
         for (String taskString : taskStrings) {
-            String[] parts = taskString.split(" \\| ");
+            String[] parts = taskString.split(DELIMITER);
             if (parts.length != 3) {
                 throw new RoverException("Possible corruption in saved tasks.");
             }
@@ -51,6 +54,7 @@ public final class TaskList {
      * @throws RoverException If there is a possible corruption in the saved tasks.
      */
     private Task getTask(String ...parts) throws RoverException {
+        assert parts != null : "Parts should not be null.";
         Task newTask;
         switch (parts[0]) {
         case "T" -> newTask = new Todo(parts[2]);
@@ -63,6 +67,7 @@ public final class TaskList {
         } else if (!parts[1].equals("0")) {
             throw new RoverException("Possible corruption in saved tasks.");
         }
+        assert newTask != null : "Task should not be null.";
         return newTask;
     }
 
@@ -82,24 +87,31 @@ public final class TaskList {
      * @param filterDescription The description of the filter.
      */
     public void showTasks(Ui ui, BiFunction<Task, AtomicBoolean, Boolean> predicate, String filterDescription) {
-        StringBuilder response = new StringBuilder();
+        assert predicate != null : "Predicate should not be null.";
+        assert filterDescription != null : "Filter description should not be null.";
+        assert !filterDescription.isEmpty() : "Filter description should not be empty.";
         AtomicBoolean wasExceptionThrown = new AtomicBoolean(false);
         List<Task> filteredTasks = tasks.stream().filter(task -> predicate.apply(task, wasExceptionThrown)).toList();
         if (wasExceptionThrown.get()) {
             return;
         }
+
+        String response = getStringOfFilteredTasks(filteredTasks, filterDescription);
+        ui.showMessage(response);
+    }
+
+    private String getStringOfFilteredTasks(List<Task> filteredTasks, String filterDescription) {
         if (filteredTasks.isEmpty()) {
-            response.append("There are no tasks ").append(filterDescription).append(".");
-        } else {
-            response.append("Here are the tasks ").append(filterDescription).append(":").append(System.lineSeparator());
-            for (int i = 0; i < filteredTasks.size(); i++) {
-                response.append((i + 1)).append(". ").append(filteredTasks.get(i));
-                if (i != filteredTasks.size() - 1) {
-                    response.append(System.lineSeparator());
-                }
+            return "There are no tasks " + filterDescription + ".";
+        }
+        StringBuilder response = new StringBuilder("Here are the tasks " + filterDescription + ":" + NEW_LINE);
+        for (int i = 0; i < filteredTasks.size(); i++) {
+            response.append((i + 1)).append(". ").append(filteredTasks.get(i));
+            if (i != filteredTasks.size() - 1) {
+                response.append(NEW_LINE);
             }
         }
-        ui.showMessage(response.toString());
+        return response.toString();
     }
 
     /**
@@ -110,13 +122,15 @@ public final class TaskList {
      * @throws RoverException If the task already exists in the list.
      */
     public void addTask(Task newTask, Ui ui) throws RoverException {
+        assert newTask != null : "Task should not be null.";
+        assert ui != null : "Ui should not be null.";
         if (tasks.contains(newTask)) {
             throw new RoverException("This task already exists in the list.");
         }
         tasks.add(newTask);
         taskCount++;
-        String response = "Got it. I've added this task:" + System.lineSeparator()
-            + "  " + newTask + System.lineSeparator()
+        String response = "Got it. I've added this task:" + NEW_LINE
+            + "  " + newTask + NEW_LINE
             + "Now you have " + taskCount + " task"
             + (taskCount > 1 ? "s" : "") + " in the list.";
         ui.showMessage(response);
@@ -129,9 +143,12 @@ public final class TaskList {
      * @param ui The user interface to display the tasks found.
      */
     public void markTask(int index, Ui ui) {
+        assert index >= 0 : "Index should be non-negative.";
+        assert index < taskCount : "Index should be less than the number of tasks.";
+        assert ui != null : "Ui should not be null.";
         Task task = tasks.get(index);
         task.setDone();
-        String response = "Nice! I've marked this task as done:" + System.lineSeparator() + task;
+        String response = "Nice! I've marked this task as done:" + NEW_LINE + task;
         ui.showMessage(response);
     }
 
@@ -142,9 +159,12 @@ public final class TaskList {
      * @param ui The user interface to display the tasks found.
      */
     public void unmarkTask(int index, Ui ui) {
+        assert index >= 0 : "Index should be non-negative.";
+        assert index < taskCount : "Index should be less than the number of tasks.";
+        assert ui != null : "Ui should not be null.";
         Task task = tasks.get(index);
         task.setUndone();
-        String response = "OK, I've marked this task as not done yet:" + System.lineSeparator() + task;
+        String response = "OK, I've marked this task as not done yet:" + NEW_LINE + task;
         ui.showMessage(response);
     }
 
@@ -155,11 +175,14 @@ public final class TaskList {
      * @param ui The user interface to display the deleted task.
      */
     public void deleteTask(int index, Ui ui) {
+        assert index >= 0 : "Index should be non-negative.";
+        assert index < taskCount : "Index should be less than the number of tasks.";
+        assert ui != null : "Ui should not be null.";
         Task task = tasks.get(index);
         tasks.remove(index);
         taskCount--;
-        String response = "Noted. I've removed this task:" + System.lineSeparator() + task
-            + System.lineSeparator() + "Now you have " + taskCount + " task"
+        String response = "Noted. I've removed this task:" + NEW_LINE + task
+            + NEW_LINE + "Now you have " + taskCount + " task"
             + (taskCount > 1 ? "s" : "") + " in the list.";
         ui.showMessage(response);
     }

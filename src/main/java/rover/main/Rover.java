@@ -35,12 +35,6 @@ public final class Rover {
         parser = new Parser();
         ui = new TextUi();
         storage = new Storage(filePath);
-        try {
-            taskList = new TaskList(storage.load(ui));
-        } catch (RoverException | DateTimeParseException e) {
-            ui.displayError("Could not load saved tasks properly. Saved tasks could be corrupted.");
-            taskList = new TaskList();
-        }
     }
 
     /**
@@ -55,6 +49,12 @@ public final class Rover {
      */
     public void startSession() {
         ui.showWelcome();
+        try {
+            taskList = new TaskList(storage.load(ui));
+        } catch (RoverException | DateTimeParseException e) {
+            ui.displayError("Could not load saved tasks properly. Saved tasks could be corrupted.");
+            taskList = new TaskList();
+        }
     }
 
     /**
@@ -62,6 +62,7 @@ public final class Rover {
      */
     public boolean handleResponse(String input) {
         Command command = parser.parseCommand(input);
+        assert command != null : "Command should not be null.";
         command.execute(taskList, parser, ui);
         return command.isExit();
     }
@@ -75,6 +76,7 @@ public final class Rover {
             ui.displayError("Could not save tasks. Try again? (Y/N)");
             String input = ui.readCommand();
             Command command = parser.parseCommand(input);
+            assert command != null : "Command should not be null.";
             command.execute(taskList, storage, ui);
             if (command.isExit()) {
                 break;
