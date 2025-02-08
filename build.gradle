@@ -43,7 +43,7 @@ test {
 }
 
 application {
-    mainClass.set("rover.main.Rover")
+    mainClass.set("rover.main.Launcher")
 }
 
 shadowJar {

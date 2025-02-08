@@ -103,7 +103,7 @@ public final class Gui extends AnchorPane implements Ui {
     public void sayBye() {
         String response = "Bye. Hope to see you again soon!";
         showRoverResponse(response);
-        new Timer().schedule(new TimerTask() {
+        new Timer(true).schedule(new TimerTask() {
             public void run() {
                 Platform.exit();
             }

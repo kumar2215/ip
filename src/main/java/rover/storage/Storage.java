@@ -48,9 +48,6 @@ public final class Storage {
         } catch (IOException e) {
             ui.displayError("Failed to load tasks.");
             return new String[0];
-        } catch (SecurityException e) {
-            ui.displayError("Could not access the saved tasks file.");
-            return new String[0];
         }
     }
 
@@ -62,6 +59,7 @@ public final class Storage {
      */
     public void save(TaskList taskList, Ui ui) {
         String response = "Saving your tasks...";
+        String errorMessage = "";
         try {
             Files.createDirectories(filePath.getParent());
             Files.deleteIfExists(filePath);
@@ -70,16 +68,18 @@ public final class Storage {
                 String taskString = task.getTaskString() + "\n";
                 Files.writeString(filePath, taskString, java.nio.file.StandardOpenOption.APPEND);
             }
-            response += System.lineSeparator() + "Tasks saved successfully.";
             isSaved = true;
         } catch (IOException e) {
-            ui.displayError("Failed to save tasks.");
-            isSaved = false;
-        } catch (SecurityException e) {
-            ui.displayError("Could not create the saved tasks file.");
+            errorMessage = "Failed to save tasks.";
             isSaved = false;
         } finally {
-            ui.showMessageWithoutLineSeparator(response);
+            if (isSaved) {
+                response += System.lineSeparator() + "Tasks saved successfully!";
+                ui.showMessageWithoutLineSeparator(response);
+            } else {
+                response += System.lineSeparator() + errorMessage;
+                ui.displayError(response);
+            }
         }
     }
 
