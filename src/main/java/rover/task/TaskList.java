@@ -13,6 +13,8 @@ import rover.ui.Ui;
  */
 public final class TaskList {
 
+    private static final String NEW_LINE = System.lineSeparator();
+    private static final String DELIMITER = " \\| ";
     private final ArrayList<Task> tasks;
     private int taskCount = 0;
 
@@ -33,7 +35,7 @@ public final class TaskList {
     public TaskList(String ...taskStrings) throws RoverException, DateTimeParseException {
         this.tasks = new ArrayList<>();
         for (String taskString : taskStrings) {
-            String[] parts = taskString.split(" \\| ");
+            String[] parts = taskString.split(DELIMITER);
             if (parts.length != 3) {
                 throw new RoverException("Possible corruption in saved tasks.");
             }
@@ -82,24 +84,28 @@ public final class TaskList {
      * @param filterDescription The description of the filter.
      */
     public void showTasks(Ui ui, BiFunction<Task, AtomicBoolean, Boolean> predicate, String filterDescription) {
-        StringBuilder response = new StringBuilder();
         AtomicBoolean wasExceptionThrown = new AtomicBoolean(false);
         List<Task> filteredTasks = tasks.stream().filter(task -> predicate.apply(task, wasExceptionThrown)).toList();
         if (wasExceptionThrown.get()) {
             return;
         }
+
+        String response = getStringOfFilteredTasks(filteredTasks, filterDescription);
+        ui.showMessage(response);
+    }
+
+    private String getStringOfFilteredTasks(List<Task> filteredTasks, String filterDescription) {
         if (filteredTasks.isEmpty()) {
-            response.append("There are no tasks ").append(filterDescription).append(".");
-        } else {
-            response.append("Here are the tasks ").append(filterDescription).append(":").append(System.lineSeparator());
-            for (int i = 0; i < filteredTasks.size(); i++) {
-                response.append((i + 1)).append(". ").append(filteredTasks.get(i));
-                if (i != filteredTasks.size() - 1) {
-                    response.append(System.lineSeparator());
-                }
+            return "There are no tasks " + filterDescription + ".";
+        }
+        StringBuilder response = new StringBuilder("Here are the tasks " + filterDescription + ":" + NEW_LINE);
+        for (int i = 0; i < filteredTasks.size(); i++) {
+            response.append((i + 1)).append(". ").append(filteredTasks.get(i));
+            if (i != filteredTasks.size() - 1) {
+                response.append(NEW_LINE);
             }
         }
-        ui.showMessage(response.toString());
+        return response.toString();
     }
 
     /**
@@ -115,8 +121,8 @@ public final class TaskList {
         }
         tasks.add(newTask);
         taskCount++;
-        String response = "Got it. I've added this task:" + System.lineSeparator()
-            + "  " + newTask + System.lineSeparator()
+        String response = "Got it. I've added this task:" + NEW_LINE
+            + "  " + newTask + NEW_LINE
             + "Now you have " + taskCount + " task"
             + (taskCount > 1 ? "s" : "") + " in the list.";
         ui.showMessage(response);
@@ -131,7 +137,7 @@ public final class TaskList {
     public void markTask(int index, Ui ui) {
         Task task = tasks.get(index);
         task.setDone();
-        String response = "Nice! I've marked this task as done:" + System.lineSeparator() + task;
+        String response = "Nice! I've marked this task as done:" + NEW_LINE + task;
         ui.showMessage(response);
     }
 
@@ -144,7 +150,7 @@ public final class TaskList {
     public void unmarkTask(int index, Ui ui) {
         Task task = tasks.get(index);
         task.setUndone();
-        String response = "OK, I've marked this task as not done yet:" + System.lineSeparator() + task;
+        String response = "OK, I've marked this task as not done yet:" + NEW_LINE + task;
         ui.showMessage(response);
     }
 
@@ -158,8 +164,8 @@ public final class TaskList {
         Task task = tasks.get(index);
         tasks.remove(index);
         taskCount--;
-        String response = "Noted. I've removed this task:" + System.lineSeparator() + task
-            + System.lineSeparator() + "Now you have " + taskCount + " task"
+        String response = "Noted. I've removed this task:" + NEW_LINE + task
+            + NEW_LINE + "Now you have " + taskCount + " task"
             + (taskCount > 1 ? "s" : "") + " in the list.";
         ui.showMessage(response);
     }

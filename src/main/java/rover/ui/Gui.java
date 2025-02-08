@@ -25,8 +25,8 @@ public final class Gui extends AnchorPane implements Ui {
 
     private Rover rover;
 
-    private Image userImage = new Image(this.getClass().getResourceAsStream("/images/User.png"));
-    private Image roverImage = new Image(this.getClass().getResourceAsStream("/images/Rover.png"));
+    private final Image userImage = new Image(this.getClass().getResourceAsStream("/images/User.png"));
+    private final Image roverImage = new Image(this.getClass().getResourceAsStream("/images/Rover.png"));
 
     @FXML
     public void initialize() {
