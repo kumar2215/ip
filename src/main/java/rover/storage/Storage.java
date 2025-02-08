@@ -59,6 +59,8 @@ public final class Storage {
      * @param ui The Ui object to display messages.
      */
     public void save(TaskList taskList, Ui ui) {
+        assert taskList != null : "TaskList should not be null.";
+        assert ui != null : "Ui should not be null.";
         String response = "Saving your tasks...";
         String errorMessage = "";
         try {

@@ -33,6 +33,7 @@ public final class TaskList {
      * @throws DateTimeParseException If the date and time format is incorrect.
      */
     public TaskList(String ...taskStrings) throws RoverException, DateTimeParseException {
+        assert taskStrings != null : "Task strings should not be null.";
         this.tasks = new ArrayList<>();
         for (String taskString : taskStrings) {
             String[] parts = taskString.split(DELIMITER);
@@ -53,6 +54,7 @@ public final class TaskList {
      * @throws RoverException If there is a possible corruption in the saved tasks.
      */
     private Task getTask(String ...parts) throws RoverException {
+        assert parts != null : "Parts should not be null.";
         Task newTask;
         switch (parts[0]) {
         case "T" -> newTask = new Todo(parts[2]);
@@ -65,6 +67,7 @@ public final class TaskList {
         } else if (!parts[1].equals("0")) {
             throw new RoverException("Possible corruption in saved tasks.");
         }
+        assert newTask != null : "Task should not be null.";
         return newTask;
     }
 
@@ -84,6 +87,9 @@ public final class TaskList {
      * @param filterDescription The description of the filter.
      */
     public void showTasks(Ui ui, BiFunction<Task, AtomicBoolean, Boolean> predicate, String filterDescription) {
+        assert predicate != null : "Predicate should not be null.";
+        assert filterDescription != null : "Filter description should not be null.";
+        assert !filterDescription.isEmpty() : "Filter description should not be empty.";
         AtomicBoolean wasExceptionThrown = new AtomicBoolean(false);
         List<Task> filteredTasks = tasks.stream().filter(task -> predicate.apply(task, wasExceptionThrown)).toList();
         if (wasExceptionThrown.get()) {
@@ -116,6 +122,8 @@ public final class TaskList {
      * @throws RoverException If the task already exists in the list.
      */
     public void addTask(Task newTask, Ui ui) throws RoverException {
+        assert newTask != null : "Task should not be null.";
+        assert ui != null : "Ui should not be null.";
         if (tasks.contains(newTask)) {
             throw new RoverException("This task already exists in the list.");
         }
@@ -135,6 +143,9 @@ public final class TaskList {
      * @param ui The user interface to display the tasks found.
      */
     public void markTask(int index, Ui ui) {
+        assert index >= 0 : "Index should be non-negative.";
+        assert index < taskCount : "Index should be less than the number of tasks.";
+        assert ui != null : "Ui should not be null.";
         Task task = tasks.get(index);
         task.setDone();
         String response = "Nice! I've marked this task as done:" + NEW_LINE + task;
@@ -148,6 +159,9 @@ public final class TaskList {
      * @param ui The user interface to display the tasks found.
      */
     public void unmarkTask(int index, Ui ui) {
+        assert index >= 0 : "Index should be non-negative.";
+        assert index < taskCount : "Index should be less than the number of tasks.";
+        assert ui != null : "Ui should not be null.";
         Task task = tasks.get(index);
         task.setUndone();
         String response = "OK, I've marked this task as not done yet:" + NEW_LINE + task;
@@ -161,6 +175,9 @@ public final class TaskList {
      * @param ui The user interface to display the deleted task.
      */
     public void deleteTask(int index, Ui ui) {
+        assert index >= 0 : "Index should be non-negative.";
+        assert index < taskCount : "Index should be less than the number of tasks.";
+        assert ui != null : "Ui should not be null.";
         Task task = tasks.get(index);
         tasks.remove(index);
         taskCount--;
