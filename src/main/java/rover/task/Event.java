@@ -47,9 +47,9 @@ public final class Event extends Task {
     private void setFromToFullFormat() {
         fromToFullFormat = "from "
             + startDate.format(DateTimeFormatter.ofPattern("EEEE, dd MMMM, yyyy")) + " "
-            + startTime.format(DateTimeFormatter.ofPattern("h:mm a")) + " to "
+            + startTime.format(DateTimeFormatter.ofPattern("h:mm a")).toLowerCase() + " to "
             + endDate.format(DateTimeFormatter.ofPattern("EEEE, dd MMMM, yyyy")) + " "
-            + endTime.format(DateTimeFormatter.ofPattern("h:mm a"));
+            + endTime.format(DateTimeFormatter.ofPattern("h:mm a")).toLowerCase();
     }
 
     private void checkIfEndIsAfterStart() throws RoverException {

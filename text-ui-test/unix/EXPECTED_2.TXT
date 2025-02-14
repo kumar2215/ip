@@ -13,7 +13,7 @@ What can I do for you?
 --------------------------------------------
 Here are the tasks in your list:
 1. [T][ ] buy milk
-2. [D][ ] CS3230 Assignment 2 (by: Saturday, 01 February, 2025 11:59 PM)
+2. [D][ ] CS3230 Assignment 2 (by: Saturday, 01 February, 2025 11:59 pm)
 3. [T][ ] read book
 --------------------------------------------
 --------------------------------------------
@@ -26,7 +26,7 @@ Nice! I've marked this task as done:
 --------------------------------------------
 Here are the tasks in your list:
 1. [T][X] buy milk
-2. [D][ ] CS3230 Assignment 2 (by: Saturday, 01 February, 2025 11:59 PM)
+2. [D][ ] CS3230 Assignment 2 (by: Saturday, 01 February, 2025 11:59 pm)
 3. [T][ ] read book
 --------------------------------------------
 --------------------------------------------
@@ -36,7 +36,7 @@ You only have 3 tasks in total.
 --------------------------------------------
 Here are the tasks in your list:
 1. [T][X] buy milk
-2. [D][ ] CS3230 Assignment 2 (by: Saturday, 01 February, 2025 11:59 PM)
+2. [D][ ] CS3230 Assignment 2 (by: Saturday, 01 February, 2025 11:59 pm)
 3. [T][ ] read book
 --------------------------------------------
 --------------------------------------------
@@ -46,16 +46,16 @@ You only have 3 tasks in total.
 --------------------------------------------
 Here are the tasks in your list:
 1. [T][X] buy milk
-2. [D][ ] CS3230 Assignment 2 (by: Saturday, 01 February, 2025 11:59 PM)
+2. [D][ ] CS3230 Assignment 2 (by: Saturday, 01 February, 2025 11:59 pm)
 3. [T][ ] read book
 --------------------------------------------
 --------------------------------------------
 Here are the tasks before 02/02/25:
-1. [D][ ] CS3230 Assignment 2 (by: Saturday, 01 February, 2025 11:59 PM)
+1. [D][ ] CS3230 Assignment 2 (by: Saturday, 01 February, 2025 11:59 pm)
 --------------------------------------------
 --------------------------------------------
 Here are the tasks after 30/01/25:
-1. [D][ ] CS3230 Assignment 2 (by: Saturday, 01 February, 2025 11:59 PM)
+1. [D][ ] CS3230 Assignment 2 (by: Saturday, 01 February, 2025 11:59 pm)
 --------------------------------------------
 --------------------------------------------
 Saving your tasks...

@@ -63,7 +63,7 @@ public final class Deadline extends Task {
 
     private void setByFullFormat() {
         this.byFullFormat = byDate.format(DateTimeFormatter.ofPattern("EEEE, dd MMMM, yyyy"));
-        this.byFullFormat += " " + byTime.format(DateTimeFormatter.ofPattern("h:mm a"));
+        this.byFullFormat += " " + byTime.format(DateTimeFormatter.ofPattern("h:mm a")).toLowerCase();
     }
 
     /**
