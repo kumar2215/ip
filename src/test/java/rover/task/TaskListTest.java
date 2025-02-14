@@ -8,11 +8,14 @@ import java.time.format.DateTimeParseException;
 
 import org.junit.jupiter.api.Test;
 
+import rover.OsCheck;
 import rover.exceptions.RoverException;
 import rover.ui.TextUi;
 import rover.ui.Ui;
 
 public class TaskListTest {
+
+    private static final OsCheck.OsType OS_TYPE = OsCheck.getOperatingSystemType();
 
     @Test
     public void checkEmptyTaskList() {
@@ -27,17 +30,17 @@ public class TaskListTest {
     @Test
     public void checkIfExceptionThrown_corruptedTaskString() {
         try {
-            TaskList taskList = new TaskList(new String[] { "T | 2 | read book" });
+            new TaskList("T | 2 | read book");
         } catch (RoverException e) {
             assertEquals("Possible corruption in saved tasks.", e.getMessage());
         }
         try {
-            TaskList taskList = new TaskList(new String[] { "X | 0 | read book" });
+            new TaskList("X | 0 | read book");
         } catch (RoverException e) {
             assertEquals("Possible corruption in saved tasks.", e.getMessage());
         }
         try {
-            TaskList taskList = new TaskList(new String[] { "T | 0 |read book" });
+            new TaskList("T | 0 |read book");
         } catch (RoverException e) {
             assertEquals("Possible corruption in saved tasks.", e.getMessage());
         }
@@ -46,17 +49,17 @@ public class TaskListTest {
     @Test
     public void checkIfExceptionThrown_corruptedTaskString2() {
         try {
-            TaskList taskList = new TaskList(new String[] { "D | 0 | read book 10/12/21" });
+            new TaskList("D | 0 | read book 10/12/21");
         } catch (RoverException e) {
             assertEquals("A deadline task must be a task followed with '/by (deadline)'.", e.getMessage());
         }
         try {
-            TaskList taskList = new TaskList(new String[] { "D | 1 | read book /by 10/12/21 /by 09/08/21" });
+            new TaskList("D | 1 | read book /by 10/12/21 /by 09/08/21");
         } catch (RoverException e) {
             assertEquals("A deadline task must be a task followed with '/by (deadline)'.", e.getMessage());
         }
         try {
-            TaskList taskList = new TaskList(new String[] { "D | 0 | read book /by 10/12/" });
+            new TaskList("D | 0 | read book /by 10/12/");
         } catch (RoverException e) {
             fail("This exception should not be thrown");
         } catch (DateTimeParseException e) {
@@ -67,29 +70,29 @@ public class TaskListTest {
     @Test
     public void checkIfExceptionThrown_corruptedTaskString3() {
         try {
-            TaskList taskList = new TaskList(new String[] { "E | 0 | read book 10/12/21 09/08/21" });
+            new TaskList("E | 0 | read book 10/12/21 09/08/21");
         } catch (RoverException e) {
             assertEquals("An event task must be a task followed with '/from (start) /to (end)'.", e.getMessage());
         }
         try {
-            TaskList taskList = new TaskList(new String[] { "E | 1 | read book /from 10/12/21 /from 09/08/21" });
+            new TaskList("E | 1 | read book /from 10/12/21 /from 09/08/21");
         } catch (RoverException e) {
             assertEquals("An event task must be a task followed with '/from (start) /to (end)'.", e.getMessage());
         }
         try {
-            TaskList taskList = new TaskList(new String[] { "E | 0 | read book /from 10/12/21 09/08/21" });
+            new TaskList("E | 0 | read book /from 10/12/21 09/08/21");
         } catch (RoverException e) {
             assertEquals("An event task must be a task followed with '/from (start) /to (end)'.", e.getMessage());
         }
         try {
-            TaskList taskList = new TaskList(new String[] { "E | 0 | read book /from 10/12/21 /to 09/08/" });
+            new TaskList("E | 0 | read book /from 10/12/21 /to 09/08/");
         } catch (RoverException e) {
             fail("This exception should not be thrown");
         } catch (DateTimeParseException e) {
             assertEquals("Unable to parse date: 09/08/", e.getMessage());
         }
         try {
-            TaskList taskList = new TaskList(new String[] { "E | 0 | read book /from 10/12/21 /to 09/08/21" });
+            new TaskList("E | 0 | read book /from 10/12/21 /to 09/08/21");
         } catch (RoverException e) {
             assertEquals("The start date and time must be before the end date and time.", e.getMessage());
         }
@@ -134,7 +137,9 @@ public class TaskListTest {
 
         taskList.showTasks(ui, (task, ignore) -> true, "in your list");
 
-        String expectedOutput = """
+        String expectedOutput = "";
+        switch (OS_TYPE) {
+        case Windows -> expectedOutput = """
             --------------------------------------------
             Here are the tasks in your list:
             1. [T][ ] read book
@@ -142,6 +147,16 @@ public class TaskListTest {
             3. [E][ ] project meeting (from Wednesday, 25 August 2021 2:00 pm to Wednesday, 25 August 2021 4:00 pm)
             --------------------------------------------
             """.replace("\n", System.lineSeparator());
+        case MacOS, Linux -> expectedOutput = """
+            --------------------------------------------
+            Here are the tasks in your list:
+            1. [T][ ] read book
+            2. [D][ ] return book (by: Tuesday, 24 August, 2021 6:00 PM)
+            3. [E][ ] project meeting (from Wednesday, 25 August, 2021 2:00 PM to Wednesday, 25 August, 2021 4:00 PM)
+            --------------------------------------------
+            """.replace("\n", System.lineSeparator());
+        default -> fail("Unknown OS detected.");
+        }
 
         assertEquals(expectedOutput, outContent.toString());
     }
@@ -175,13 +190,24 @@ public class TaskListTest {
             fail("Exception should not be thrown");
         }
 
-        String expectedOutput2 = """
+        String expectedOutput2 = "";
+        switch (OS_TYPE) {
+        case Windows -> expectedOutput2 = """
             --------------------------------------------
             Got it. I've added this task:
               [D][ ] return book (by: Tuesday, 24 August 2021 6:00 pm)
             Now you have 2 tasks in the list.
             --------------------------------------------
             """.replace("\n", System.lineSeparator());
+        case MacOS, Linux -> expectedOutput2 = """
+            --------------------------------------------
+            Got it. I've added this task:
+              [D][ ] return book (by: Tuesday, 24 August, 2021 6:00 PM)
+            Now you have 2 tasks in the list.
+            --------------------------------------------
+            """.replace("\n", System.lineSeparator());
+        default -> fail("Unknown OS detected.");
+        }
         assertEquals(expectedOutput2, outContent.toString());
         outContent.reset();
 
@@ -191,13 +217,24 @@ public class TaskListTest {
             fail("Exception should not be thrown");
         }
 
-        String expectedOutput3 = """
+        String expectedOutput3 = "";
+        switch (OS_TYPE) {
+        case Windows -> expectedOutput3 = """
             --------------------------------------------
             Got it. I've added this task:
               [E][ ] project meeting (from Wednesday, 25 August 2021 2:00 pm to Wednesday, 25 August 2021 4:00 pm)
             Now you have 3 tasks in the list.
             --------------------------------------------
             """.replace("\n", System.lineSeparator());
+        case MacOS, Linux -> expectedOutput3 = """
+            --------------------------------------------
+            Got it. I've added this task:
+              [E][ ] project meeting (from Wednesday, 25 August, 2021 2:00 PM to Wednesday, 25 August, 2021 4:00 PM)
+            Now you have 3 tasks in the list.
+            --------------------------------------------
+            """.replace("\n", System.lineSeparator());
+        default -> fail("Unknown OS detected.");
+        }
         assertEquals(expectedOutput3, outContent.toString());
         outContent.reset();
 
