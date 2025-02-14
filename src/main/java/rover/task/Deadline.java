@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.time.format.FormatStyle;
 
 import rover.exceptions.RoverException;
 import rover.parser.DateTimeParser;
@@ -63,8 +62,8 @@ public final class Deadline extends Task {
     }
 
     private void setByFullFormat() {
-        this.byFullFormat = byDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL));
-        this.byFullFormat += " " + byTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT));
+        this.byFullFormat = byDate.format(DateTimeFormatter.ofPattern("EEEE, dd MMMM, yyyy"));
+        this.byFullFormat += " " + byTime.format(DateTimeFormatter.ofPattern("h:mm a"));
     }
 
     /**

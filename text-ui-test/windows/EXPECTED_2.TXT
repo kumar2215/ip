@@ -13,8 +13,8 @@ What can I do for you?
 --------------------------------------------
 Here are the tasks in your list:
 1. [T][ ] buy milk
-2. [D][ ] CS3230 Assignment 2 (by: Saturday, 1 February 2025 11:59 pm)
-3. [E][ ] CS3230 Lecture (from Wednesday, 29 January 2025 2:00 pm to Wednesday, 29 January 2025 4:00 pm)
+2. [D][ ] CS3230 Assignment 2 (by: Saturday, 01 February, 2025 11:59 pm)
+3. [E][ ] CS3230 Lecture (from Wednesday, 29 January, 2025 2:00 pm to Wednesday, 29 January, 2025 4:00 pm)
 4. [T][ ] read book
 --------------------------------------------
 --------------------------------------------
@@ -27,8 +27,8 @@ Nice! I've marked this task as done:
 --------------------------------------------
 Here are the tasks in your list:
 1. [T][X] buy milk
-2. [D][ ] CS3230 Assignment 2 (by: Saturday, 1 February 2025 11:59 pm)
-3. [E][ ] CS3230 Lecture (from Wednesday, 29 January 2025 2:00 pm to Wednesday, 29 January 2025 4:00 pm)
+2. [D][ ] CS3230 Assignment 2 (by: Saturday, 01 February, 2025 11:59 pm)
+3. [E][ ] CS3230 Lecture (from Wednesday, 29 January, 2025 2:00 pm to Wednesday, 29 January, 2025 4:00 pm)
 4. [T][ ] read book
 --------------------------------------------
 --------------------------------------------
@@ -38,8 +38,8 @@ Nice! I've marked this task as done:
 --------------------------------------------
 Here are the tasks in your list:
 1. [T][X] buy milk
-2. [D][ ] CS3230 Assignment 2 (by: Saturday, 1 February 2025 11:59 pm)
-3. [E][ ] CS3230 Lecture (from Wednesday, 29 January 2025 2:00 pm to Wednesday, 29 January 2025 4:00 pm)
+2. [D][ ] CS3230 Assignment 2 (by: Saturday, 01 February, 2025 11:59 pm)
+3. [E][ ] CS3230 Lecture (from Wednesday, 29 January, 2025 2:00 pm to Wednesday, 29 January, 2025 4:00 pm)
 4. [T][X] read book
 --------------------------------------------
 --------------------------------------------
@@ -50,17 +50,17 @@ Now you have 3 tasks in the list.
 --------------------------------------------
 Here are the tasks in your list:
 1. [T][X] buy milk
-2. [D][ ] CS3230 Assignment 2 (by: Saturday, 1 February 2025 11:59 pm)
-3. [E][ ] CS3230 Lecture (from Wednesday, 29 January 2025 2:00 pm to Wednesday, 29 January 2025 4:00 pm)
+2. [D][ ] CS3230 Assignment 2 (by: Saturday, 01 February, 2025 11:59 pm)
+3. [E][ ] CS3230 Lecture (from Wednesday, 29 January, 2025 2:00 pm to Wednesday, 29 January, 2025 4:00 pm)
 --------------------------------------------
 --------------------------------------------
 Here are the tasks before 02/02/25:
-1. [D][ ] CS3230 Assignment 2 (by: Saturday, 1 February 2025 11:59 pm)
-2. [E][ ] CS3230 Lecture (from Wednesday, 29 January 2025 2:00 pm to Wednesday, 29 January 2025 4:00 pm)
+1. [D][ ] CS3230 Assignment 2 (by: Saturday, 01 February, 2025 11:59 pm)
+2. [E][ ] CS3230 Lecture (from Wednesday, 29 January, 2025 2:00 pm to Wednesday, 29 January, 2025 4:00 pm)
 --------------------------------------------
 --------------------------------------------
 Here are the tasks after 30/01/25:
-1. [D][ ] CS3230 Assignment 2 (by: Saturday, 1 February 2025 11:59 pm)
+1. [D][ ] CS3230 Assignment 2 (by: Saturday, 01 February, 2025 11:59 pm)
 --------------------------------------------
 --------------------------------------------
 Saving your tasks...

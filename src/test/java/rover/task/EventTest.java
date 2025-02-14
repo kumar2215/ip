@@ -9,12 +9,9 @@ import java.time.format.DateTimeParseException;
 
 import org.junit.jupiter.api.Test;
 
-import rover.OsCheck;
 import rover.exceptions.RoverException;
 
 public class EventTest {
-
-    private static final OsCheck.OsType OS_TYPE = OsCheck.getOperatingSystemType();
 
     @Test
     public void checkIfExceptionThrown_emptyStringInitialisation() {
@@ -63,25 +60,13 @@ public class EventTest {
         try {
             Event event = new Event("School Camp /from 2021-08-24 1800 /to 2021-08-27 1800");
             assertEquals("E | 0 | School Camp /from 2021-08-24 1800 /to 2021-08-27 1800", event.getTaskString());
+            assertEquals("[E][ ] School Camp (from Tuesday, 24 August, 2021 6:00 pm to Friday, "
+                + "27 August, 2021 6:00 pm)", event.toString());
 
             Event event2 = new Event("School Camp /from 2021-08-24 /to 2021-08-27");
             assertEquals("E | 0 | School Camp /from 2021-08-24 /to 2021-08-27", event2.getTaskString());
-
-            switch (OS_TYPE) {
-            case Windows -> {
-                assertEquals("[E][ ] School Camp (from Tuesday, 24 August 2021 6:00 pm to Friday, "
-                    + "27 August 2021 6:00 pm)", event.toString());
-                assertEquals("[E][ ] School Camp (from Tuesday, 24 August 2021 12:00 am to Friday, "
-                    + "27 August 2021 11:59 pm)", event2.toString());
-            }
-            case MacOS, Linux -> {
-                assertEquals("[E][ ] School Camp (from Tuesday, 24 August, 2021 6:00 PM to Friday, "
-                    + "27 August, 2021 6:00 PM)", event.toString());
-                assertEquals("[E][ ] School Camp (from Tuesday, 24 August, 2021 12:00 AM to Friday, "
-                    + "27 August, 2021 11:59 PM)", event2.toString());
-            }
-            default -> throw new RoverException("Unknown OS detected.");
-            }
+            assertEquals("[E][ ] School Camp (from Tuesday, 24 August, 2021 12:00 am to Friday, "
+                + "27 August, 2021 11:59 pm)", event2.toString());
         } catch (RoverException | DateTimeParseException e) {
             System.out.println(e.getMessage());
         }
@@ -93,25 +78,14 @@ public class EventTest {
             Event event = new Event("School Camp /from 2021-08-24 1800 /to 2021-08-27 1800");
             event.setDone();
             assertEquals("E | 1 | School Camp /from 2021-08-24 1800 /to 2021-08-27 1800", event.getTaskString());
+            assertEquals("[E][X] School Camp (from Tuesday, 24 August, 2021 6:00 pm to Friday, "
+                + "27 August, 2021 6:00 pm)", event.toString());
+
             Event event2 = new Event("School Camp /from 2021-08-24 /to 2021-08-27");
             event2.setDone();
             assertEquals("E | 1 | School Camp /from 2021-08-24 /to 2021-08-27", event2.getTaskString());
-
-            switch (OS_TYPE) {
-            case Windows -> {
-                assertEquals("[E][X] School Camp (from Tuesday, 24 August 2021 6:00 pm to Friday, "
-                    + "27 August 2021 6:00 pm)", event.toString());
-                assertEquals("[E][X] School Camp (from Tuesday, 24 August 2021 12:00 am to Friday, "
-                    + "27 August 2021 11:59 pm)", event2.toString());
-            }
-            case MacOS, Linux -> {
-                assertEquals("[E][X] School Camp (from Tuesday, 24 August, 2021 6:00 PM to Friday, "
-                    + "27 August, 2021 6:00 PM)", event.toString());
-                assertEquals("[E][X] School Camp (from Tuesday, 24 August, 2021 12:00 AM to Friday, "
-                    + "27 August, 2021 11:59 PM)", event2.toString());
-            }
-            default -> throw new RoverException("Unknown OS detected.");
-            }
+            assertEquals("[E][X] School Camp (from Tuesday, 24 August, 2021 12:00 am to Friday, "
+                + "27 August, 2021 11:59 pm)", event2.toString());
         } catch (RoverException | DateTimeParseException e) {
             System.out.println(e.getMessage());
         }

@@ -60,19 +60,19 @@ Oops! Error: The date format should be 'dd/mm/yy'.
 --------------------------------------------
 --------------------------------------------
 Got it. I've added this task:
-  [D][ ] CS3230 Assignment 2 (by: Saturday, 1 February 2025 11:59 pm)
+  [D][ ] CS3230 Assignment 2 (by: Saturday, 01 February, 2025 11:59 pm)
 Now you have 2 tasks in the list.
 --------------------------------------------
 --------------------------------------------
 Got it. I've added this task:
-  [E][ ] CS3230 Lecture (from Wednesday, 29 January 2025 2:00 pm to Wednesday, 29 January 2025 4:00 pm)
+  [E][ ] CS3230 Lecture (from Wednesday, 29 January, 2025 2:00 pm to Wednesday, 29 January, 2025 4:00 pm)
 Now you have 3 tasks in the list.
 --------------------------------------------
 --------------------------------------------
 Here are the tasks in your list:
 1. [T][ ] buy milk
-2. [D][ ] CS3230 Assignment 2 (by: Saturday, 1 February 2025 11:59 pm)
-3. [E][ ] CS3230 Lecture (from Wednesday, 29 January 2025 2:00 pm to Wednesday, 29 January 2025 4:00 pm)
+2. [D][ ] CS3230 Assignment 2 (by: Saturday, 01 February, 2025 11:59 pm)
+3. [E][ ] CS3230 Lecture (from Wednesday, 29 January, 2025 2:00 pm to Wednesday, 29 January, 2025 4:00 pm)
 --------------------------------------------
 --------------------------------------------
 Got it. I've added this task:
@@ -82,8 +82,8 @@ Now you have 4 tasks in the list.
 --------------------------------------------
 Here are the tasks in your list:
 1. [T][ ] buy milk
-2. [D][ ] CS3230 Assignment 2 (by: Saturday, 1 February 2025 11:59 pm)
-3. [E][ ] CS3230 Lecture (from Wednesday, 29 January 2025 2:00 pm to Wednesday, 29 January 2025 4:00 pm)
+2. [D][ ] CS3230 Assignment 2 (by: Saturday, 01 February, 2025 11:59 pm)
+3. [E][ ] CS3230 Lecture (from Wednesday, 29 January, 2025 2:00 pm to Wednesday, 29 January, 2025 4:00 pm)
 4. [T][ ] read book
 --------------------------------------------
 --------------------------------------------

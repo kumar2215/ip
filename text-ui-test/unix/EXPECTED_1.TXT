@@ -60,7 +60,7 @@ Oops! Error: The date format should be 'dd/mm/yy'.
 --------------------------------------------
 --------------------------------------------
 Got it. I've added this task:
-  [D][ ] CS3230 Assignment 2 (by: Saturday, February 1, 2025 11:59 PM)
+  [D][ ] CS3230 Assignment 2 (by: Saturday, 01 February, 2025 11:59 PM)
 Now you have 2 tasks in the list.
 --------------------------------------------
 --------------------------------------------
@@ -69,7 +69,7 @@ Oops! Error: The time format should be 'hh:mm'.
 --------------------------------------------
 Here are the tasks in your list:
 1. [T][ ] buy milk
-2. [D][ ] CS3230 Assignment 2 (by: Saturday, February 1, 2025 11:59 PM)
+2. [D][ ] CS3230 Assignment 2 (by: Saturday, 01 February, 2025 11:59 PM)
 --------------------------------------------
 --------------------------------------------
 Got it. I've added this task:
@@ -79,7 +79,7 @@ Now you have 3 tasks in the list.
 --------------------------------------------
 Here are the tasks in your list:
 1. [T][ ] buy milk
-2. [D][ ] CS3230 Assignment 2 (by: Saturday, February 1, 2025 11:59 PM)
+2. [D][ ] CS3230 Assignment 2 (by: Saturday, 01 February, 2025 11:59 PM)
 3. [T][ ] read book
 --------------------------------------------
 --------------------------------------------

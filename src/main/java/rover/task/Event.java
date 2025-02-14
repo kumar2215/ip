@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.time.format.FormatStyle;
 
 import rover.exceptions.RoverException;
 import rover.parser.DateTimeParser;
@@ -47,10 +46,10 @@ public final class Event extends Task {
 
     private void setFromToFullFormat() {
         fromToFullFormat = "from "
-            + startDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL)) + " "
-            + startTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))
-            + " to " + endDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL)) + " "
-            + endTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT));
+            + startDate.format(DateTimeFormatter.ofPattern("EEEE, dd MMMM, yyyy")) + " "
+            + startTime.format(DateTimeFormatter.ofPattern("h:mm a")) + " to "
+            + endDate.format(DateTimeFormatter.ofPattern("EEEE, dd MMMM, yyyy")) + " "
+            + endTime.format(DateTimeFormatter.ofPattern("h:mm a"));
     }
 
     private void checkIfEndIsAfterStart() throws RoverException {

@@ -9,12 +9,9 @@ import java.time.format.DateTimeParseException;
 
 import org.junit.jupiter.api.Test;
 
-import rover.OsCheck;
 import rover.exceptions.RoverException;
 
 public class DeadlineTest {
-
-    private static final OsCheck.OsType OS_TYPE = OsCheck.getOperatingSystemType();
 
     @Test
     public void checkIfExceptionThrown_emptyStringInitialisation() {
@@ -53,14 +50,7 @@ public class DeadlineTest {
         try {
             Deadline deadline = new Deadline("do homework /by 2021-08-24");
             assertEquals("D | 0 | do homework /by 2021-08-24", deadline.getTaskString());
-            switch (OS_TYPE) {
-            case Windows -> assertEquals("[D][ ] do homework (by: Tuesday, 24 August 2021 11:59 pm)",
-                deadline.toString());
-            case MacOS, Linux -> assertEquals("[D][ ] do homework (by: Tuesday, 24 August, 2021 11:59 PM)",
-                deadline.toString());
-            default -> throw new RoverException("Unknown OS detected.");
-            }
-            assertEquals("[D][ ] do homework (by: Tuesday, 24 August 2021 11:59 pm)", deadline.toString());
+            assertEquals("[D][ ] do homework (by: Tuesday, 24 August, 2021 11:59 pm)", deadline.toString());
         } catch (RoverException e) {
             System.out.println(e.getMessage());
         }
@@ -72,13 +62,7 @@ public class DeadlineTest {
             Deadline deadline = new Deadline("do homework /by 2021-08-24");
             deadline.setDone();
             assertEquals("D | 1 | do homework /by 2021-08-24", deadline.getTaskString());
-            switch (OS_TYPE) {
-            case Windows -> assertEquals("[D][X] do homework (by: Tuesday, 24 August 2021 11:59 pm)",
-                deadline.toString());
-            case MacOS, Linux -> assertEquals("[D][X] do homework (by: Tuesday, 24 August, 2021 11:59 PM)",
-                deadline.toString());
-            default -> throw new RoverException("Unknown OS detected.");
-            }
+            assertEquals("[D][X] do homework (by: Tuesday, 24 August, 2021 11:59 pm)", deadline.toString());
         } catch (RoverException e) {
             System.out.println(e.getMessage());
         }
