@@ -42,11 +42,11 @@ public class TaskTest {
             Task task5 = new Event("read book /from 01/01/2021 1800 /to 01/01/2021 1900");
             Task task6 = new Event("read book /from 01/01/2022 1800 /to 01/01/2022 1900");
             assertEquals(task1, task2);
-            assertEquals(task1, task3);
-            assertEquals(task1, task5);
-            assertEquals(task3, task4);
-            assertEquals(task3, task5);
-            assertEquals(task5, task6);
+            assertNotEquals(task1, task3);
+            assertNotEquals(task1, task5);
+            assertNotEquals(task3, task4);
+            assertNotEquals(task3, task5);
+            assertNotEquals(task5, task6);
         } catch (RoverException e) {
             System.out.println(e.getMessage());
         }
