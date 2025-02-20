@@ -149,6 +149,20 @@ public final class Event extends Task {
     }
 
     /**
+     * Compares this event task with the specified object for equality.
+     *
+     * @param obj The object to compare with.
+     */
+    public boolean equals(Object obj) {
+        if (obj instanceof Event other) {
+            return this.description.equals(other.description) && this.startDate.equals(other.startDate)
+                    && this.startTime.equals(other.startTime) && this.endDate.equals(other.endDate)
+                    && this.endTime.equals(other.endTime);
+        }
+        return false;
+    }
+
+    /**
      * {@code @InheritDoc} from Task
      */
     @Override

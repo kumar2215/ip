@@ -109,6 +109,18 @@ public final class Deadline extends Task {
     }
 
     /**
+     * Compares this deadline task with the specified object for equality.
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Deadline other) {
+            return this.description.equals(other.description) && this.byDate.equals(other.byDate)
+                    && this.byTime.equals(other.byTime);
+        }
+        return false;
+    }
+
+    /**
      * {@code @InheritDoc} from Task
      */
     @Override

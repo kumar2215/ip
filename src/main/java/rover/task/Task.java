@@ -45,20 +45,6 @@ public abstract sealed class Task permits Todo, Deadline, Event {
     }
 
     /**
-     * Overrides the equals method to compare tasks based on their description.
-     *
-     * @param obj The object to compare with.
-     * @return True if the tasks have the same description, false otherwise.
-     */
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof Task other) {
-            return this.description.equals(other.description);
-        }
-        return false;
-    }
-
-    /**
      * Returns the description of the task for saving to the file.
      *
      * @return The description of the task.

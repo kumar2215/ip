@@ -41,6 +41,19 @@ public final class Todo extends Task {
     }
 
     /**
+     * Compares this todo task with the specified object for equality.
+     *
+     * @param obj The object to compare with.
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Todo other) {
+            return this.description.equals(other.description);
+        }
+        return false;
+    }
+
+    /**
      * {@code @InheritDoc} from Task
      */
     @Override
