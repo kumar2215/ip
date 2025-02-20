@@ -1,19 +1,21 @@
 .label {
     -fx-background-color: linear-gradient(to bottom right, #00ffbf, #00ddff);
-    -fx-border-color: #d55e00 #009e73 #cc79a7 #0072b2;
+    -fx-border-color: #00ddff #00ddff #00ddff #00ddff;
     -fx-border-width: 2px;
     -fx-background-radius: 1em 1em 0 1em;
     -fx-border-radius: 1em 1em 0 1em;
 }
 
 .reply-label {
+    -fx-background-color: linear-gradient(to bottom right, #ad8ef6, #b470f6);
+    -fx-border-color: #b470f6 #b470f6 #b470f6 #b470f6;
     -fx-background-radius: 1em 1em 1em 0;
     -fx-border-radius: 1em 1em 1em 0;
 }
 
 .error-label {
     -fx-background-color: linear-gradient(to bottom right, #dc5959, #e18888);
-    -fx-border-color: #d55e00 #009e73 #cc79a7 #0072b2;
+    -fx-border-color: #e18888 #e18888 #e18888 #e18888;
 }
 
 #displayPicture {

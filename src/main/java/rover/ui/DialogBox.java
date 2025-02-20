@@ -62,14 +62,13 @@ public class DialogBox extends HBox {
     }
 
     public static DialogBox getRoverDialog(String text, Image img) {
-        var db = new DialogBox(text, img);
+        DialogBox db = new DialogBox(text, img);
         db.flip();
         return db;
     }
 
     public static DialogBox getErrorDialog(String text, Image img) {
-        var db = new DialogBox(text, img);
-        db.flip();
+        DialogBox db = getRoverDialog(text, img);
         db.convertToErrorDialog();
         return db;
     }
