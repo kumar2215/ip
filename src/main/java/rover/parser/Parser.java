@@ -12,10 +12,12 @@ import rover.command.InvalidCommand;
 import rover.command.ListCommand;
 import rover.command.MarkCommand;
 import rover.command.RetrySaveCommand;
+import rover.command.SetCommand;
 import rover.command.ShowAfterCommand;
 import rover.command.ShowBeforeCommand;
 import rover.command.UnmarkCommand;
 import rover.exceptions.RoverException;
+import rover.preferences.PreferenceOption;
 import rover.task.Deadline;
 import rover.task.Event;
 import rover.task.Task;
@@ -55,6 +57,8 @@ public final class Parser {
             return new UnmarkCommand(args);
         } else if (stdInput.startsWith("delete")) {
             return new DeleteCommand(args);
+        } else if (stdInput.startsWith("set")) {
+            return new SetCommand(args);
         } else if (stdInput.startsWith("show before")) {
             return new ShowBeforeCommand(args);
         } else if (stdInput.startsWith("show after")) {
@@ -64,6 +68,22 @@ public final class Parser {
         } else {
             return new InvalidCommand(args);
         }
+    }
+
+    /**
+     * Parses the preference option and returns the corresponding preference option
+     *
+     * @param option Preference option specified by the user
+     * @return Preference option
+     * @throws RoverException If the preference option is invalid
+     */
+    public PreferenceOption parsePreferenceOption(String option) throws RoverException {
+        return switch (option) {
+        case "name" -> PreferenceOption.NAME;
+        case "userImage" -> PreferenceOption.USER_IMAGE;
+        case "roverImage" -> PreferenceOption.ROVER_IMAGE;
+        default -> throw new RoverException("Invalid preference option");
+        };
     }
 
     /**

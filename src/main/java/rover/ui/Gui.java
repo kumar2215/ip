@@ -1,6 +1,11 @@
 package rover.ui;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -10,11 +15,15 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import rover.main.Rover;
+import rover.preferences.UserPreferences;
 
 /**
  * Controller for the main GUI.
  */
 public final class Gui extends AnchorPane implements Ui {
+
+    private static final Image DEFAULT_USER_IMAGE = new Image(Gui.class.getResourceAsStream("/images/User.png"));
+    private static final Image DEFAULT_ROVER_IMAGE = new Image(Gui.class.getResourceAsStream("/images/Rover.png"));
 
     @FXML
     private ScrollPane scrollPane;
@@ -24,19 +33,110 @@ public final class Gui extends AnchorPane implements Ui {
     private TextField userInput;
 
     private Rover rover;
+    private Image userImage;
+    private Image roverImage;
+    private String username;
+    private UserPreferences userPreferences;
 
-    private final Image userImage = new Image(this.getClass().getResourceAsStream("/images/User.png"));
-    private final Image roverImage = new Image(this.getClass().getResourceAsStream("/images/Rover.png"));
-
+    /**
+     * Initializes the GUI.
+     */
     @FXML
     public void initialize() {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
     }
 
-    /** Injects the Rover instance */
+    /**
+     * Gets the UserPreferences instance.
+     *
+     * @return The UserPreferences instance.
+     */
+    public UserPreferences getUserPreferences() {
+        return userPreferences;
+    }
+
+    /**
+     * Injects the UserPreferences instance.
+     *
+     * @param userPreferences The UserPreferences instance.
+     */
+    public void setUserPreferences(UserPreferences userPreferences) {
+        assert userPreferences != null : "User preferences should not be null.";
+        this.userPreferences = userPreferences;
+
+        JsonNode name = userPreferences.getJsonNode().get("name");
+        this.username = name.asText().isEmpty() ? "" : " " + name.asText();
+        setUserImage(Path.of(userPreferences.getJsonNode().get("userImage").asText()));
+        setRoverImage(Path.of(userPreferences.getJsonNode().get("roverImage").asText()));
+    }
+
+    /**
+     * Injects the Rover instance
+     */
     public void setRover(Rover r) {
         rover = r;
         rover.setUi(this);
+    }
+
+    /**
+     * Gets the username of the user.
+     *
+     * @return The username of the user.
+     */
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    /**
+     * Sets the username of the user.
+     *
+     * @param username The username of the user.
+     */
+    @Override
+    public boolean setUsername(String username) {
+        assert username != null : "Username should not be null.";
+        assert !username.isBlank() : "Username should not be blank.";
+        this.username = " " + username;
+        return userPreferences.setName(username);
+    }
+
+    /**
+     * Sets the image of the user.
+     *
+     * @param userImagePath The path to the image of the user.
+     */
+    public boolean setUserImage(Path userImagePath) {
+        if (userImagePath.toString().equals("default")) {
+            userImage = DEFAULT_USER_IMAGE;
+            return false;
+        } else if (!Files.exists(userImagePath)) {
+            displayError(String.format("File %s not found at the specified path. "
+                + "Using default user image.", userImagePath));
+            userImage = DEFAULT_USER_IMAGE;
+            return false;
+        }
+        userImage = new Image(userImagePath.toUri().toString());
+        return userPreferences.setUserImage(userImagePath.toString());
+    }
+
+    /**
+     * Sets the image of the rover.
+     *
+     * @param roverImagePath The path to the image of the rover.
+     */
+    public boolean setRoverImage(Path roverImagePath) {
+        if (roverImagePath.toString().equals("default")) {
+            roverImage = DEFAULT_ROVER_IMAGE;
+            return false;
+        } else if (!Files.exists(roverImagePath)) {
+            displayError(String.format("File %s not found at the specified path. "
+                + "Using default rover image.", roverImagePath));
+            roverImage = DEFAULT_ROVER_IMAGE;
+            return false;
+        }
+        roverImage = new Image(roverImagePath.toUri().toString());
+        return userPreferences.setRoverImage(roverImagePath.toString());
     }
 
     /**
@@ -92,11 +192,11 @@ public final class Gui extends AnchorPane implements Ui {
      */
     @Override
     public void showWelcome() {
-        String response = """
-            Hello! I'm Rover
+        String response = String.format("""
+            Hello%s! I'm Rover
             I am your personal task manager.
             What can I do for you?
-            """;
+            """, username);
         showRoverResponse(response);
     }
 
@@ -105,7 +205,7 @@ public final class Gui extends AnchorPane implements Ui {
      */
     @Override
     public void sayBye() {
-        String response = "Bye. Hope to see you again soon!";
+        String response = String.format("Bye%s. Hope to see you again soon!", username);
         showRoverResponse(response);
         new Timer(true).schedule(new TimerTask() {
             public void run() {
@@ -119,8 +219,8 @@ public final class Gui extends AnchorPane implements Ui {
      */
     @Override
     public void showHelpMessage() {
-        String briefHelp = """
-                        I'm sorry, but I don't know what that means.
+        String briefHelp = String.format("""
+                        I'm sorry%s, but I don't know what that means.
                         The following commands are supported:
                             You can add a task by typing:
                             - todo (description)
@@ -133,7 +233,7 @@ public final class Gui extends AnchorPane implements Ui {
                             Show tasks before a certain date and/or time by typing 'show before (date) (time)'.
                             Show tasks after a certain date and/or time by typing 'show after (date) (time)'.
                             Exit the program by typing 'bye'.
-                        """;
+                        """, username);
         showRoverResponse(briefHelp);
     }
 

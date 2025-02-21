@@ -128,7 +128,7 @@ public final class TaskList {
         }
         tasks.add(newTask);
         taskCount++;
-        String response = "Got it. I've added this task:" + NEW_LINE
+        String response = String.format("Got it%s. I've added this task:", ui.getUsername()) + NEW_LINE
             + "  " + newTask + NEW_LINE
             + "Now you have " + taskCount + " task"
             + (taskCount > 1 ? "s" : "") + " in the list.";
@@ -147,7 +147,7 @@ public final class TaskList {
         assert ui != null : "Ui should not be null.";
         Task task = tasks.get(index);
         task.setDone();
-        String response = "Nice! I've marked this task as done:" + NEW_LINE + task;
+        String response = String.format("Nice%s! I've marked this task as done:", ui.getUsername()) + NEW_LINE + task;
         ui.showMessage(response);
     }
 
@@ -163,7 +163,8 @@ public final class TaskList {
         assert ui != null : "Ui should not be null.";
         Task task = tasks.get(index);
         task.setUndone();
-        String response = "OK, I've marked this task as not done yet:" + NEW_LINE + task;
+        String response = String.format("Alright%s, I've marked this task as not done yet:", ui.getUsername())
+            + NEW_LINE + task;
         ui.showMessage(response);
     }
 
@@ -180,7 +181,7 @@ public final class TaskList {
         Task task = tasks.get(index);
         tasks.remove(index);
         taskCount--;
-        String response = "Noted. I've removed this task:" + NEW_LINE + task
+        String response = String.format("Noted%s. I've removed this task:", ui.getUsername()) + NEW_LINE + task
             + NEW_LINE + "Now you have " + taskCount + " task"
             + (taskCount > 1 ? "s" : "") + " in the list.";
         ui.showMessage(response);

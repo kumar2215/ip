@@ -2,6 +2,10 @@ package rover.ui;
 
 import java.util.Scanner;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
+import rover.preferences.UserPreferences;
+
 /**
  * Ui class deals with interactions with the user.
  * It displays messages to the user and reads input from the user.
@@ -9,7 +13,9 @@ import java.util.Scanner;
 public final class TextUi implements Ui {
 
     private static final String divider = "--------------------------------------------";
+    private String username;
     private final Scanner sc;
+    private UserPreferences userPreferences;
 
     /**
      * Constructor for Ui class.
@@ -26,10 +32,52 @@ public final class TextUi implements Ui {
      */
     @Override
     public String readCommand() {
-        assert sc != null : "Scanner should not be null.";
         String input = sc.nextLine();
         assert input != null && !input.isEmpty() : "Input should not be null or empty.";
         return input;
+    }
+
+    /**
+     * Gets the user preferences for the Ui.
+     *
+     * @return The user preferences object.
+     */
+    public UserPreferences getUserPreferences() {
+        return userPreferences;
+    }
+
+    /**
+     * Sets the user preferences for the Ui.
+     *
+     * @param userPreferences The user preferences object to set.
+     */
+    @Override
+    public void setUserPreferences(UserPreferences userPreferences) {
+        assert userPreferences != null : "User preferences should not be null.";
+        this.userPreferences = userPreferences;
+        JsonNode name = userPreferences.getJsonNode().get("username");
+        this.username = name != null ? " " + name.asText() : "";
+    }
+
+    /**
+     * Gets the username of the user.
+     *
+     * @return The username of the user.
+     */
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    /**
+     * Sets the username of the user.
+     *
+     * @param username The username of the user.
+     */
+    @Override
+    public boolean setUsername(String username) {
+        this.username = " " + username;
+        return userPreferences.setName(username);
     }
 
     /**
@@ -54,7 +102,7 @@ public final class TextUi implements Ui {
                 """;
 
         showLine();
-        System.out.println("Hello! I'm Rover");
+        System.out.println("Hello" + username + "! I'm Rover");
         System.out.println(logo);
         System.out.println("I am your personal task manager.");
         System.out.println("What can I do for you?");
@@ -66,7 +114,7 @@ public final class TextUi implements Ui {
      */
     @Override
     public void sayBye() {
-        System.out.println("Bye. Hope to see you again soon!");
+        System.out.println("Bye" + username + ". Hope to see you again soon!");
         showLine();
         sc.close();
     }
@@ -77,7 +125,7 @@ public final class TextUi implements Ui {
     @Override
     public void showHelpMessage() {
         showLine();
-        System.out.println("I'm sorry, but I don't know what that means.");
+        System.out.println("I'm sorry" + username + ", but I don't know what that means.");
         String briefHelp = """
                         The following commands are supported:
                             You can add a task by typing:

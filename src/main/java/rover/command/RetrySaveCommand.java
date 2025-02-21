@@ -32,7 +32,7 @@ public final class RetrySaveCommand extends Command {
     @Override
     public void execute(TaskList taskList, Storage storage, Ui ui) {
         if (args.equals("y") || args.equals("yes")) {
-            storage.save(taskList, ui);
+            storage.saveAll(taskList, ui.getUserPreferences(), ui);
         } else {
             ui.showMessage("Exiting without saving...");
         }

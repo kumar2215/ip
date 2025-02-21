@@ -4,6 +4,7 @@ import java.time.format.DateTimeParseException;
 import rover.command.Command;
 import rover.exceptions.RoverException;
 import rover.parser.Parser;
+import rover.preferences.UserPreferences;
 import rover.storage.Storage;
 import rover.task.TaskList;
 import rover.ui.TextUi;
@@ -14,6 +15,10 @@ import rover.ui.Ui;
  **/
 public final class Rover {
 
+    private static final String DEFAULT_TASKS_FILE_PATH = "data/Tasks.txt";
+    private static final String DEFAULT_PREFERENCES_FILE_PATH = "data/Preferences.json";
+
+    private UserPreferences userPreferences;
     private final Storage storage;
     private TaskList taskList;
     private final Parser parser;
@@ -23,18 +28,19 @@ public final class Rover {
      * Creates a new Rover instance with the default file path.
      */
     public Rover() {
-        this("data/Rover.txt");
+        this(DEFAULT_TASKS_FILE_PATH, DEFAULT_PREFERENCES_FILE_PATH);
     }
 
     /**
      * Creates a new Rover instance by loading tasks from the specified file path.
      *
-     * @param filePath The file path to save and load tasks from.
+     * @param tasksFilePath The file path to save and load tasks from.
+     * @param preferencesFilePath The file path to save and load preferences from.
      */
-    private Rover(String filePath) {
+    private Rover(String tasksFilePath, String preferencesFilePath) {
         parser = new Parser();
         ui = new TextUi();
-        storage = new Storage(filePath);
+        storage = new Storage(tasksFilePath, preferencesFilePath);
     }
 
     /**
@@ -42,6 +48,8 @@ public final class Rover {
      */
     public void setUi(Ui ui) {
         this.ui = ui;
+        this.userPreferences = new UserPreferences(storage.loadPreferences(ui));
+        this.ui.setUserPreferences(userPreferences);
     }
 
     /**
@@ -50,7 +58,7 @@ public final class Rover {
     public void startSession() {
         ui.showWelcome();
         try {
-            taskList = new TaskList(storage.load(ui));
+            taskList = new TaskList(storage.loadTasks(ui));
         } catch (RoverException | DateTimeParseException e) {
             ui.displayError("Could not load saved tasks properly. Saved tasks could be corrupted.");
             taskList = new TaskList();
@@ -62,7 +70,6 @@ public final class Rover {
      */
     public boolean handleResponse(String input) {
         Command command = parser.parseCommand(input);
-        assert command != null : "Command should not be null.";
         command.execute(taskList, parser, ui);
         return command.isExit();
     }
@@ -71,12 +78,11 @@ public final class Rover {
      * Ends the Rover session by saving the tasks and displaying the goodbye message.
      */
     public void endSession() {
-        storage.save(taskList, ui);
+        storage.saveAll(taskList, userPreferences, ui);
         while (!storage.isSavedSuccessfully()) {
             ui.displayError("Could not save tasks. Try again? (Y/N)");
             String input = ui.readCommand();
             Command command = parser.parseCommand(input);
-            assert command != null : "Command should not be null.";
             command.execute(taskList, storage, ui);
             if (command.isExit()) {
                 break;
@@ -104,6 +110,6 @@ public final class Rover {
      * @param args Command line arguments.
      */
     public static void main(String[] args) {
-        new Rover("data/Rover.txt").run();
+        new Rover(DEFAULT_TASKS_FILE_PATH, DEFAULT_PREFERENCES_FILE_PATH).run();
     }
 }
