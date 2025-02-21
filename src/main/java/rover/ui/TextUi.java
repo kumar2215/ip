@@ -13,7 +13,7 @@ import rover.preferences.UserPreferences;
 public final class TextUi implements Ui {
 
     private static final String divider = "--------------------------------------------";
-    private String username;
+    private String username = "";
     private final Scanner sc;
     private UserPreferences userPreferences;
 
@@ -55,8 +55,8 @@ public final class TextUi implements Ui {
     public void setUserPreferences(UserPreferences userPreferences) {
         assert userPreferences != null : "User preferences should not be null.";
         this.userPreferences = userPreferences;
-        JsonNode name = userPreferences.getJsonNode().get("username");
-        this.username = name != null ? " " + name.asText() : "";
+        JsonNode name = userPreferences.getJsonNode().get("name");
+        this.username = name.asText().isEmpty() ? "" : " " + name.asText();
     }
 
     /**
@@ -76,6 +76,8 @@ public final class TextUi implements Ui {
      */
     @Override
     public boolean setUsername(String username) {
+        assert username != null : "Username should not be null.";
+        assert !username.isBlank() : "Username should not be blank.";
         this.username = " " + username;
         return userPreferences.setName(username);
     }
