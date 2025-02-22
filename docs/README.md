@@ -126,7 +126,7 @@ set name John
 
 **Example:**
 ```plaintext
-set userImage path/to/image.png
+set userImage path/to/image.png (relative to the current directory)
 ```
 
 ### Expected Outcome:
@@ -136,7 +136,7 @@ set userImage path/to/image.png
 
 **Example:**
 ```plaintext
-set roverImage path/to/rover.png
+set roverImage path/to/rover.png (relative to the current directory)
 ```
 
 ### Expected Outcome:
