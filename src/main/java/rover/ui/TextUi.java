@@ -134,6 +134,10 @@ public final class TextUi implements Ui {
                             - todo (description)
                             - deadline (description) /by (deadline)
                             - event (description) /from (start) /to (end)
+                            You can set your preferences by typing 'set (preference) (value)'.
+                            To set your name, type 'set name (your name)'.
+                            To set your user image, type 'set userImage (path to image)'.
+                            To set Rover's image, type 'set roverImage (path to image)'.
                             List the existing tasks by typing 'list'.
                             Mark a task as done by typing 'mark (task number)'.
                             Mark a task as not done by typing 'unmark (task number)'.
