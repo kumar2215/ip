@@ -7,6 +7,7 @@ import java.time.format.DateTimeParseException;
 
 import rover.exceptions.RoverException;
 import rover.parser.DateTimeParser;
+import rover.ui.Ui;
 
 /**
  * Represents an event task.
@@ -24,6 +25,17 @@ public final class Event extends Task {
 
     /**
      * Constructs an event task with the given description.
+     *
+     * @param description The description of the event task.
+     * @throws RoverException If the description is not in the correct format or the start date and time is after
+     *      the end date and time.
+     */
+    public Event(String description) throws RoverException, DateTimeParseException {
+        this(description, null);
+    }
+
+    /**
+     * Constructs an event task with the given description.
      * The description must be in the format "task /from (start) /to (end)".
      * The start and end can be a date, time, or date and time.
      * If the start or end is a date, the time will be set to 00:00.
@@ -32,14 +44,15 @@ public final class Event extends Task {
      * The start date and time must be before the end date and time.
      *
      * @param description The description of the event task.
+     * @param ui The ui object to display messages.
      * @throws RoverException If the description is not in the correct format or the start date and time is after
      *      the end date and time.
      */
-    public Event(String description) throws RoverException, DateTimeParseException {
+    public Event(String description, Ui ui) throws RoverException, DateTimeParseException {
         super(description);
         setStartAndEnd();
-        setStartDateAndTime();
-        setEndDateAndTime();
+        setStartDateAndTime(ui);
+        setEndDateAndTime(ui);
         checkIfEndIsAfterStart();
         setFromToFullFormat();
     }
@@ -72,56 +85,70 @@ public final class Event extends Task {
         this.end = parts2[1];
     }
 
-    private void setStartDateAndTime() throws DateTimeParseException, RoverException {
+    private void setStartDateAndTime(Ui ui) throws DateTimeParseException, RoverException {
         try { // Try to parse the start as a date and time
             startDate = DateTimeParser.parseDateTime(start).toLocalDate();
             startTime = DateTimeParser.parseDateTime(start).toLocalTime();
             if (startDate.isBefore(LocalDate.now()) || (startDate.isEqual(LocalDate.now())
                     && startTime.isBefore(LocalTime.now()))) {
-                throw new RoverException("The start date and time cannot be in the past.");
+                handleOverDue(ui, String.format("The following event: %s has already transpired.", this.description),
+                    "The start date and time cannot be in the past.");
             }
         } catch (DateTimeParseException e) {
             try { // Try to parse the start as a date only
                 this.startDate = DateTimeParser.parseDate(start);
                 this.startTime = LocalTime.of(0, 0);
                 if (startDate.isBefore(LocalDate.now())) {
-                    throw new RoverException("The start date cannot be in the past.");
+                    handleOverDue(ui, String.format("The following event: %s has already transpired.",
+                            this.description), "The start date cannot be in the past.");
                 }
             } catch (DateTimeParseException e2) {
                 // Try to parse the start as a time only
                 this.startDate = LocalDate.now();
                 this.startTime = DateTimeParser.parseTime(start);
                 if (startTime.isBefore(LocalTime.now())) {
-                    throw new RoverException("The start time cannot be in the past.");
+                    handleOverDue(ui, String.format("The following event: %s has already transpired.",
+                            this.description), "The start time cannot be in the past.");
                 }
             }
         }
     }
 
-    private void setEndDateAndTime() throws DateTimeParseException, RoverException {
+    private void setEndDateAndTime(Ui ui) throws DateTimeParseException, RoverException {
         try { // Try to parse the end as a date and time
             endDate = DateTimeParser.parseDateTime(end).toLocalDate();
             endTime = DateTimeParser.parseDateTime(end).toLocalTime();
             if (endDate.isBefore(LocalDate.now()) || (endDate.isEqual(LocalDate.now())
                     && endTime.isBefore(LocalTime.now()))) {
-                throw new RoverException("The end date and time cannot be in the past.");
+                handleOverDue(ui, String.format("The following event: %s has already transpired.", this.description),
+                    "The end date and time cannot be in the past.");
             }
         } catch (DateTimeParseException e) {
             try { // Try to parse the end as a time only
                 endDate = startDate;
                 endTime = DateTimeParser.parseTime(end);
                 if (startDate.equals(LocalDate.now()) && endTime.isBefore(LocalTime.now())) {
-                    throw new RoverException("The end time cannot be in the past.");
+                    handleOverDue(ui, String.format("The following event: %s has already transpired.",
+                            this.description), "The end time cannot be in the past.");
                 }
             } catch (DateTimeParseException e2) {
                 // Try to parse the end as a date only
                 endDate = DateTimeParser.parseDate(end);
                 endTime = LocalTime.of(23, 59);
                 if (endDate.isBefore(LocalDate.now())) {
-                    throw new RoverException("The end date cannot be in the past.");
+                    handleOverDue(ui, String.format("The following event: %s has already transpired.",
+                            this.description), "The end date cannot be in the past.");
                 }
             }
         }
+    }
+
+    private void handleOverDue(Ui ui, String warning, String error) throws RoverException {
+        if (ui != null) {
+            ui.showMessage(warning);
+            return;
+        }
+        throw new RoverException(error);
     }
 
     /**

@@ -7,6 +7,7 @@ import java.time.format.DateTimeParseException;
 
 import rover.exceptions.RoverException;
 import rover.parser.DateTimeParser;
+import rover.ui.Ui;
 
 /**
  * Represents a deadline task that can be added to the task list.
@@ -21,19 +22,30 @@ public final class Deadline extends Task {
 
     /**
      * Constructs a deadline task with the given description.
-     * The description must be in the format "task /by (deadline)".
+     *
+     * @param description The description of the deadline task.
+     * @throws RoverException If the description is not in the correct format.
+     */
+    public Deadline(String description) throws RoverException, DateTimeParseException {
+        this(description, null);
+    }
+
+    /**
+     * Constructs a deadline task with the given description.
+     * * The description must be in the format "task /by (deadline)".
      * The deadline can be a date, time, or date and time.
      * If the deadline is a date, the time will be set to 00:00.
      * If the deadline is a time, the date will be set to the current date.
      * If the deadline is a date and time, the date and time will be set accordingly.
      *
      * @param description The description of the deadline task.
+     * @param ui The ui object to display messages.
      * @throws RoverException If the description is not in the correct format.
      */
-    public Deadline(String description) throws RoverException, DateTimeParseException {
+    public Deadline(String description, Ui ui) throws RoverException, DateTimeParseException {
         super(description);
         setByAndDescription(description);
-        setByDateAndTime();
+        setByDateAndTime(ui);
         setByFullFormat();
     }
 
@@ -46,7 +58,7 @@ public final class Deadline extends Task {
         this.by = parts[1];
     }
 
-    private void setByDateAndTime() throws DateTimeParseException, RoverException {
+    private void setByDateAndTime(Ui ui) throws DateTimeParseException, RoverException {
         String[] dateAndTime = by.split(" ");
         if (dateAndTime.length == 1) {
             // Deadline is a date only
@@ -55,7 +67,8 @@ public final class Deadline extends Task {
             this.byDate = DateTimeParser.parseDate(dateAndTime[0]);
             this.byTime = LocalTime.MAX; // Set to the end of the day
             if (byDate.isBefore(LocalDate.now())) {
-                throw new RoverException("The deadline cannot be in the past.");
+                handleOverDue(ui, String.format("The following deadline: %s is overdue.", this.description),
+                        "The deadline cannot be in the past.");
             }
         } else {
             // Deadline is a date and time
@@ -63,9 +76,18 @@ public final class Deadline extends Task {
             this.byTime = DateTimeParser.parseTime(dateAndTime[1]);
             if (byDate.isBefore(LocalDate.now()) || (byDate.isEqual(LocalDate.now())
                     && byTime.isBefore(LocalTime.now()))) {
-                throw new RoverException("The deadline cannot be in the past.");
+                handleOverDue(ui, String.format("The following deadline: %s is overdue.", this.description),
+                        "The deadline cannot be in the past.");
             }
         }
+    }
+
+    private void handleOverDue(Ui ui, String warning, String error) throws RoverException {
+        if (ui != null) {
+            ui.showMessage(warning);
+            return;
+        }
+        throw new RoverException(error);
     }
 
     private void setByFullFormat() {

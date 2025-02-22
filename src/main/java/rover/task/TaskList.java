@@ -28,11 +28,12 @@ public final class TaskList {
     /**
      * Returns a task list with the tasks from the given array of task strings.
      *
+     * @param ui The user interface to display messages.
      * @param taskStrings The array of task strings to be converted to tasks.
      * @throws RoverException If there is a possible corruption in the saved tasks.
      * @throws DateTimeParseException If the date and time format is incorrect.
      */
-    public TaskList(String ...taskStrings) throws RoverException, DateTimeParseException {
+    public TaskList(Ui ui, String ...taskStrings) throws RoverException, DateTimeParseException {
         assert taskStrings != null : "Task strings should not be null.";
         this.tasks = new ArrayList<>();
         for (String taskString : taskStrings) {
@@ -40,7 +41,7 @@ public final class TaskList {
             if (parts.length != 3) {
                 throw new RoverException("Possible corruption in saved tasks.");
             }
-            Task newTask = getTask(parts);
+            Task newTask = getTask(ui, parts);
             tasks.add(newTask);
             taskCount++;
         }
@@ -53,13 +54,13 @@ public final class TaskList {
      * @return The task based on the parts.
      * @throws RoverException If there is a possible corruption in the saved tasks.
      */
-    private Task getTask(String ...parts) throws RoverException {
+    private Task getTask(Ui ui, String ...parts) throws RoverException {
         assert parts != null : "Parts should not be null.";
         Task newTask;
         switch (parts[0]) {
         case "T" -> newTask = new Todo(parts[2]);
-        case "D" -> newTask = new Deadline(parts[2]);
-        case "E" -> newTask = new Event(parts[2]);
+        case "D" -> newTask = new Deadline(parts[2], ui);
+        case "E" -> newTask = new Event(parts[2], ui);
         default -> throw new RoverException("Possible corruption in saved tasks.");
         }
         if (parts[1].equals("1")) {

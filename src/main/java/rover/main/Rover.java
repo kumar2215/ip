@@ -58,7 +58,7 @@ public final class Rover {
     public void startSession() {
         ui.showWelcome();
         try {
-            taskList = new TaskList(storage.loadTasks(ui));
+            taskList = new TaskList(ui, storage.loadTasks(ui));
         } catch (RoverException | DateTimeParseException e) {
             ui.displayError("Could not load saved tasks properly. Saved tasks could be corrupted.");
             taskList = new TaskList();
