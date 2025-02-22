@@ -201,6 +201,12 @@ public final class Gui extends AnchorPane implements Ui {
 
     /**
      * Displays the goodbye message when the program ends.
+     * Part of the code was taken from a StackOverflow answer given by Jason C.
+     * source: <a href="https://stackoverflow.com/questions/21974415/how-to-close-this-javafx
+     * -application-after-showing-a-message-in-a-text-area-elem">...</a>
+     * Thanks to Jason C. for the original code.
+     * Thanks to @zuoshihua for pointing out the issue with the original code.
+     * Thanks to @ChinZJ for the fix to use new Timer(true) instead.
      */
     @Override
     public void sayBye() {
