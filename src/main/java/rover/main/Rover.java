@@ -95,6 +95,7 @@ public final class Rover {
      * Runs the Rover program.
      */
     private void run() {
+        setUi(ui);
         startSession();
         boolean isExit = false;
         while (!isExit) {

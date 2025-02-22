@@ -51,6 +51,7 @@ public class SetCommand extends Command {
             optionName = optionName.substring(0, 1).toUpperCase() + optionName.substring(1);
             if (ui instanceof TextUi && optionName.contains("image")) {
                 ui.displayError(String.format("%s cannot be set in text mode!", optionName));
+                return;
             }
 
             boolean isSuccessful = setOption(ui, preferenceOption, preferences[1]);

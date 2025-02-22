@@ -50,7 +50,7 @@ application {
 }
 
 shadowJar {
-    archiveFileName = "rover.jar"
+    archiveFileName = "Rover.jar"
 }
 
 checkstyle {
