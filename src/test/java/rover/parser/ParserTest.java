@@ -76,10 +76,10 @@ public class ParserTest {
         Parser parser = new Parser();
         assertDoesNotThrow(() -> {
             assertEquals(new Todo("read book"), parser.parseTaskDescription("todo read book"));
-            assertEquals(new Deadline("return book /by 24/08/21 1800"),
-                parser.parseTaskDescription("deadline return book /by 24/08/21 1800"));
-            assertEquals(new Event("project meeting /from 24/08/21 1800 /to 1900"),
-                parser.parseTaskDescription("event project meeting /from 24/08/21 1800 /to 1900"));
+            assertEquals(new Deadline("return book /by 24/08/30 1800"),
+                parser.parseTaskDescription("deadline return book /by 24/08/30 1800"));
+            assertEquals(new Event("project meeting /from 24/08/30 1800 /to 1900"),
+                parser.parseTaskDescription("event project meeting /from 24/08/30 1800 /to 1900"));
         });
     }
 

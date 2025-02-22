@@ -18,7 +18,7 @@ public class TaskListTest {
     public void checkEmptyTaskList() {
         assertEquals(0, new TaskList().getNumberOfTasks());
         try {
-            assertEquals(0, new TaskList(new String[0]).getNumberOfTasks());
+            assertEquals(0, new TaskList(null).getNumberOfTasks());
         } catch (RoverException e) {
             fail("Exception should not be thrown");
         }
@@ -27,17 +27,17 @@ public class TaskListTest {
     @Test
     public void checkIfExceptionThrown_corruptedTaskString() {
         try {
-            new TaskList("T | 2 | read book");
+            new TaskList(null, "T | 2 | read book");
         } catch (RoverException e) {
             assertEquals("Possible corruption in saved tasks.", e.getMessage());
         }
         try {
-            new TaskList("X | 0 | read book");
+            new TaskList(null, "X | 0 | read book");
         } catch (RoverException e) {
             assertEquals("Possible corruption in saved tasks.", e.getMessage());
         }
         try {
-            new TaskList("T | 0 |read book");
+            new TaskList(null, "T | 0 |read book");
         } catch (RoverException e) {
             assertEquals("Possible corruption in saved tasks.", e.getMessage());
         }
@@ -46,17 +46,17 @@ public class TaskListTest {
     @Test
     public void checkIfExceptionThrown_corruptedTaskString2() {
         try {
-            new TaskList("D | 0 | read book 10/12/21");
+            new TaskList(null, "D | 0 | read book 10/12/21");
         } catch (RoverException e) {
             assertEquals("A deadline task must be a task followed with '/by (deadline)'.", e.getMessage());
         }
         try {
-            new TaskList("D | 1 | read book /by 10/12/21 /by 09/08/21");
+            new TaskList(null, "D | 1 | read book /by 10/12/21 /by 09/08/21");
         } catch (RoverException e) {
             assertEquals("A deadline task must be a task followed with '/by (deadline)'.", e.getMessage());
         }
         try {
-            new TaskList("D | 0 | read book /by 10/12/");
+            new TaskList(null, "D | 0 | read book /by 10/12/");
         } catch (RoverException e) {
             fail("This exception should not be thrown");
         } catch (DateTimeParseException e) {
@@ -66,30 +66,31 @@ public class TaskListTest {
 
     @Test
     public void checkIfExceptionThrown_corruptedTaskString3() {
+        Ui ui = new TextUi();
         try {
-            new TaskList("E | 0 | read book 10/12/21 09/08/21");
+            new TaskList(ui, "E | 0 | read book 10/12/21 09/08/21");
         } catch (RoverException e) {
             assertEquals("An event task must be a task followed with '/from (start) /to (end)'.", e.getMessage());
         }
         try {
-            new TaskList("E | 1 | read book /from 10/12/21 /from 09/08/21");
+            new TaskList(ui, "E | 1 | read book /from 10/12/21 /from 09/08/21");
         } catch (RoverException e) {
             assertEquals("An event task must be a task followed with '/from (start) /to (end)'.", e.getMessage());
         }
         try {
-            new TaskList("E | 0 | read book /from 10/12/21 09/08/21");
+            new TaskList(ui, "E | 0 | read book /from 10/12/21 09/08/21");
         } catch (RoverException e) {
             assertEquals("An event task must be a task followed with '/from (start) /to (end)'.", e.getMessage());
         }
         try {
-            new TaskList("E | 0 | read book /from 10/12/21 /to 09/08/");
+            new TaskList(ui, "E | 0 | read book /from 10/12/21 /to 09/08/");
         } catch (RoverException e) {
             fail("This exception should not be thrown");
         } catch (DateTimeParseException e) {
             assertEquals("Unable to parse date: 09/08/", e.getMessage());
         }
         try {
-            new TaskList("E | 0 | read book /from 10/12/21 /to 09/08/21");
+            new TaskList(ui, "E | 0 | read book /from 10/12/21 /to 09/08/21");
         } catch (RoverException e) {
             assertEquals("The start date and time must be before the end date and time.", e.getMessage());
         }
@@ -103,7 +104,8 @@ public class TaskListTest {
             "E | 0 | project meeting /from 2021-08-25 1400 /to 2021-08-25 1600"
         };
         try {
-            TaskList taskList = new TaskList(taskStrings);
+            Ui ui = new TextUi();
+            TaskList taskList = new TaskList(ui, taskStrings);
             assertEquals(3, taskList.getNumberOfTasks());
             assertEquals("T | 0 | read book", taskList.getTasks().get(0).getTaskString());
             assertEquals("D | 1 | return book /by 2021-08-24 1800", taskList.getTasks().get(1).getTaskString());
@@ -122,8 +124,8 @@ public class TaskListTest {
         Ui ui = new TextUi();
         try {
             taskList.addTask(new Todo("read book"), ui);
-            taskList.addTask(new Deadline("return book /by 2021-08-24 1800"), ui);
-            taskList.addTask(new Event("project meeting /from 2021-08-25 1400 /to 2021-08-25 1600"), ui);
+            taskList.addTask(new Deadline("return book /by 2021-08-24 1800", ui), ui);
+            taskList.addTask(new Event("project meeting /from 2021-08-25 1400 /to 2021-08-25 1600", ui), ui);
         } catch (RoverException | DateTimeParseException e) {
             fail("Exception should not be thrown");
         }
@@ -169,7 +171,7 @@ public class TaskListTest {
         outContent.reset();
 
         try {
-            taskList.addTask(new Deadline("return book /by 2021-08-24 1800"), ui);
+            taskList.addTask(new Deadline("return book /by 2030-08-24 1800", ui), ui);
         } catch (RoverException | DateTimeParseException e) {
             fail("Exception should not be thrown");
         }
@@ -177,7 +179,7 @@ public class TaskListTest {
         String expectedOutput2 = """
             --------------------------------------------
             Got it. I've added this task:
-              [D][ ] return book (by: Tuesday, 24 August, 2021 6:00 pm)
+              [D][ ] return book (by: Saturday, 24 August, 2030 6:00 pm)
             Now you have 2 tasks in the list.
             --------------------------------------------
             """.replace("\n", System.lineSeparator());
@@ -185,7 +187,7 @@ public class TaskListTest {
         outContent.reset();
 
         try {
-            taskList.addTask(new Event("project meeting /from 2021-08-25 1400 /to 2021-08-25 1600"), ui);
+            taskList.addTask(new Event("project meeting /from 2030-08-25 1400 /to 2030-08-25 1600"), ui);
         } catch (RoverException | DateTimeParseException e) {
             fail("Exception should not be thrown");
         }
@@ -193,7 +195,7 @@ public class TaskListTest {
         String expectedOutput3 = """
             --------------------------------------------
             Got it. I've added this task:
-              [E][ ] project meeting (from Wednesday, 25 August, 2021 2:00 pm to Wednesday, 25 August, 2021 4:00 pm)
+              [E][ ] project meeting (from Sunday, 25 August, 2030 2:00 pm to Sunday, 25 August, 2030 4:00 pm)
             Now you have 3 tasks in the list.
             --------------------------------------------
             """.replace("\n", System.lineSeparator());

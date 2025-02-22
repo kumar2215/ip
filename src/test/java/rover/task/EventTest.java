@@ -40,18 +40,18 @@ public class EventTest {
     public void checkIfExceptionThrown_improperDate() {
         assertThrowsExactly(DateTimeParseException.class, () -> new Event("read book /from 240921 /to 250921"));
         assertThrowsExactly(DateTimeParseException.class, () ->
-            new Event("read book /from 2021-08-24 1800 /to 250921"));
+            new Event("read book /from 2030-08-24 1800 /to 250921"));
         assertThrowsExactly(RoverException.class, () ->
-            new Event("read book /from 24/08/21 1900 /to 2021-08-24 1800"));
+            new Event("read book /from 24/08/30 1900 /to 2030-08-24 1800"));
     }
 
     @Test
     public void checkIfExceptionNotThrown_properDate() {
         assertDoesNotThrow(() -> {
-            new Event("School Camp /from 2021-08-24 /to 2021-08-27");
+            new Event("School Camp /from 2030-08-24 /to 2030-08-27");
         });
         assertDoesNotThrow(() -> {
-            new Event("School Camp /from 2021-08-24 1800 /to 2021-08-25 1800");
+            new Event("School Camp /from 2030-08-24 1800 /to 2030-08-25 1800");
         });
     }
 

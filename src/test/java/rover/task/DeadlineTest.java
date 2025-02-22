@@ -38,10 +38,10 @@ public class DeadlineTest {
     @Test
     public void checkIfExceptionNotThrown_properDate() {
         assertDoesNotThrow(() -> {
-            new Deadline("read book /by 2021-08-24");
+            new Deadline("read book /by 2030-08-24");
         });
         assertDoesNotThrow(() -> {
-            new Deadline("read book /by 2021-08-24 1800");
+            new Deadline("read book /by 2030-08-24 1800");
         });
     }
 
