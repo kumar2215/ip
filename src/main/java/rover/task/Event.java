@@ -72,34 +72,54 @@ public final class Event extends Task {
         this.end = parts2[1];
     }
 
-    private void setStartDateAndTime() throws DateTimeParseException {
+    private void setStartDateAndTime() throws DateTimeParseException, RoverException {
         try { // Try to parse the start as a date and time
             startDate = DateTimeParser.parseDateTime(start).toLocalDate();
             startTime = DateTimeParser.parseDateTime(start).toLocalTime();
+            if (startDate.isBefore(LocalDate.now()) || (startDate.isEqual(LocalDate.now())
+                    && startTime.isBefore(LocalTime.now()))) {
+                throw new RoverException("The start date and time cannot be in the past.");
+            }
         } catch (DateTimeParseException e) {
             try { // Try to parse the start as a date only
                 this.startDate = DateTimeParser.parseDate(start);
                 this.startTime = LocalTime.of(0, 0);
+                if (startDate.isBefore(LocalDate.now())) {
+                    throw new RoverException("The start date cannot be in the past.");
+                }
             } catch (DateTimeParseException e2) {
                 // Try to parse the start as a time only
                 this.startDate = LocalDate.now();
                 this.startTime = DateTimeParser.parseTime(start);
+                if (startTime.isBefore(LocalTime.now())) {
+                    throw new RoverException("The start time cannot be in the past.");
+                }
             }
         }
     }
 
-    private void setEndDateAndTime() throws DateTimeParseException {
+    private void setEndDateAndTime() throws DateTimeParseException, RoverException {
         try { // Try to parse the end as a date and time
             endDate = DateTimeParser.parseDateTime(end).toLocalDate();
             endTime = DateTimeParser.parseDateTime(end).toLocalTime();
+            if (endDate.isBefore(LocalDate.now()) || (endDate.isEqual(LocalDate.now())
+                    && endTime.isBefore(LocalTime.now()))) {
+                throw new RoverException("The end date and time cannot be in the past.");
+            }
         } catch (DateTimeParseException e) {
             try { // Try to parse the end as a time only
                 endDate = startDate;
                 endTime = DateTimeParser.parseTime(end);
+                if (startDate.equals(LocalDate.now()) && endTime.isBefore(LocalTime.now())) {
+                    throw new RoverException("The end time cannot be in the past.");
+                }
             } catch (DateTimeParseException e2) {
                 // Try to parse the end as a date only
                 endDate = DateTimeParser.parseDate(end);
                 endTime = LocalTime.of(23, 59);
+                if (endDate.isBefore(LocalDate.now())) {
+                    throw new RoverException("The end date cannot be in the past.");
+                }
             }
         }
     }

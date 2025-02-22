@@ -46,7 +46,7 @@ public final class Deadline extends Task {
         this.by = parts[1];
     }
 
-    private void setByDateAndTime() {
+    private void setByDateAndTime() throws DateTimeParseException, RoverException {
         String[] dateAndTime = by.split(" ");
         if (dateAndTime.length == 1) {
             // Deadline is a date only
@@ -54,10 +54,17 @@ public final class Deadline extends Task {
             // to create a deadline task on the same day with only a time
             this.byDate = DateTimeParser.parseDate(dateAndTime[0]);
             this.byTime = LocalTime.MAX; // Set to the end of the day
+            if (byDate.isBefore(LocalDate.now())) {
+                throw new RoverException("The deadline cannot be in the past.");
+            }
         } else {
             // Deadline is a date and time
             this.byDate = DateTimeParser.parseDate(dateAndTime[0]);
             this.byTime = DateTimeParser.parseTime(dateAndTime[1]);
+            if (byDate.isBefore(LocalDate.now()) || (byDate.isEqual(LocalDate.now())
+                    && byTime.isBefore(LocalTime.now()))) {
+                throw new RoverException("The deadline cannot be in the past.");
+            }
         }
     }
 
