@@ -46,4 +46,17 @@ public abstract class Command {
         return false;
     }
 
+    /**
+     * Checks equality of commands based on their arguments.
+     * Returns true if the argument of the command is equal to the argument of the other command.
+     *
+     * @param obj The object to compare with.
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Command other) {
+            return this.args.equals(other.args);
+        }
+        return false;
+    }
 }
