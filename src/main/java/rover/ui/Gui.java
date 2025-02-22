@@ -239,6 +239,7 @@ public final class Gui extends AnchorPane implements Ui {
                             Mark a task as done by typing 'mark (task number)'.
                             Mark a task as not done by typing 'unmark (task number)'.
                             Delete a task by typing 'delete (task number)'.
+                            Find tasks with a certain keyword by typing 'find (keyword)'.
                             Show tasks before a certain date and/or time by typing 'show before (date) (time)'.
                             Show tasks after a certain date and/or time by typing 'show after (date) (time)'.
                             Exit the program by typing 'bye'.
