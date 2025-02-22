@@ -67,7 +67,7 @@ public final class Deadline extends Task {
     }
 
     /**
-     * {@code @InheritDoc} from Task
+     * Checks if the task is due before the given date and time.
      */
     @Override
     public boolean isBefore(String dateTime) throws DateTimeParseException {
@@ -88,7 +88,7 @@ public final class Deadline extends Task {
     }
 
     /**
-     * {@code @InheritDoc} from Task
+     * Checks if the task is due after the given date and time.
      */
     @Override
     public boolean isAfter(String dateTime) {
@@ -121,7 +121,7 @@ public final class Deadline extends Task {
     }
 
     /**
-     * {@code @InheritDoc} from Task
+     * Returns the description of the deadline task for saving to the file.
      */
     @Override
     public String getTaskString() {
@@ -129,7 +129,7 @@ public final class Deadline extends Task {
     }
 
     /**
-     * {@code @InheritDoc} from Task
+     * Returns the string representation of the deadline task.
      */
     @Override
     public String toString() {

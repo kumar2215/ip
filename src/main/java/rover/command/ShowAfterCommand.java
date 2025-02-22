@@ -19,7 +19,7 @@ public final class ShowAfterCommand extends ShowCommand {
     }
 
     /**
-     * {@code @InheritDoc} from Task
+     * Shows the tasks after the specified date and/or time.
      */
     @Override
     protected void show(TaskList taskList, Ui ui) {

@@ -18,7 +18,7 @@ public final class ListCommand extends ShowCommand {
     }
 
     /**
-     * {@code @InheritDoc} from Task
+     * Executes the command to list all tasks in the task list.
      */
     @Override
     protected void show(TaskList taskList, Ui ui) {

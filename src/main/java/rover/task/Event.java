@@ -105,7 +105,7 @@ public final class Event extends Task {
     }
 
     /**
-     * {@code @InheritDoc} from Task
+     * Checks if the task is due before the given date and time.
      * Event tasks are due before the start date and time.
      */
     @Override
@@ -127,7 +127,7 @@ public final class Event extends Task {
     }
 
     /**
-     * {@code @InheritDoc} from Task
+     * Checks if the task is due after the given date and time.
      * Event tasks are due before the end date and time.
      */
     @Override
@@ -163,7 +163,7 @@ public final class Event extends Task {
     }
 
     /**
-     * {@code @InheritDoc} from Task
+     * Returns the description of the task for saving to the file.
      */
     @Override
     public String getTaskString() {
@@ -171,7 +171,7 @@ public final class Event extends Task {
     }
 
     /**
-     * {@code @InheritDoc} from Task
+     * Returns the string representation of the task.
      */
     @Override
     public String toString() {

@@ -21,7 +21,7 @@ public final class MarkCommand extends Command {
     }
 
     /**
-     * {@code @InheritDoc} from Task
+     * Marks a task as done in the task list.
      */
     @Override
     public void execute(TaskList taskList, Parser parser, Ui ui) {

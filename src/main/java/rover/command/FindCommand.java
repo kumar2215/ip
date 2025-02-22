@@ -18,7 +18,7 @@ public class FindCommand extends ShowCommand {
     }
 
     /**
-     * {@code @InheritDoc} from Task
+     * Shows the tasks that contain the keyword.
      */
     @Override
     protected void show(TaskList taskList, Ui ui) {

@@ -19,7 +19,7 @@ public final class InvalidCommand extends Command {
     }
 
     /**
-     * {@code @InheritDoc} from Task
+     * Displays the help message to the user.
      */
     @Override
     public void execute(TaskList taskList, Parser parser, Ui ui) {

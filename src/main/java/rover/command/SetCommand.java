@@ -15,10 +15,22 @@ import rover.ui.Ui;
  */
 public class SetCommand extends Command {
 
+    /**
+     * Creates a new SetCommand with the given arguments.
+     *
+     * @param args The arguments for the command.
+     */
     public SetCommand(String args) {
         super(args.substring(3).trim());
     }
 
+    /**
+     * Executes the set command to set the given user preferences.
+     *
+     * @param taskList The task list to be operated on.
+     * @param parser The parser to parse the user input.
+     * @param ui The user interface to interact with the user.
+     */
     @Override
     public void execute(TaskList taskList, Parser parser, Ui ui) {
         String[] preferences = args.split(" ");

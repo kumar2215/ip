@@ -22,7 +22,7 @@ public final class AddCommand extends Command {
     }
 
     /**
-     * {@code @InheritDoc} from Task
+     * Executes the add command to add a task to the task list.
      */
     @Override
     public void execute(TaskList taskList, Parser parser, Ui ui) {

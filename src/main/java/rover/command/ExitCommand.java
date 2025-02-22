@@ -19,13 +19,13 @@ public final class ExitCommand extends Command {
     }
 
     /**
-     * {@code @InheritDoc} from Task
+     * Executes nothing as the program is exiting.
      */
     @Override
     public void execute(TaskList taskList, Parser parser, Ui ui) {}
 
     /**
-     * {@code @InheritDoc} from Task
+     * Returns true as the command is an exit command.
      */
     @Override
     public boolean isExit() {

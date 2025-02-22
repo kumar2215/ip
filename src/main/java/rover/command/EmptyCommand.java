@@ -19,7 +19,7 @@ public final class EmptyCommand extends Command {
     }
 
     /**
-     * {@code @InheritDoc} from Task
+     * Just displays an error message to the user.
      */
     @Override
     public void execute(TaskList taskList, Parser parser, Ui ui) {

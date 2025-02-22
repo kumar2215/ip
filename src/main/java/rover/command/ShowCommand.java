@@ -14,7 +14,7 @@ public abstract class ShowCommand extends Command {
     }
 
     /**
-     * {@code @InheritDoc} from Task
+     * Executes the show command.
      */
     @Override
     public void execute(TaskList taskList, Parser parser, Ui ui) {

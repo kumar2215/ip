@@ -21,7 +21,7 @@ public final class UnmarkCommand extends Command {
     }
 
     /**
-     * {@code @InheritDoc} from Task
+     * Marks the task as not done in the task list.
      */
     @Override
     public void execute(TaskList taskList, Parser parser, Ui ui) {

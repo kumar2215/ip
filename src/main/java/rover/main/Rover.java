@@ -104,7 +104,6 @@ public final class Rover {
     }
 
     /**
-     * Main entry point of the Rover program.
      * Creates a new Rover instance and runs the program.
      *
      * @param args Command line arguments.

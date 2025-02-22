@@ -21,7 +21,7 @@ public final class DeleteCommand extends Command {
     }
 
     /**
-     * {@code @InheritDoc} from Task
+     * Executes the command to delete a task from the task list.
      */
     @Override
     public void execute(TaskList taskList, Parser parser, Ui ui) {

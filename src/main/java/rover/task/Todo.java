@@ -19,7 +19,7 @@ public final class Todo extends Task {
     }
 
     /**
-     * {@code @InheritDoc} from Task
+     * Checks if the task is due before the given date and time.
      * Todo tasks do not have a date and time and will always return false.
      *
      * @param dateTime The date and time to compare with.
@@ -30,7 +30,7 @@ public final class Todo extends Task {
     }
 
     /**
-     * {@code @InheritDoc} from Task
+     * Checks if the task is due after the given date and time.
      * Todo tasks do not have a date and time and will always return false.
      *
      * @param dateTime The date and time to compare with.
@@ -54,7 +54,7 @@ public final class Todo extends Task {
     }
 
     /**
-     * {@code @InheritDoc} from Task
+     * Returns the description of the task for saving to the file.
      */
     @Override
     public String getTaskString() {
@@ -62,7 +62,7 @@ public final class Todo extends Task {
     }
 
     /**
-     * {@code @InheritDoc} from Task
+     * Returns the string representation of the task.
      */
     @Override
     public String toString() {
