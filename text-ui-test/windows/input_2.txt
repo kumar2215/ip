@@ -1,0 +1,11 @@
+list
+todo read book
+mark 1
+list
+mark 4
+list
+delete 4
+list
+show before 02/02/25
+show after 30/01/25
+bye

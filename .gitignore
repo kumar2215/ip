@@ -6,6 +6,7 @@
 # Gradle build files
 /.gradle/
 /build/
+*.jar
 src/main/resources/docs/
 
 # MacOS custom attributes files created by Finder
@@ -13,5 +14,7 @@ src/main/resources/docs/
 *.iml
 bin/
 
-/text-ui-test/ACTUAL.TXT
-text-ui-test/EXPECTED-UNIX.TXT
+# Other
+*.class
+data/
+/text-ui-test/**/ACTUAL*.TXT
