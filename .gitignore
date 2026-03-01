@@ -18,3 +18,4 @@ bin/
 *.class
 data/
 /text-ui-test/**/ACTUAL*.TXT
+.env

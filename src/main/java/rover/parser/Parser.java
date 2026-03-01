@@ -3,6 +3,7 @@ package rover.parser;
 import java.time.format.DateTimeParseException;
 
 import rover.command.AddCommand;
+import rover.command.AiCommand;
 import rover.command.Command;
 import rover.command.DeleteCommand;
 import rover.command.EmptyCommand;
@@ -65,6 +66,8 @@ public final class Parser {
             return new ShowAfterCommand(args);
         } else if (stdInput.startsWith("todo") || stdInput.startsWith("deadline") || stdInput.startsWith("event")) {
             return new AddCommand(args);
+        } else if (stdInput.startsWith("@ai")) {
+            return new AiCommand(args);
         } else {
             return new InvalidCommand(args);
         }

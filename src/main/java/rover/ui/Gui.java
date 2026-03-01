@@ -242,6 +242,7 @@ public final class Gui extends AnchorPane implements Ui {
                             Find tasks with a certain keyword by typing 'find (keyword)'.
                             Show tasks before a certain date and/or time by typing 'show before (date) (time)'.
                             Show tasks after a certain date and/or time by typing 'show after (date) (time)'.
+                            @ai (your request to the AI)
                             Exit the program by typing 'bye'.
                         """, username);
         showRoverResponse(briefHelp);
